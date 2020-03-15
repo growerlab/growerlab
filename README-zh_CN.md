@@ -57,10 +57,8 @@ $ chown -R git:git /home/git/repositories/
 
 ```
 REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
-node                13.10               7aef30ae6655        9 days ago          943MB
 eqalpha/keydb       latest              4e94005a2d74        10 days ago         180MB
 postgres            latest              73119b8892f9        10 days ago         314MB
 nginx               latest              6678c7c2e56c        10 days ago         127MB
-golang              1.14                25c4671a1478        2 weeks ago         809MB
 ubuntu              latest              72300a873c2c        3 weeks ago         64.2MB
 ```
