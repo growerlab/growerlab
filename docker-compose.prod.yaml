@@ -38,6 +38,6 @@ services:
         buildno: 1
       labels:
         - "com.growerlab.description=growerlab services"
-        - "com.growerlab.department=non"
+        - "com.growerlab.department=dev"
         - "com.growerlab.by=moli"
       target: prod
