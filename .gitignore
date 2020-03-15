@@ -2,3 +2,10 @@
 
 devdisp
 main
+
+data/pgdata
+data/website
+data/reposiotries
+data/nginx/logs
+data/nginx/ssl
+data/keydb
