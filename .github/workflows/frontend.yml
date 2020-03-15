@@ -4,7 +4,7 @@ on:
   push:
     branches: [master]
     paths:
-      - ".github/events/**.*"
+      - ".github/events/frontend.event"
 
 jobs:
   build:
