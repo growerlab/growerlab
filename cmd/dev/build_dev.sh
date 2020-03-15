@@ -9,3 +9,4 @@ SVC=$(getCloneURL "svc")
 BACKEND=$(getCloneURL "backend")
 MENSA=$(getCloneURL "mensa")
 
+echo $FRONTEND
