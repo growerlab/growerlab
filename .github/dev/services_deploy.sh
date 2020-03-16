@@ -79,11 +79,12 @@ syncData() {
   echo "---------2222"
   echo "$SERVER_DEPLOY_STRING"
   sshString="$SERVER_USER@$SERVER_HOST -p $SERVER_PORT"
-  echo $sshString | base64
+
 ssh "$SERVER_USER@$SERVER_HOST -p $SERVER_PORT" << EOF
   echo "hello"
   stat /data
 EOF
+
   echo "---------2222"
 
   rsync -avzP --delete --relative $SERVICES_PATH -e "ssh -i $SSHPATH/key -o StrictHostKeyChecking=no -p $SERVER_PORT" "$ROOT_DIR"/data "$SERVER_DEPLOY_STRING"
