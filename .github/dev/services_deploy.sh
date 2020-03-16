@@ -25,7 +25,8 @@ cloneAndBuildProject() {
   cd "$repoName" || exit 1
   go get -v -t -d ./...
   go build -o "$repoName" -v main.go
-  cd ..
+  echo "build $repoName => $(pwd)/$repoName"
+  cd -
 }
 
 # 将二进制文件移动到本仓库的data/services目录下
