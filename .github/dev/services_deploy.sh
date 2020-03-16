@@ -61,14 +61,9 @@ bindMensa() {
   sourceDir="$ROOT_DIR/$MENSA"
 
   mkdir -p "$servicesDir"
-
-  echo "---------test"
-  stat "$MENSA/conf"
-  stat "$MENSA/$MENSA"
-  echo "---------test"
-
   cp -R "$MENSA/conf" "$servicesDir"
-  cp "$MENSA/$MENSA" "$servicesDir"
+  echo "========"
+  cp -R "$MENSA/$MENSA" "$servicesDir"
   echo "------ done mensa -------"
 }
 
