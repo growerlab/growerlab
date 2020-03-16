@@ -15,17 +15,12 @@
 - svc - 仓库相关的操作服务（文件列表、分支、tag等）
 - frontend - web网站前端
 - backend - web网站后端
-  
-#### 仓库存储目录
-
-```
-/home/git/repositories
-```
 
 #### 依赖
 
 ```shell
-$ sudo apt install nginx ruby -y
+$ sudo apt install docker.io -y
+$ sudo apt install rsync openssh-client -yq
 ```
 
 #### 创建Git账号

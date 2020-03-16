@@ -1,4 +1,5 @@
 #!/bin/bash
+set -eu
 
 # 编译golang相关的项目，并部署到dev服务器
 
@@ -7,12 +8,13 @@ BACKEND="backend"
 MENSA="mensa"
 
 # server
-SERVER=$GOWERLAB_SERVER
-SERVER_PORT=$GOWERLAB_SERVER_PORT
-SERVICES_PATH="/data/$DEPLOY_DIR/"
+SERVER_HOST=$SERVER
+SERVER_PORT=$SERVER_PORT
+SERVER_USER=$SERVER_USER
+SERVICES_PATH="/data/$(cat "$DEPLOY_DIR")"
 
 # PWD
-ROOT_DIR=pwd
+ROOT_DIR=$GITHUB_WORKSPACE
 
 cloneAndBuildProject() {
   repoName=$1
@@ -60,9 +62,16 @@ bindMensa() {
 }
 
 # 将本仓库rsync到服务器
-deploy() {
+syncData() {
   echo "------ deploy -------"
+  SSHPATH="$HOME/.ssh"
+  mkdir "$SSHPATH"
+  echo "$DEPLOY_KEY" > "$SSHPATH/key"
+  chmod 600 "$SSHPATH/key"
+  SERVER_DEPLOY_STRING="$SERVER_USER@$SERVER_HOST:$SERVICES_PATH"
 
+  rsync -avzP --delete -e "ssh -i $SSHPATH/key -o StrictHostKeyChecking=no -p $SERVER_PORT" $ROOT_DIR/data $SERVER_DEPLOY_STRING
+  rsync -avzP --delete -e "ssh -i $SSHPATH/key -o StrictHostKeyChecking=no -p $SERVER_PORT" $ROOT_DIR/docker-compose.prod.yaml $SERVER_DEPLOY_STRING
 }
 
 # 重启docker
@@ -79,7 +88,7 @@ main() {
   bindSVC
   bindMensa
 
-  deploy
+  syncData
   restartService
 }
 

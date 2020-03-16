@@ -7,8 +7,10 @@ on:
       - ".github/events/services.event"
 
 env:
-  SERVER: ${{ secrets.GOWERLAB_SERVER }}
-  SERVER_PORT: ${{ secrets.GOWWERLAB_SERVER_PORT }}
+  SERVER: ${{ secrets.GROWERLAB_SERVER }}
+  SERVER_PORT: ${{ secrets.GROWERLAB_SERVER_PORT }}
+  SERVER_USER: ${{ secrets.GROWERLAB_SERVER_USER }}
+  SERVER_SSH_KEY: ${{ secrets.GROWERLAB_SERVER_SSH_KEY }}
   DEPLOY_DIR: ".github/events/services.event"
 
 jobs:
