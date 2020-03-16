@@ -61,6 +61,12 @@ bindMensa() {
   sourceDir="$ROOT_DIR/$MENSA"
 
   mkdir -p "$servicesDir"
+
+  echo "---------test"
+  stat "$MENSA/conf"
+  stat "$MENSA/$MENSA"
+  echo "---------test"
+
   cp -R "$MENSA/conf" "$servicesDir"
   cp "$MENSA/$MENSA" "$servicesDir"
   echo "------ done mensa -------"
@@ -69,6 +75,7 @@ bindMensa() {
 # 将本仓库rsync到服务器
 syncData() {
   echo "------ deploy -------"
+  cd "$ROOT_DIR" || exit 1
   SSHPATH="$HOME/.ssh"
   mkdir -p "$SSHPATH"
   echo "$DEPLOY_KEY" > "$SSHPATH/key"
