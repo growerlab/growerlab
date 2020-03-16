@@ -12,6 +12,7 @@ SERVER_HOST=$SERVER
 SERVER_PORT=$SERVER_PORT
 SERVER_USER=$SERVER_USER
 SERVICES_PATH="/data/$(cat "$DEPLOY_DIR")"
+DEPLOY_KEY=$SERVER_SSH_KEY
 
 # PWD
 ROOT_DIR=$GITHUB_WORKSPACE
@@ -30,35 +31,38 @@ cloneAndBuildProject() {
 # 将二进制文件移动到本仓库的data/services目录下
 bindBackend() {
   echo "------ bind backend -------"
-  cd $ROOT_DIR || exit 1
+  cd "$ROOT_DIR" || exit 1
   servicesDir="$ROOT_DIR/data/services/$BACKEND"
   sourceDir="$ROOT_DIR/$BACKEND"
 
-  mkdir -p $servicesDir
-  cp -R "$BACKEND/conf" $servicesDir
-  cp "$BACKEND/$BACKEND" $servicesDir
+  mkdir -p "$servicesDir"
+  cp -R "$BACKEND/conf" "$servicesDir"
+  cp "$BACKEND/$BACKEND" "$servicesDir"
+  echo "------ done backend -------"
 }
 
 bindSVC() {
   echo "------ bind svc -------"
-  cd $ROOT_DIR || exit 1
+  cd "$ROOT_DIR" || exit 1
   servicesDir="$ROOT_DIR/data/services/$SVC"
   sourceDir="$ROOT_DIR/$SVC"
 
-  mkdir -p $servicesDir
-  cp -R "$SVC/.env.example" $servicesDir/.env
-  cp "$SVC/$SVC" $servicesDir
+  mkdir -p "$servicesDir"
+  cp -R "$SVC/.env.example" "$servicesDir"/.env
+  cp "$SVC/$SVC" "$servicesDir"
+  echo "------ done svc -------"
 }
 
 bindMensa() {
   echo "------ bind mensa -------"
-  cd $ROOT_DIR || exit 1
+  cd "$ROOT_DIR" || exit 1
   servicesDir="$ROOT_DIR/data/services/$MENSA"
   sourceDir="$ROOT_DIR/$MENSA"
 
-  mkdir -p $servicesDir
-  cp -R "$MENSA/conf" $servicesDir
-  cp "$MENSA/$MENSA" $servicesDir
+  mkdir -p "$servicesDir"
+  cp -R "$MENSA/conf" "$servicesDir"
+  cp "$MENSA/$MENSA" "$servicesDir"
+  echo "------ done mensa -------"
 }
 
 # 将本仓库rsync到服务器
@@ -72,6 +76,7 @@ syncData() {
 
   rsync -avzP --delete -e "ssh -i $SSHPATH/key -o StrictHostKeyChecking=no -p $SERVER_PORT" $ROOT_DIR/data $SERVER_DEPLOY_STRING
   rsync -avzP --delete -e "ssh -i $SSHPATH/key -o StrictHostKeyChecking=no -p $SERVER_PORT" $ROOT_DIR/docker-compose.prod.yaml $SERVER_DEPLOY_STRING
+  echo "------ done deploy -------"
 }
 
 # 重启docker
