@@ -6,6 +6,7 @@ on:
     paths:
       - ".github/events/services.event"
       - ".github/events/touch.event"
+      - ".github/dev/services_deploy.sh"
 
 env:
   SERVER: ${{ secrets.GROWERLAB_SERVER }}

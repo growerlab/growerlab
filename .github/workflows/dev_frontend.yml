@@ -6,6 +6,7 @@ on:
     paths:
       - ".github/events/frontend.event"
       - ".github/events/touch.event"
+      - ".github/workflows/dev_frontend.yml"
 
 jobs:
   build:
