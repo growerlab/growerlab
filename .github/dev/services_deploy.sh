@@ -79,7 +79,7 @@ syncData() {
   echo "---------2222"
   echo "$SERVER_DEPLOY_STRING"
   sshString="$SERVER_USER@$SERVER_HOST -p $SERVER_PORT"
-  echo sshString
+  echo $sshString | base64
 ssh "$SERVER_USER@$SERVER_HOST -p $SERVER_PORT" << EOF
   echo "hello"
   stat /data
