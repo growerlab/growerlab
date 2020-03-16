@@ -62,8 +62,7 @@ bindMensa() {
 
   mkdir -p "$servicesDir"
   cp -R "$MENSA/conf" "$servicesDir"
-  echo "========"
-  cp -R "$MENSA/$MENSA" "$servicesDir"
+  cp "$MENSA/$MENSA" "$servicesDir"
   echo "------ done mensa -------"
 }
 
