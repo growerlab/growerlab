@@ -30,16 +30,8 @@ $ sudo apt install rsync openssh-client -yq
 - `growerlab` 用于部署网站服务
 
 ```shell
-$ sudo adduser git --system --shell /bin/bash --gecos 'git version control' --group --disabled-password --home /home/git
-$ sudo adduser growerlab --disabled-login --gecos 'growerlab system'
-$ sudo usermod -a -G git growerlab
-$ sudo usermod -a -G growerlab git
-
-$ sudo -s -u git
-$ cd
-$ mkdir /home/git/repositories
-$ chmod -R g+rwX /home/git/repositories/
-$ chown -R git:git /home/git/repositories/
+$ sudo adduser growerlab --system --group --disabled-password
+$ sudo usermod -aG docker growerlab
 ```
 
 #### 配置SSH
