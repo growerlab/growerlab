@@ -76,15 +76,6 @@ syncData() {
   chmod 600 "$SSHPATH/key"
   SERVER_DEPLOY_STRING="$SERVER_USER@$SERVER_HOST:$SERVICES_PATH"
 
-  echo "---------+++++"
-  stat "$SSHPATH/key"
-
-ssh "$SERVER_USER@$SERVER_HOST -p $SERVER_PORT" << EOF
-  echo "hello"
-  stat /data
-EOF
-  echo "---------++++++"
-
   rsync -avzP --delete --relative $SERVICES_PATH -e "ssh -i $SSHPATH/key -o StrictHostKeyChecking=no -p $SERVER_PORT" "$ROOT_DIR"/data "$SERVER_DEPLOY_STRING"
   rsync -avzP --delete -e "ssh -i $SSHPATH/key -o StrictHostKeyChecking=no -p $SERVER_PORT" "$ROOT_DIR"/docker-compose.prod.yaml "$SERVER_DEPLOY_STRING"
   echo "------ done deploy -------"
