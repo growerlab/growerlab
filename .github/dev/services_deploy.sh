@@ -77,6 +77,8 @@ syncData() {
   SERVER_DEPLOY_STRING="$SERVER_USER@$SERVER_HOST:$SERVICES_PATH"
 
   echo "---------+++++"
+  stat "$SSHPATH/key"
+
 ssh "$SERVER_USER@$SERVER_HOST -p $SERVER_PORT" << EOF
   echo "hello"
   stat /data
