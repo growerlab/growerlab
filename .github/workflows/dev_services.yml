@@ -5,6 +5,7 @@ on:
     branches: [master]
     paths:
       - ".github/events/services.event"
+      - ".github/events/touch.event"
 
 env:
   SERVER: ${{ secrets.GROWERLAB_SERVER }}

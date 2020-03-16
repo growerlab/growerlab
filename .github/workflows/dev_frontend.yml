@@ -5,6 +5,7 @@ on:
     branches: [master]
     paths:
       - ".github/events/frontend.event"
+      - ".github/events/touch.event"
 
 jobs:
   build:
