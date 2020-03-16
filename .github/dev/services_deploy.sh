@@ -34,7 +34,7 @@ bindBackend() {
   servicesDir="$ROOT_DIR/data/services/$BACKEND"
   sourceDir="$ROOT_DIR/$BACKEND"
 
-  mkdir $sourceDir
+  mkdir $servicesDir
   cp -R "$BACKEND/conf" $servicesDir
   cp "$BACKEND/$BACKEND" $servicesDir
 }
@@ -45,7 +45,7 @@ bindSVC() {
   servicesDir="$ROOT_DIR/data/services/$SVC"
   sourceDir="$ROOT_DIR/$SVC"
 
-  mkdir $sourceDir
+  mkdir $servicesDir
   cp -R "$SVC/.env.example" $servicesDir/.env
   cp "$SVC/$SVC" $servicesDir
 }
@@ -56,7 +56,7 @@ bindMensa() {
   servicesDir="$ROOT_DIR/data/services/$MENSA"
   sourceDir="$ROOT_DIR/$MENSA"
 
-  mkdir $sourceDir
+  mkdir $servicesDir
   cp -R "$MENSA/conf" $servicesDir
   cp "$MENSA/$MENSA" $servicesDir
 }
