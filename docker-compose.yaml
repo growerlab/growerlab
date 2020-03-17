@@ -31,9 +31,11 @@ services:
       - db
       - keydb
       - nginx
+    volumes:
+      - ./data:/data
     build:
       dockerfile: Dockerfile
-      context: .
+      context: ./
       args:
         buildno: 1
       labels:
