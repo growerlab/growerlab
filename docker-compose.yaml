@@ -31,6 +31,8 @@ services:
       - db
       - keydb
       - nginx
+    tty: true
+    container_name: services
     volumes:
       - ./data:/data
     build:
@@ -42,4 +44,3 @@ services:
         - "com.growerlab.description=growerlab services"
         - "com.growerlab.department=dev"
         - "com.growerlab.by=moli"
-      target: prod
