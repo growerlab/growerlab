@@ -17,6 +17,7 @@ services:
   nginx:
     image: nginx
     volumes:
+      - ./data/nginx/conf:/etc/nginx/conf.d
       - ./data/website:/usr/local/nginx/html
       - ./data/nginx/logs:/usr/local/var/log/nginx  # nginx的日志路径，后面的容器内路径应该与growerlab.conf中的符合
       - ./data/nginx/ssl:/etc/nginx/ssl             # nginx中的ssl路径
@@ -25,7 +26,7 @@ services:
     environment:
       - NGINX_HOST=growerlab.com
       - NGINX_PORT=80
-    command: /bin/bash -c "envsubst < ./data/nginx/growerlab.conf.template > /etc/nginx/conf.d/default.conf && exec nginx -g 'daemon off;'"
+    command: /bin/bash -c "exec nginx -g 'daemon off;'"
   growerlab:
     depends_on: # 依赖启动顺序
       - db
