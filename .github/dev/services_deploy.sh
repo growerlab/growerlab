@@ -95,7 +95,7 @@ docker-compose -f ./docker-compose.yaml up -d growerlab
 EOF
 ) > "$HOME"/start_growerlab.sh
 
-  sh -c "ssh $INPUT_ARGS -i $SSHPATH/key -o StrictHostKeyChecking=no -p $SERVER_PORT ${INPUT_USER}@${INPUT_HOST} < $HOME/start_growerlab.sh"
+  sh -c "ssh $INPUT_ARGS -i $SSHPATH/key -o StrictHostKeyChecking=no -p $SERVER_PORT $SERVER_USER@$SERVER_HOST < $HOME/start_growerlab.sh"
 }
 
 main() {
