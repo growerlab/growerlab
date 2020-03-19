@@ -7,7 +7,6 @@ on:
       - ".github/events/services.event"
       - ".github/events/touch.event"
       - ".github/dev/services_deploy.sh"
-
 env:
   SERVER: ${{ secrets.GROWERLAB_SERVER }}
   SERVER_PORT: ${{ secrets.GROWERLAB_SERVER_PORT }}
@@ -21,13 +20,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Set up Go 1.14
+        timeout-minutes: 5
         uses: actions/setup-go@v1
         with:
           go-version: 1.14
         id: go
 
       - name: Check out code into the Go module directory
+        timeout-minutes: 5
         uses: actions/checkout@v2
 
       - name: Build and deploy to dev server
+        timeout-minutes: 5
         run: .github/dev/services_deploy.sh

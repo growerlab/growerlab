@@ -18,10 +18,12 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Use Node.js ${{ matrix.node-version }}
+        timeout-minutes: 5
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
       - name: build dist
+        timeout-minutes: 5
         run: |
           pwd
       - run: npm ci
