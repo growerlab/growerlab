@@ -7,6 +7,8 @@ on:
       - ".github/events/services.event"
       - ".github/events/touch.event"
       - ".github/dev/services_deploy.sh"
+      - ".github/workflows/dev_services.yml"
+
 env:
   SERVER: ${{ secrets.GROWERLAB_SERVER }}
   SERVER_PORT: ${{ secrets.GROWERLAB_SERVER_PORT }}
