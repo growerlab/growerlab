@@ -9,3 +9,5 @@ data/reposiotries
 data/nginx/logs
 data/nginx/ssl
 data/keydb
+
+.vscode
