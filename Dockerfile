@@ -9,4 +9,4 @@ VOLUME /data
 
 WORKDIR /data
 
-CMD ["/usr/bin/supervisord","-c","/etc/supervisor/supervisord.conf"]
+ENTRYPOINT ["/usr/bin/supervisord","-c","/etc/supervisor/supervisord.conf"]
