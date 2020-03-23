@@ -11,3 +11,6 @@ data/nginx/ssl
 data/keydb
 
 .vscode
+
+data/services/*
+data/logs
