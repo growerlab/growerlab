@@ -1,6 +1,6 @@
 version: "3.7"
 services:
-  db:
+  postgresql:
     container_name: postgres
     image: postgres
     restart: "no"
@@ -10,12 +10,16 @@ services:
       POSTGRES_DB: growerlab
     volumes:
       - ./data/pgdata:/var/lib/postgresql/data
+    networks:
+      - growerlab_net
   keydb:
     container_name: keydb
     image: eqalpha/keydb
     volumes:
       - ./data/keydb/data:/data
       - ./data/keydb/flash:/flash
+    networks:
+      - growerlab_net
   nginx:
     container_name: nginx
     image: nginx
@@ -30,10 +34,12 @@ services:
       - NGINX_HOST=growerlab.com
       - NGINX_PORT=80
     command: /bin/bash -c "exec nginx -g 'daemon off;'"
+    networks:
+      - growerlab_net
   growerlab:
     container_name: services
     depends_on: # 依赖启动顺序
-      - db
+      - postgresql
       - keydb
       - nginx
     tty: true
@@ -49,3 +55,9 @@ services:
         - "com.growerlab.description=growerlab services"
         - "com.growerlab.department=dev"
         - "com.growerlab.by=moli"
+    networks:
+      - growerlab_net
+    environment:
+      DB_HOST: postgresql
+networks:
+  growerlab_net:
