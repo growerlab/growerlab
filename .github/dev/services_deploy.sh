@@ -11,7 +11,8 @@ MENSA="mensa"
 SERVER_HOST=$SERVER
 SERVER_PORT=$SERVER_PORT
 SERVER_USER=$SERVER_USER
-SERVICES_PATH="/data/$(cat "$BRANCH_FILE")"
+BRANCH="$(cat "$BRANCH_FILE")"
+SERVICES_PATH="/data/$BRANCH"
 DEPLOY_KEY=$SERVER_SSH_KEY
 
 # PWD
@@ -21,7 +22,12 @@ cloneAndBuildProject() {
   repoName=$1
   echo "------ clone and build $repoName -------"
 
-  git clone "https://github.com/growerlab/$repoName.git" --depth=1
+  git clone "https://github.com/growerlab/$repoName.git" --depth=1 --branch=$BRANCH
+  if test $? -ne 0
+  then
+    git clone "https://github.com/growerlab/$repoName.git" --depth=1 --branch=master
+  fi
+
   cd "$repoName" || exit 1
   go get -v -t -d ./...
   go build -o "$repoName" -v main.go
@@ -92,6 +98,7 @@ restartService() {
 (
 cat << EOF
 cd $SERVICES_PATH || exit 1
+sed -i 's/{{branchName}}/$BRANCH/g' docker-compose.yaml
 docker-compose -f ./docker-compose.yaml up -d growerlab
 EOF
 ) > "$HOME"/start_growerlab.sh

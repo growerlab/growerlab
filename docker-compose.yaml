@@ -37,7 +37,7 @@ services:
     networks:
       - growerlab_net
   growerlab:
-    container_name: services
+    container_name: services_{{branchName}}
     depends_on: # 依赖启动顺序
       - postgresql
       - keydb
