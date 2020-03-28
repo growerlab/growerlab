@@ -7,7 +7,7 @@ on:
       - ".github/events/frontend.event"
       - ".github/events/touch.event"
       - ".github/workflows/dev_frontend.yml"
-        - "docker-compose.yaml"
+      - "docker-compose.yaml"
 
 jobs:
   build:
