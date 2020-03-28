@@ -1,6 +1,6 @@
 version: "3.7"
 services:
-  postgresql:
+  postgres:
     container_name: postgres
     image: postgres
     restart: "no"
@@ -39,7 +39,7 @@ services:
   growerlab:
     container_name: services_{{branchName}}
     depends_on: # 依赖启动顺序
-      - postgresql
+      - postgres
       - keydb
       - nginx
     tty: true
@@ -58,6 +58,6 @@ services:
     networks:
       - growerlab_net
     environment:
-      DB_HOST: postgresql
+      DB_HOST: postgres
 networks:
   growerlab_net:
