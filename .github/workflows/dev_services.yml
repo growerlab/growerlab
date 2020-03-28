@@ -8,6 +8,7 @@ on:
       - ".github/events/touch.event"
       - ".github/dev/services_deploy.sh"
       - ".github/workflows/dev_services.yml"
+      - "docker-compose.yaml"
 
 env:
   SERVER: ${{ secrets.GROWERLAB_SERVER }}
