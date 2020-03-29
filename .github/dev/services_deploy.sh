@@ -84,7 +84,7 @@ syncData() {
   SERVER_DEPLOY_STRING="$SERVER_USER@$SERVER_HOST:$SERVICES_PATH"
 
   rsync -e -c -r -u -e "ssh -i $SSHPATH/key -o StrictHostKeyChecking=no -p $SERVER_PORT" "$ROOT_DIR"/data "$SERVER_DEPLOY_STRING" || $(case "$?" in 0|23) exit 0 ;; *) exit $?; esac)
-#  rsync -e -c -r --delete -e "ssh -i $SSHPATH/key -o StrictHostKeyChecking=no -p $SERVER_PORT" "$ROOT_DIR"/data/services "$SERVER_DEPLOY_STRING"/data/services
+  rsync -e -c -r --delete -e "ssh -i $SSHPATH/key -o StrictHostKeyChecking=no -p $SERVER_PORT" "$ROOT_DIR"/data/services "$SERVER_DEPLOY_STRING"/data/services
   rsync -e -c -r --delete -e "ssh -i $SSHPATH/key -o StrictHostKeyChecking=no -p $SERVER_PORT" "$ROOT_DIR"/docker-compose.yaml "$SERVER_DEPLOY_STRING"
   rsync -e -c -r --delete -e "ssh -i $SSHPATH/key -o StrictHostKeyChecking=no -p $SERVER_PORT" "$ROOT_DIR"/Dockerfile "$SERVER_DEPLOY_STRING"
   echo "------ done deploy -------"
@@ -95,22 +95,23 @@ restartService() {
   echo "------- restart service -------"
   cd "$ROOT_DIR" || exit 1
   SSHPATH="$HOME/.ssh"
+  DATABASE_NAME="growerlab_$BRANCH"
 
 (
 cat << EOF
 cd $SERVICES_PATH || exit 1
 sed -i 's/{{branchName}}/$BRANCH/g' docker-compose.yaml
 
-sed -i 's/namespace: master/namespace: $BRANCH/g' data/services/backend/conf/config.yaml
-sed -i 's/postgresql:.*/postgresql:\/\/growerlab:growerlab@postgres:5432\/growerlab_$BRANCH?sslmode=disable/g' data/services/backend/conf/config.yaml
+sed -i 's/namespace: master/namespace: $BRANCH/g' ./data/services/backend/conf/config.yaml
+sed -i 's/postgresql:.*/postgresql:\/\/growerlab:growerlab@postgres:5432\/$DATABASE_NAME?sslmode=disable/g' ./data/services/backend/conf/config.yaml
 
 # init database
 DB_SEED=`cat "/data/$BRANCH/services/backend/db/seed.sql"`
 DB_STRUCTURE=`cat "/data/$BRANCH/services/backend/db/growerlab.sql"`
 docker exec -it postgres /bin/bash <<-EODOCKER
-  psql -v ON_ERROR_STOP=1 --username "growerlab" --dbname "growerlab_$BRANCH" <<-EOSQL
+  psql -v ON_ERROR_STOP=1 --username "growerlab" --dbname "$DATABASE_NAME" <<-EOSQL
       create database growerlab;
-      grant all privileges on database growerlab_$BRANCH to growerlab;
+      grant all privileges on database $DATABASE_NAME to growerlab;
       $DB_STRUCTURE
       $DB_SEED
   EOSQL
