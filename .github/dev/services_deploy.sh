@@ -99,6 +99,10 @@ restartService() {
 cat << EOF
 cd $SERVICES_PATH || exit 1
 sed -i 's/{{branchName}}/$BRANCH/g' docker-compose.yaml
+
+sed -i 's/namespace: master/namespace: $BRANCH/g' data/services/backend/conf/config.yaml
+sed -i 's/postgresql:.*/postgresql:\/\/growerlab:growerlab@postgres:5432\/growerlab_$BRANCH?sslmode=disable/g' data/services/backend/conf/config.yaml
+
 docker-compose -f ./docker-compose.yaml up -d growerlab
 EOF
 ) > "$HOME"/start_growerlab.sh

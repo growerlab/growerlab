@@ -7,7 +7,7 @@ services:
     environment:
       POSTGRES_USER: growerlab
       POSTGRES_PASSWORD: growerlab
-      POSTGRES_DB: growerlab
+      POSTGRES_DB: growerlab_{{branchName}}
     volumes:
       - ./data/pgdata:/var/lib/postgresql/data
     networks:
@@ -57,7 +57,5 @@ services:
         - "com.growerlab.by=moli"
     networks:
       - growerlab_net
-    environment:
-      DB_HOST: postgres
 networks:
   growerlab_net:
