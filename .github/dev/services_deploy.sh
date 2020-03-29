@@ -43,6 +43,7 @@ bindBackend() {
   sourceDir="$ROOT_DIR/$BACKEND"
 
   mkdir -p "$servicesDir"
+  cp -R "$BACKEND/db" "$servicesDir"
   cp -R "$BACKEND/conf" "$servicesDir"
   cp "$BACKEND/$BACKEND" "$servicesDir"
   echo "------ done backend -------"
@@ -102,6 +103,18 @@ sed -i 's/{{branchName}}/$BRANCH/g' docker-compose.yaml
 
 sed -i 's/namespace: master/namespace: $BRANCH/g' data/services/backend/conf/config.yaml
 sed -i 's/postgresql:.*/postgresql:\/\/growerlab:growerlab@postgres:5432\/growerlab_$BRANCH?sslmode=disable/g' data/services/backend/conf/config.yaml
+
+# init database
+DB_SEED=`cat "/data/$BRANCH/services/backend/db/seed.sql"`
+DB_STRUCTURE=`cat "/data/$BRANCH/services/backend/db/growerlab.sql"`
+docker exec -it postgres /bin/bash <<-EODOCKER
+  psql -v ON_ERROR_STOP=1 --username "growerlab" --dbname "growerlab_$BRANCH" <<-EOSQL
+      create database growerlab;
+      grant all privileges on database growerlab_$BRANCH to growerlab;
+      $DB_STRUCTURE
+      $DB_SEED
+  EOSQL
+EODOCKER
 
 docker-compose -f ./docker-compose.yaml up -d growerlab
 EOF

@@ -7,11 +7,13 @@ services:
     environment:
       POSTGRES_USER: growerlab
       POSTGRES_PASSWORD: growerlab
-      POSTGRES_DB: growerlab_{{branchName}}
+      POSTGRES_DB: growerlab_master
     volumes:
       - ./data/pgdata:/var/lib/postgresql/data
     networks:
       - growerlab_net
+    ports:
+      - "5432:5432"
   keydb:
     container_name: keydb
     image: eqalpha/keydb
