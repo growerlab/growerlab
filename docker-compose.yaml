@@ -47,7 +47,6 @@ services:
     tty: true
     volumes:
       - ./data:/data
-      - ./data/logs:/data/logs
     build:
       dockerfile: Dockerfile
       context: ./
