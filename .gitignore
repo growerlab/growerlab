@@ -13,4 +13,4 @@ data/keydb
 .vscode
 
 data/services/*
-data/logs
+data/logs/*.log
