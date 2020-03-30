@@ -112,7 +112,7 @@ sed -i 's/postgresql:.*/postgresql:\/\/growerlab:growerlab@postgres:5432\/$DATAB
 # init database
 docker exec -it postgres /bin/bash <<-EODOCKER
   psql -v ON_ERROR_STOP=1 --username "growerlab" --dbname "$DATABASE_NAME" <<-EOSQL
-      create database growerlab;
+      create database $DATABASE_NAME;
       grant all privileges on database $DATABASE_NAME to growerlab;
       ${DB_STRUCTURE}
       ${DB_SEED}
