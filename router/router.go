@@ -1,0 +1,61 @@
+/*
+	dev env.
+	nginx -> router -> growerlab
+
+	接受nginx的请求，将请求路由到不同的后端 growerlab
+*/
+
+package main
+
+import (
+	"errors"
+	"fmt"
+	"net/http"
+	"net/http/httputil"
+	"net/url"
+	"os"
+	"strings"
+)
+
+func main() {
+	if err := run(); err != nil {
+		panic(err)
+	}
+}
+
+func run() error {
+	return http.ListenAndServe(":80", &Router{})
+}
+
+type Router struct {
+}
+
+func (w *Router) ServeHTTP(resp http.ResponseWriter, req *http.Request) {
+	branch := w.branch(req.Host)
+	path := "index.html"
+	if req.URL.Path != "/" {
+		path = req.URL.Path
+	}
+	file := fmt.Sprintf("/data/%s/data/website/%s", branch, path)
+
+	if i, _ := os.Stat(file); !i.IsDir() {
+		http.ServeFile(resp, req, file)
+		return
+	}
+
+	// reproxy
+	uri, _ := url.Parse(fmt.Sprintf("http://services_%s:8080", branch))
+	reverseProxy := httputil.NewSingleHostReverseProxy(uri)
+	reverseProxy.Director = func(proxyReq *http.Request) {
+		proxyReq.Header = req.Header.Clone()
+	}
+	reverseProxy.ServeHTTP(resp, req)
+}
+
+func (w *Router) branch(host string) string {
+	if !strings.Contains(host, ".dev.growerlab.net") {
+		panic(errors.New("invalid host"))
+	}
+	n := strings.Index(host, ".")
+	return host[:n]
+}

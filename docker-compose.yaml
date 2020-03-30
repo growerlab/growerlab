@@ -14,6 +14,7 @@ services:
       - growerlab_net
     ports:
       - "5432:5432"
+
   keydb:
     container_name: keydb
     image: eqalpha/keydb
@@ -22,28 +23,43 @@ services:
       - ./data/keydb/flash:/flash
     networks:
       - growerlab_net
+
   nginx:
     container_name: nginx
     image: nginx
     volumes:
       - ./data/nginx/conf:/etc/nginx/conf.d
-      - ./data/website:/usr/local/nginx/html
       - ./data/nginx/logs:/usr/local/var/log/nginx # nginx的日志路径，后面的容器内路径应该与growerlab.conf中的符合
       - ./data/nginx/ssl:/etc/nginx/ssl # nginx中的ssl路径
     ports:
-      - "8080:80"
-    environment:
-      - NGINX_HOST=growerlab.com
-      - NGINX_PORT=80
+      - "80:80"
     command: /bin/bash -c "exec nginx -g 'daemon off;'"
     networks:
       - growerlab_net
+
+  router:
+    container_name: router
+    volumes:
+      - /data:/data
+    build:
+      dockerfile: router/Dockerfile
+      context: ./router
+      args:
+        buildno: 1
+      labels:
+        - "com.growerlab.description=growerlab.dev.router"
+        - "com.growerlab.department=dev"
+        - "com.growerlab.by=moli"
+    networks:
+      - growerlab_net
+
   growerlab:
     container_name: services_master
     depends_on: # 依赖启动顺序
       - postgres
       - keydb
       - nginx
+      - router
     tty: true
     volumes:
       - ./data:/data
@@ -53,7 +69,7 @@ services:
       args:
         buildno: 1
       labels:
-        - "com.growerlab.description=growerlab services"
+        - "com.growerlab.description=growerlab.services"
         - "com.growerlab.department=dev"
         - "com.growerlab.by=moli"
     networks:
