@@ -103,7 +103,7 @@ restartService() {
 (
 cat << EOF
 cd $SERVICES_PATH || exit 1
-sed -i 's/POSTGRES_DB: growerlab_master/POSTGRES_DB: ${BRANCH}/g' docker-compose.yaml
+sed -i 's/POSTGRES_DB: growerlab_master/POSTGRES_DB: growerlab_${BRANCH}/g' docker-compose.yaml
 sed -i 's/container_name: services_master/container_name: services_${BRANCH}/g' docker-compose.yaml
 
 sed -i 's/namespace: master/namespace: "${BRANCH}"/g' ./data/services/backend/conf/config.yaml
