@@ -1,5 +1,10 @@
 #!/bin/bash
 
-GOOS=linux go build -o ./router ./router.go
+if [ ! -f ./router/router ]
+then
+  cd ./router || exit 1
+  GOOS=linux go build -o ./router ./router.go
+  docker build .
+  cd - || exit 1
+fi
 
-docker build "$GOPATH"/src/github.com/growerlab/growerlab/router/.

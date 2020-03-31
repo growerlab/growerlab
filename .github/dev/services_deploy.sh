@@ -122,12 +122,7 @@ docker exec -it postgres /bin/bash <<-EODOCKER
 EODOCKER
 
 # build router
-if [ ! -f ./router/router ]
-then
-  cd ./router
-  go build -o ./router ./router.go
-  cd -
-fi
+./router/build.sh
 
 docker-compose -f ./docker-compose.yaml up -d growerlab
 EOF
