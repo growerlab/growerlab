@@ -24,6 +24,8 @@ func main() {
 }
 
 func run() error {
+	fmt.Println("router running...")
+	defer fmt.Println("router exit..")
 	return http.ListenAndServe(":80", &Router{})
 }
 

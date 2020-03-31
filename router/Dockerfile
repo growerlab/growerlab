@@ -1,12 +1,8 @@
-# growerlab services
+# growerlab router for dev
 #
 FROM scratch
 
-RUN go build -o /tmp/router router.go
-
-COPY /tmp/router /home/router
-
-RUN chmod +x /home/router
+COPY ./router /home/router
 
 VOLUME /data
 

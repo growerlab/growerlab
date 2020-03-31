@@ -42,7 +42,7 @@ services:
     volumes:
       - /data:/data
     build:
-      dockerfile: router/Dockerfile
+      dockerfile: Dockerfile
       context: ./router
       args:
         buildno: 1
