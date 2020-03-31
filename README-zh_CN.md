@@ -19,6 +19,7 @@
 #### 依赖
 
 ```shell
+$ sudo apt install -y golang-go
 $ sudo apt install docker.io -y
 $ sudo apt install rsync openssh-client -yq
 $ sudo curl -L "https://github.com/docker/compose/releases/download/1.25.4/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
