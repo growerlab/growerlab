@@ -30,6 +30,8 @@ func run() error {
 type Router struct {
 }
 
+// TODO 后端的接口比较少，可以加个map cache
+//
 func (w *Router) ServeHTTP(resp http.ResponseWriter, req *http.Request) {
 	branch := w.branch(req.Host)
 	path := "index.html"
