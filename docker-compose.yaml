@@ -40,7 +40,7 @@ services:
   router:
     container_name: router
     volumes:
-      - /data:/data
+      - ./data:/data
     build:
       dockerfile: Dockerfile
       context: ./router
