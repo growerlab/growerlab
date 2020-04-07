@@ -83,13 +83,13 @@ syncData() {
     SERVER_DEPLOY_STRING="$SERVER_USER@$SERVER_HOST:$SERVICES_PATH"
 
     rsync -e -c -r -u --ignore-errors -e "ssh -i $SSHPATH/key -o StrictHostKeyChecking=no -p $SERVER_PORT" "$ROOT_DIR"/data/keydb "$SERVER_DEPLOY_STRING" || $(case "$?" in 0 | 23) exit 0 ;; *) exit $? ;; esac)
-    rsync -e -c -r -u --ignore-errors -e "ssh -i $SSHPATH/key -o StrictHostKeyChecking=no -p $SERVER_PORT" "$ROOT_DIR"/data/logs "$SERVER_DEPLOY_STRING" || $(case "$?" in 0 | 23) exit 0 ;; *) exit $? ;; esac)
-    rsync -e -c -r -u --ignore-errors -e "ssh -i $SSHPATH/key -o StrictHostKeyChecking=no -p $SERVER_PORT" "$ROOT_DIR"/data/nginx "$SERVER_DEPLOY_STRING" || $(case "$?" in 0 | 23) exit 0 ;; *) exit $? ;; esac)
     rsync -e -c -r -u --ignore-errors -e "ssh -i $SSHPATH/key -o StrictHostKeyChecking=no -p $SERVER_PORT" "$ROOT_DIR"/data/pgdata "$SERVER_DEPLOY_STRING" || $(case "$?" in 0 | 23) exit 0 ;; *) exit $? ;; esac)
-    rsync -e -c -r -u --ignore-errors -e "ssh -i $SSHPATH/key -o StrictHostKeyChecking=no -p $SERVER_PORT" "$ROOT_DIR"/data/repositories "$SERVER_DEPLOY_STRING" || $(case "$?" in 0 | 23) exit 0 ;; *) exit $? ;; esac)
-    rsync -e -c -r -u --ignore-errors -e "ssh -i $SSHPATH/key -o StrictHostKeyChecking=no -p $SERVER_PORT" "$ROOT_DIR"/data/supervisor "$SERVER_DEPLOY_STRING" || $(case "$?" in 0 | 23) exit 0 ;; *) exit $? ;; esac)
-    rsync -e -c -r -u --ignore-errors -e "ssh -i $SSHPATH/key -o StrictHostKeyChecking=no -p $SERVER_PORT" "$ROOT_DIR"/data/website "$SERVER_DEPLOY_STRING" || $(case "$?" in 0 | 23) exit 0 ;; *) exit $? ;; esac)
 
+    rsync -e -c -r --delete -e "ssh -i $SSHPATH/key -o StrictHostKeyChecking=no -p $SERVER_PORT" "$ROOT_DIR"/data/logs "$SERVER_DEPLOY_STRING"
+    rsync -e -c -r --delete -e "ssh -i $SSHPATH/key -o StrictHostKeyChecking=no -p $SERVER_PORT" "$ROOT_DIR"/data/nginx "$SERVER_DEPLOY_STRING"
+    rsync -e -c -r --delete -e "ssh -i $SSHPATH/key -o StrictHostKeyChecking=no -p $SERVER_PORT" "$ROOT_DIR"/data/repositories "$SERVER_DEPLOY_STRING"
+    rsync -e -c -r --delete -e "ssh -i $SSHPATH/key -o StrictHostKeyChecking=no -p $SERVER_PORT" "$ROOT_DIR"/data/supervisor "$SERVER_DEPLOY_STRING"
+    rsync -e -c -r --delete -e "ssh -i $SSHPATH/key -o StrictHostKeyChecking=no -p $SERVER_PORT" "$ROOT_DIR"/data/website "$SERVER_DEPLOY_STRING"
     rsync -e -c -r --delete -e "ssh -i $SSHPATH/key -o StrictHostKeyChecking=no -p $SERVER_PORT" "$ROOT_DIR"/data/services "$SERVER_DEPLOY_STRING"/data/services
 
     rsync -e -c -r --delete -e "ssh -i $SSHPATH/key -o StrictHostKeyChecking=no -p $SERVER_PORT" "$ROOT_DIR"/router "$SERVER_DEPLOY_STRING"
