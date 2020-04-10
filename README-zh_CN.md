@@ -27,6 +27,14 @@ $ sudo chmod +x /usr/local/bin/docker-compose
 $ sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
 ```
 
+```shell
+$ cd ~
+$ wget https://dl.google.com/go/go1.14.1.linux-amd64.tar.gz
+$ tar -C /usr/local -xzf go1.14.1.linux-amd64.tar.gz
+$ echo "export PATH=$PATH:/usr/local/go/bin" >> ~/.profile
+$ source ~/.profile
+```
+
 #### 创建Git账号
 
 创建系统账号，便于ssh访问以及托管网站服务。
