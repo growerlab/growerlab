@@ -17,6 +17,10 @@ import (
 	"strings"
 )
 
+const (
+	DefaultIndex = "index.html"
+)
+
 func main() {
 	if err := run(); err != nil {
 		panic(err)
@@ -36,7 +40,7 @@ type Router struct {
 //
 func (w *Router) ServeHTTP(resp http.ResponseWriter, req *http.Request) {
 	branch := w.branch(req.Host)
-	path := "index.html"
+	path := DefaultIndex
 	if req.URL.Path != "/" {
 		path = req.URL.Path
 	}
