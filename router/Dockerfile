@@ -4,6 +4,8 @@ FROM scratch
 
 COPY ./main /home/router
 
+RUN chmod +x /home/router
+
 VOLUME /data
 
 WORKDIR /home
