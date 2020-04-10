@@ -2,7 +2,7 @@
 #
 FROM scratch
 
-COPY ./router /home/router
+COPY ./main /home/router
 
 VOLUME /data
 
