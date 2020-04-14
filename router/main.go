@@ -10,6 +10,7 @@ package main
 import (
 	"errors"
 	"fmt"
+	"net"
 	"net/http"
 	"net/http/httputil"
 	"net/url"
@@ -64,6 +65,8 @@ func (w *Router) branch(host string) string {
 	if !strings.Contains(host, ".dev.growerlab.net") {
 		panic(errors.New("invalid host"))
 	}
+	host, _, _ = net.SplitHostPort(host)
+
 	n := strings.Index(host, ".")
 	return host[:n]
 }
