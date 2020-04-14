@@ -10,7 +10,6 @@ package main
 import (
 	"errors"
 	"fmt"
-	"net"
 	"net/http"
 	"net/http/httputil"
 	"net/url"
@@ -47,7 +46,7 @@ func (w *Router) ServeHTTP(resp http.ResponseWriter, req *http.Request) {
 	}
 	file := fmt.Sprintf("/data/%s/data/website/%s", branch, path)
 
-	if i, _ := os.Stat(file); !i.IsDir() {
+	if i, err := os.Stat(file); os.IsExist(err) && !i.IsDir() {
 		http.ServeFile(resp, req, file)
 		return
 	}
@@ -65,8 +64,6 @@ func (w *Router) branch(host string) string {
 	if !strings.Contains(host, ".dev.growerlab.net") {
 		panic(errors.New("invalid host"))
 	}
-	host, _, _ = net.SplitHostPort(host)
-
 	n := strings.Index(host, ".")
 	return host[:n]
 }
