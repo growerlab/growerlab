@@ -1,6 +1,6 @@
 # growerlab router for dev
 #
-FROM scratch
+FROM ubuntu:latest
 
 COPY ./main /home/router
 
