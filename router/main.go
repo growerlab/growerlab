@@ -52,9 +52,13 @@ func (w *Router) ServeHTTP(resp http.ResponseWriter, req *http.Request) {
 	}
 
 	// reproxy
-	uri, _ := url.Parse(fmt.Sprintf("http://services_%s:8080", branch))
+	uri, err := url.Parse(fmt.Sprintf("http://services_%s:8080", branch))
+	if err != nil {
+		panic(errors.New("parse url was err: " + err.Error() + " branch:" + branch))
+	}
 	reverseProxy := httputil.NewSingleHostReverseProxy(uri)
 	reverseProxy.Director = func(proxyReq *http.Request) {
+		proxyReq.URL.Scheme = uri.Scheme
 		proxyReq.Header = req.Header.Clone()
 	}
 	reverseProxy.ServeHTTP(resp, req)
