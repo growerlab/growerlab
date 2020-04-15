@@ -57,10 +57,10 @@ func (w *Router) ServeHTTP(resp http.ResponseWriter, req *http.Request) {
 		panic(errors.New("parse url was err: " + err.Error() + " branch:" + branch))
 	}
 	reverseProxy := httputil.NewSingleHostReverseProxy(uri)
-	reverseProxy.Director = func(proxyReq *http.Request) {
-		proxyReq.URL.Scheme = uri.Scheme
-		proxyReq.Header = req.Header.Clone()
-	}
+	// reverseProxy.Director = func(proxyReq *http.Request) {
+	// 	// proxyReq.URL.Scheme = uri.Scheme
+	// 	// proxyReq.Header = req.Header.Clone()
+	// }
 	reverseProxy.ServeHTTP(resp, req)
 }
 
