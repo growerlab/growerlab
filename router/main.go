@@ -10,6 +10,7 @@ package main
 import (
 	"errors"
 	"fmt"
+	"log"
 	"net/http"
 	"net/http/httputil"
 	"net/url"
@@ -46,6 +47,8 @@ func (w *Router) ServeHTTP(resp http.ResponseWriter, req *http.Request) {
 	}
 	file := fmt.Sprintf("/data/%s/data/website/%s", branch, path)
 
+	log.Printf("url: %s => path: %s client: %s", req.URL.String(), file, req.RemoteAddr)
+
 	if i, err := os.Stat(file); os.IsExist(err) && !i.IsDir() {
 		http.ServeFile(resp, req, file)
 		return
@@ -61,6 +64,10 @@ func (w *Router) ServeHTTP(resp http.ResponseWriter, req *http.Request) {
 	// 	// proxyReq.URL.Scheme = uri.Scheme
 	// 	// proxyReq.Header = req.Header.Clone()
 	// }
+	reverseProxy.ModifyResponse = func(response *http.Response) error {
+		response.Header.Set("Growerlab", "Router")
+		return nil
+	}
 	reverseProxy.ServeHTTP(resp, req)
 }
 
