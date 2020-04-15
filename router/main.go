@@ -45,7 +45,7 @@ func (w *Router) ServeHTTP(resp http.ResponseWriter, req *http.Request) {
 	if req.URL.Path != "/" {
 		path = req.URL.Path
 	}
-	file := fmt.Sprintf("/data/%s/data/website/%s", branch, path)
+	file := fmt.Sprintf("/data/%s/data/website%s", branch, path)
 
 	log.Printf("url: %s => path: %s client: %s", req.URL.String(), file, req.RemoteAddr)
 
@@ -55,7 +55,7 @@ func (w *Router) ServeHTTP(resp http.ResponseWriter, req *http.Request) {
 	}
 
 	// reproxy
-	uri, err := url.Parse(fmt.Sprintf("http://services_%s:8080", branch))
+	uri, err := url.Parse(fmt.Sprintf("http://services_%s:8081", branch))
 	if err != nil {
 		panic(errors.New("parse url was err: " + err.Error() + " branch:" + branch))
 	}
