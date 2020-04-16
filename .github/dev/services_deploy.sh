@@ -82,6 +82,10 @@ syncData() {
     chmod 600 "$SSHPATH/key"
     SERVER_DEPLOY_STRING="$SERVER_USER@$SERVER_HOST:$SERVICES_PATH"
 
+    if [ ! -d "$ROOT_DIR"/data/pgdata ]; then
+        mkdir "$ROOT_DIR"/data/pgdata || echo "pgdata exists"
+    fi
+
     echo "rsync /data/keydb..."
     rsync -e -c -r -u --ignore-errors -e "ssh -i $SSHPATH/key -o StrictHostKeyChecking=no -p $SERVER_PORT" "$ROOT_DIR"/data/keydb "$SERVER_DEPLOY_STRING"/data/keydb || $(case "$?" in 0 | 23) exit 0 ;; *) exit $? ;; esac)
     echo "/rsync /data/pgdata"
