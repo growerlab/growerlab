@@ -131,7 +131,7 @@ sed -i 's/namespace: master/namespace: ${BRANCH}/g' ./data/services/backend/conf
 sed -i 's/postgresql:.*/postgresql:\/\/growerlab:growerlab@postgres:5432\/$DATABASE_NAME?sslmode=disable/g' ./data/services/backend/conf/config.yaml
 sed -i 's/host: 127.0.0.1/host: keydb/g' ./data/services/backend/conf/config.yaml
 
-sed -i 's/logs/${SERVICES_PATH}\/data/logs\/g' ./data/services/svc/.env
+sed -i 's/logs/${SERVICES_PATH}\/data\/logs/g' ./data/services/svc/.env
 
 # init database
 docker exec -it postgres /bin/bash <<-EODOCKER
