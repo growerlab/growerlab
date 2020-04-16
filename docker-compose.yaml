@@ -29,7 +29,7 @@ services:
     image: nginx
     volumes:
       - ./data/nginx/conf:/etc/nginx/conf.d
-      - ./data/nginx/logs:/usr/local/var/log/nginx # nginx的日志路径，后面的容器内路径应该与growerlab.conf中的符合
+      - ./data/nginx/logs:/var/log/nginx # nginx的日志路径，后面的容器内路径应该与growerlab.conf中的符合
       - ./data/nginx/ssl:/etc/nginx/ssl # nginx中的ssl路径
     ports:
       - "80:80"
