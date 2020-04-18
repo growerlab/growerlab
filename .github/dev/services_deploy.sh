@@ -39,7 +39,6 @@ bindBackend() {
     echo "------ bind backend -------"
     cd "$ROOT_DIR" || exit 1
     servicesDir="$ROOT_DIR/data/services/$BACKEND"
-    sourceDir="$ROOT_DIR/$BACKEND"
     DATABASE_NAME="growerlab_$BRANCH"
 
     mkdir -p "$servicesDir"
@@ -58,7 +57,6 @@ bindSVC() {
     echo "------ bind svc -------"
     cd "$ROOT_DIR" || exit 1
     servicesDir="$ROOT_DIR/data/services/$SVC"
-    sourceDir="$ROOT_DIR/$SVC"
 
     mkdir -p "$servicesDir"
     cp -R "$SVC/.env.example" "$servicesDir"/.env
@@ -73,7 +71,6 @@ bindMensa() {
     echo "------ bind mensa -------"
     cd "$ROOT_DIR" || exit 1
     servicesDir="$ROOT_DIR/data/services/$MENSA"
-    sourceDir="$ROOT_DIR/$MENSA"
 
     mkdir -p "$servicesDir"
     cp -R "$MENSA/conf" "$servicesDir"
