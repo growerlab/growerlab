@@ -62,7 +62,8 @@ bindSVC() {
     cp -R "$SVC/.env.example" "$servicesDir"/.env
     cp "$SVC/$SVC" "$servicesDir"
 
-    sed -i "s/logs/${SERVICES_PATH}\/data\/logs/g" $servicesDir/.env
+    ESCAPE_SERVICES_PATH=$(echo "${SERVICES_PATH}" | sed 's/\//\\\//g')
+    sed -i "s/logs/${ESCAPE_SERVICES_PATH}\/data\/logs/g" $servicesDir/.env
 
     echo "------ done svc -------"
 }
