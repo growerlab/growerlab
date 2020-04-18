@@ -40,11 +40,17 @@ bindBackend() {
     cd "$ROOT_DIR" || exit 1
     servicesDir="$ROOT_DIR/data/services/$BACKEND"
     sourceDir="$ROOT_DIR/$BACKEND"
+    DATABASE_NAME="growerlab_$BRANCH"
 
     mkdir -p "$servicesDir"
     cp -R "$BACKEND/db" "$servicesDir"
     cp -R "$BACKEND/conf" "$servicesDir"
     cp "$BACKEND/$BACKEND" "$servicesDir"
+
+    sed -i 's/namespace: master/namespace: ${BRANCH}/g' "$servicesDir/conf/config.yaml"
+    sed -i 's/postgresql:.*/postgresql:\/\/growerlab:growerlab@postgres:5432\/$DATABASE_NAME?sslmode=disable/g' "$servicesDir/conf/config.yaml"
+    sed -i 's/host: 127.0.0.1/host: keydb/g' "$servicesDir/conf/config.yaml"
+
     echo "------ done backend -------"
 }
 
@@ -57,6 +63,9 @@ bindSVC() {
     mkdir -p "$servicesDir"
     cp -R "$SVC/.env.example" "$servicesDir"/.env
     cp "$SVC/$SVC" "$servicesDir"
+
+    sed -i 's/logs/${SERVICES_PATH}\/data\/logs/g' $servicesDir/.env
+
     echo "------ done svc -------"
 }
 
@@ -87,7 +96,7 @@ syncData() {
     fi
 
     echo "rsync /data/keydb..."
-    rsync -e -c -r -u --ignore-errors -e "ssh -i $SSHPATH/key -o StrictHostKeyChecking=no -p $SERVER_PORT" "$ROOT_DIR"/data/keydb "$SERVER_DEPLOY_STRING"/data || $(case "$?" in 0 | 3| 23) exit 0 ;; *) exit $? ;; esac)
+    rsync -e -c -r -u --ignore-errors -e "ssh -i $SSHPATH/key -o StrictHostKeyChecking=no -p $SERVER_PORT" "$ROOT_DIR"/data/keydb "$SERVER_DEPLOY_STRING"/data || $(case "$?" in 0 | 3 | 23) exit 0 ;; *) exit $? ;; esac)
     echo "/rsync /data/pgdata"
     rsync -e -c -r -u --ignore-errors -e "ssh -i $SSHPATH/key -o StrictHostKeyChecking=no -p $SERVER_PORT" "$ROOT_DIR"/data/pgdata "$SERVER_DEPLOY_STRING"/data || $(case "$?" in 0 | 3 | 23) exit 0 ;; *) exit $? ;; esac)
     echo "/rsync /data/logs"
@@ -124,14 +133,6 @@ restartService() {
     (
         cat <<EOF
 cd $SERVICES_PATH || exit 1
-sed -i 's/POSTGRES_DB: growerlab_master/POSTGRES_DB: growerlab_${BRANCH}/g' docker-compose.yaml
-sed -i 's/container_name: services_master/container_name: services_${BRANCH}/g' docker-compose.yaml
-
-sed -i 's/namespace: master/namespace: ${BRANCH}/g' ./data/services/backend/conf/config.yaml
-sed -i 's/postgresql:.*/postgresql:\/\/growerlab:growerlab@postgres:5432\/$DATABASE_NAME?sslmode=disable/g' ./data/services/backend/conf/config.yaml
-sed -i 's/host: 127.0.0.1/host: keydb/g' ./data/services/backend/conf/config.yaml
-
-sed -i 's/logs/${SERVICES_PATH}\/data\/logs/g' ./data/services/svc/.env
 
 # init database
 docker exec -it postgres /bin/bash <<-EODOCKER
