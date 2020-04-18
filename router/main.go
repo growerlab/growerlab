@@ -15,6 +15,7 @@ import (
 	"net/http/httputil"
 	"net/url"
 	"os"
+	"path/filepath"
 	"strings"
 )
 
@@ -45,7 +46,7 @@ func (w *Router) ServeHTTP(resp http.ResponseWriter, req *http.Request) {
 	if req.URL.Path != "/" {
 		path = req.URL.Path
 	}
-	file := fmt.Sprintf("/data/%s/data/website%s", branch, path)
+	file := filepath.Join("/data", branch, "data/website", path)
 
 	log.Printf("url: %s => path: %s client: %s", req.URL.String(), file, req.RemoteAddr)
 
