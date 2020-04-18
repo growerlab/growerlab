@@ -46,9 +46,9 @@ bindBackend() {
     cp -R "$BACKEND/conf" "$servicesDir"
     cp "$BACKEND/$BACKEND" "$servicesDir"
 
-    sed -i 's/namespace: master/namespace: ${BRANCH}/g' "$servicesDir/conf/config.yaml"
-    sed -i 's/postgresql:.*/postgresql:\/\/growerlab:growerlab@postgres:5432\/$DATABASE_NAME?sslmode=disable/g' "$servicesDir/conf/config.yaml"
-    sed -i 's/host: 127.0.0.1/host: keydb/g' "$servicesDir/conf/config.yaml"
+    sed -i "s/namespace: master/namespace: ${BRANCH}/g" "$servicesDir/conf/config.yaml"
+    sed -i "s/postgresql:.*/postgresql:\/\/growerlab:growerlab@postgres:5432\/$DATABASE_NAME?sslmode=disable/g" "$servicesDir/conf/config.yaml"
+    sed -i "s/host: 127.0.0.1/host: keydb/g" "$servicesDir/conf/config.yaml"
 
     echo "------ done backend -------"
 }
@@ -62,7 +62,7 @@ bindSVC() {
     cp -R "$SVC/.env.example" "$servicesDir"/.env
     cp "$SVC/$SVC" "$servicesDir"
 
-    sed -i 's/logs/${SERVICES_PATH}\/data\/logs/g' $servicesDir/.env
+    sed -i "s/logs/${SERVICES_PATH}\/data\/logs/g" $servicesDir/.env
 
     echo "------ done svc -------"
 }
