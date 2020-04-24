@@ -50,21 +50,17 @@ func (w *Router) ServeHTTP(resp http.ResponseWriter, req *http.Request) {
 
 	log.Printf("url: %s => path: %s client: %s", req.URL.String(), file, req.RemoteAddr)
 
-	if i, err := os.Stat(file); os.IsExist(err) && !i.IsDir() {
+	if info, _ := os.Stat(file); info != nil && !info.IsDir() {
 		http.ServeFile(resp, req, file)
 		return
 	}
 
-	// reproxy
+	// 将请求路由到后端
 	uri, err := url.Parse(fmt.Sprintf("http://services_%s:8081", branch))
 	if err != nil {
 		panic(errors.New("parse url was err: " + err.Error() + " branch:" + branch))
 	}
 	reverseProxy := httputil.NewSingleHostReverseProxy(uri)
-	// reverseProxy.Director = func(proxyReq *http.Request) {
-	// 	// proxyReq.URL.Scheme = uri.Scheme
-	// 	// proxyReq.Header = req.Header.Clone()
-	// }
 	reverseProxy.ModifyResponse = func(response *http.Response) error {
 		response.Header.Set("Growerlab", "Router")
 		return nil
