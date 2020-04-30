@@ -3,11 +3,11 @@ name: Frontend
 on:
   push:
     branches: [master]
-    paths:
-      - ".github/events/frontend.event"
-      - ".github/events/touch.event"
-      - ".github/workflows/dev_frontend.yml"
-      - "docker-compose.yaml"
+#    paths:
+#      - ".github/events/frontend.event"
+#      - ".github/events/touch.event"
+#      - ".github/workflows/dev_frontend.yml"
+#      - "docker-compose.yaml"
 
 jobs:
   build:
