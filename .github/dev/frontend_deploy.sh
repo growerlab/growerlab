@@ -30,6 +30,7 @@ buildFrontend() {
     echo "------ buildFrontend -------"
     cd $FRONTEND || exit 1
 
+    npm install
     npm run build --if-present
 
     cd -
