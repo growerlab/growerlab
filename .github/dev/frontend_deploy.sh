@@ -47,7 +47,7 @@ syncDist() {
     chmod 600 "$SSHPATH/key"
     SERVER_DEPLOY_STRING="$SERVER_USER@$SERVER_HOST:$SERVICES_PATH"
 
-    rsync -e -c -r --delete -e "ssh -i $SSHPATH/key -o StrictHostKeyChecking=no -p $SERVER_PORT" "$ROOT_DIR"/dist "$SERVER_DEPLOY_STRING"/website
+    rsync -e -c -r --delete -e "ssh -i $SSHPATH/key -o StrictHostKeyChecking=no -p $SERVER_PORT" ./dist "$SERVER_DEPLOY_STRING"/website
 
     cd -
     echo "------ syncDist done -------"
