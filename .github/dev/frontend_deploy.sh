@@ -30,9 +30,6 @@ buildFrontend() {
     echo "------ buildFrontend -------"
     cd $FRONTEND || exit 1
 
-    echo "config replaces"
-    sed -i "s/git.com/${BRANCH}.dev.growerlab.net/g" "./src/config/config.ts"
-
     echo "npm install"
     npm install
     echo "npm run build"

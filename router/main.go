@@ -16,11 +16,21 @@ import (
 	"net/url"
 	"os"
 	"path/filepath"
+	"regexp"
 	"strings"
 )
 
 const (
 	DefaultIndex = "index.html"
+)
+
+const (
+	HeaderID    = "Growerlab"
+	HeaderLabel = "Router"
+)
+
+var (
+	RegexpApi = regexp.MustCompile(`/api/.+`) // api regexp
 )
 
 func main() {
@@ -38,31 +48,52 @@ func run() error {
 type Router struct {
 }
 
-// TODO 后端的接口比较少，可以加个map cache
-//
 func (w *Router) ServeHTTP(resp http.ResponseWriter, req *http.Request) {
 	branch := w.branch(req.Host)
-	path := DefaultIndex
-	if req.URL.Path != "/" {
-		path = req.URL.Path
+
+	switch {
+	case RegexpApi.MatchString(req.URL.Path):
+		w.apiLocation(branch, resp, req)
+	default:
+		w.fileLocation(branch, resp, req)
 	}
-	file := filepath.Join("/data", branch, "data/website", path)
+}
 
-	log.Printf("url: %s => path: %s client: %s", req.URL.String(), file, req.RemoteAddr)
+// 文件路由
+func (w *Router) fileLocation(branch string, resp http.ResponseWriter, req *http.Request) {
+	path := req.URL.Path
+	root := filepath.Join("/data", branch, "data/website")
+	file := filepath.Join(root, path)
 
-	if info, _ := os.Stat(file); info != nil && !info.IsDir() {
-		http.ServeFile(resp, req, file)
-		return
+	switch path {
+	case "/":
+		path = DefaultIndex
+		file = filepath.Join(root, path)
+	default:
+		file = filepath.Join(root, path)
+		_, err := os.Stat(file)
+		if os.IsNotExist(err) {
+			path = DefaultIndex
+		}
+		file = filepath.Join(root, path)
 	}
 
-	// 将请求路由到后端
+	log.Printf("url: %s, client: %s, path: %s", req.URL.String(), req.RemoteAddr, file)
+
+	http.ServeFile(resp, req, file)
+}
+
+// api路由到后端
+func (w *Router) apiLocation(branch string, resp http.ResponseWriter, req *http.Request) {
+	log.Printf("url: %s, client: %s", req.URL.String(), req.RemoteAddr)
+
 	uri, err := url.Parse(fmt.Sprintf("http://services_%s:8081", branch))
 	if err != nil {
 		panic(errors.New("parse url was err: " + err.Error() + " branch:" + branch))
 	}
 	reverseProxy := httputil.NewSingleHostReverseProxy(uri)
 	reverseProxy.ModifyResponse = func(response *http.Response) error {
-		response.Header.Set("Growerlab", "Router")
+		response.Header.Set(HeaderID, HeaderLabel)
 		return nil
 	}
 	reverseProxy.ServeHTTP(resp, req)
