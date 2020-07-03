@@ -7,7 +7,7 @@ on:
 #      - ".github/events/frontend.event"
 #      - ".github/events/touch.event"
 #      - ".github/workflows/dev_frontend.yml"
-#      - "docker-compose.yaml"
+#      - "dev.compose.yaml"
 
 env:
   SERVER: ${{ secrets.GROWERLAB_SERVER }}
@@ -15,7 +15,6 @@ env:
   SERVER_USER: ${{ secrets.GROWERLAB_SERVER_USER }}
   SERVER_SSH_KEY: ${{ secrets.GROWERLAB_SERVER_SSH_KEY }}
   BRANCH_FILE: ".github/events/services.event"
-
 
 jobs:
   build:

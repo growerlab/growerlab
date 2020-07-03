@@ -111,8 +111,8 @@ syncData() {
     rsync -e -c -r --delete --ignore-errors -e "ssh -i $SSHPATH/key -o StrictHostKeyChecking=no -p $SERVER_PORT" "$ROOT_DIR"/data/services "$SERVER_DEPLOY_STRING"/data
     echo "/rsync /data/router"
     rsync -e -c -r --delete -e "ssh -i $SSHPATH/key -o StrictHostKeyChecking=no -p $SERVER_PORT" "$ROOT_DIR"/router "$SERVER_DEPLOY_STRING"
-    echo "/rsync /data/docker-compose.yaml"
-    rsync -e -c -r --delete -e "ssh -i $SSHPATH/key -o StrictHostKeyChecking=no -p $SERVER_PORT" "$ROOT_DIR"/docker-compose.yaml "$SERVER_DEPLOY_STRING"
+    echo "/rsync /data/dev.compose.yaml"
+    rsync -e -c -r --delete -e "ssh -i $SSHPATH/key -o StrictHostKeyChecking=no -p $SERVER_PORT" "$ROOT_DIR"/dev.compose.yaml "$SERVER_DEPLOY_STRING"
     echo "/rsync /data/Dockerfile"
     rsync -e -c -r --delete -e "ssh -i $SSHPATH/key -o StrictHostKeyChecking=no -p $SERVER_PORT" "$ROOT_DIR"/Dockerfile "$SERVER_DEPLOY_STRING"
     echo "------ done deploy -------"
@@ -145,7 +145,7 @@ EODOCKER
 # build router
 ./router/build.sh
 
-docker-compose -f ./docker-compose.yaml up -d growerlab
+docker-compose -f ./dev.compose.yaml up -d growerlab
 EOF
     ) >"$HOME"/start_growerlab.sh
 

@@ -33,6 +33,7 @@ services:
       - ./data/nginx/ssl:/etc/nginx/ssl # nginx中的ssl路径
     ports:
       - "80:80"
+      - "443:443"
     command: /bin/bash -c "exec nginx -g 'daemon off;'"
     networks:
       - growerlab_net
@@ -50,6 +51,8 @@ services:
         - "com.growerlab.description=growerlab.dev.router"
         - "com.growerlab.department=dev"
         - "com.growerlab.by=moli"
+    ports:
+      - "22:22"
     networks:
       - growerlab_net
 
