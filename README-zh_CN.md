@@ -1,23 +1,25 @@
-## Growerlab 
+![Services](https://github.com/growerlab/growerlab/workflows/Services/badge.svg)
+
+## Growerlab
 
 代码托管平台
 
 ### 安装教程
 
-主要介绍growerlab在ubuntu的安装，你应拥有sudo权限
+主要介绍 growerlab 在 ubuntu 的安装，你应拥有 sudo 权限
 
-- 基于ubuntu19.10
-- 未来将打包成docker镜像
+- 基于 ubuntu19.10
+- 未来将打包成 docker 镜像
 
 需要安装运行的服务：
 
-- mensa - SSH/HTTP git仓库服务
-    - 端口 8022、8080
-- svc - 仓库相关的操作服务（文件列表、分支、tag等）
-    - 端口 9000
-- frontend - web网站前端
-- backend - web网站后端
-    - 端口 8081
+- mensa - SSH/HTTP git 仓库服务
+  - 端口 8022、8080
+- svc - 仓库相关的操作服务（文件列表、分支、tag 等）
+  - 端口 9000
+- frontend - web 网站前端
+- backend - web 网站后端
+  - 端口 8081
 
 #### 依赖
 
@@ -38,10 +40,11 @@ $ echo "export PATH=$PATH:/usr/local/go/bin" >> ~/.profile
 $ source ~/.profile
 ```
 
-#### 创建Git账号
+#### 创建 Git 账号
 
-创建系统账号，便于ssh访问以及托管网站服务。
-- `git` 用于ssh访问、仓库操作等进程服务
+创建系统账号，便于 ssh 访问以及托管网站服务。
+
+- `git` 用于 ssh 访问、仓库操作等进程服务
 - `growerlab` 用于部署网站服务
 
 ```shell
@@ -49,13 +52,12 @@ $ sudo adduser growerlab --system --group --disabled-password
 $ sudo usermod -aG docker growerlab
 ```
 
-#### 配置SSH
+#### 配置 SSH
 
-如果需要ssh操作仓库时使用22端口，则需要修改 /etc/ssh/sshd_config 中的端口设置为非22端口（系统中默认可能是`Port 22`）。
-并修改`mensa`服务的端口为22端口。
+如果需要 ssh 操作仓库时使用 22 端口，则需要修改 /etc/ssh/sshd_config 中的端口设置为非 22 端口（系统中默认可能是`Port 22`）。
+并修改`mensa`服务的端口为 22 端口。
 
-
-#### 依赖的docker镜像
+#### 依赖的 docker 镜像
 
 ```
 REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
