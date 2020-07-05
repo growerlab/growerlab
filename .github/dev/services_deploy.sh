@@ -149,8 +149,8 @@ EODOCKER
 
 # docker-compose 启动
 if docker ps -a --format "{{.Names}}" | grep -qw services_$BRANCH; then
-  docker-compose -f ./dev.compose.yaml stop -d growerlab
-  docker-compose -f ./dev.compose.yaml start -d growerlab
+  docker-compose -f ./dev.compose.yaml stop
+  docker-compose -f ./dev.compose.yaml start
 else
   docker-compose -f ./dev.compose.yaml up -d growerlab
 fi
