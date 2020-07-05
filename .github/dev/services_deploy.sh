@@ -134,18 +134,27 @@ cd $SERVICES_PATH || exit 1
 
 # init database
 docker exec -it postgres /bin/bash <<-EODOCKER
-  psql -v ON_ERROR_STOP=1 --username "growerlab" --dbname "$DATABASE_NAME" <<-EOSQL
+  if ! psql -lqt | cut -d \| -f 1 | grep -qw $DATABASE_NAME; then
+    psql -v ON_ERROR_STOP=1 --username "growerlab" --dbname "$DATABASE_NAME" <<-EOSQL
       create database $DATABASE_NAME;
       grant all privileges on database $DATABASE_NAME to growerlab;
       ${DB_STRUCTURE}
       ${DB_SEED}
-  EOSQL
+    EOSQL
+  fi
 EODOCKER
 
 # build router
 ./router/build.sh
 
-docker-compose -f ./dev.compose.yaml up -d growerlab
+# docker-compose 启动
+if docker ps -a --format "{{.Names}}" | grep -qw services_$BRANCH; then
+  docker-compose -f ./dev.compose.yaml stop -d growerlab
+  docker-compose -f ./dev.compose.yaml start -d growerlab
+else
+  docker-compose -f ./dev.compose.yaml up -d growerlab
+fi
+
 EOF
     ) >"$HOME"/start_growerlab.sh
 
