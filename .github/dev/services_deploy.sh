@@ -147,10 +147,11 @@ EODOCKER
 # build router
 ./router/build.sh
 
-# docker-compose 启动
+# docker-compose 编排
 if docker ps -a --format "{{.Names}}" | grep -qw services_$BRANCH; then
-  docker-compose -f ./dev.compose.yaml stop
-  docker-compose -f ./dev.compose.yaml start
+  # TODO 这里的pg，keydb等容器是不需要重复启动的，未来这里需要调整
+  docker-compose -f ./dev.compose.yaml restart router
+  docker-compose -f ./dev.compose.yaml restart services_$BRANCH
 else
   docker-compose -f ./dev.compose.yaml up -d growerlab
 fi
