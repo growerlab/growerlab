@@ -150,8 +150,8 @@ fi
 
 # init database
 docker exec -i postgres /bin/bash <<-EODOCKER
-  if ! psql -lqt | cut -d \| -f 1 | grep -qw $DATABASE_NAME; then
-    psql -v ON_ERROR_STOP=1 --username "growerlab" --dbname "$DATABASE_NAME" <<-EOSQL
+  if ! psql --username growerlab -lqt | cut -d \| -f 1 | grep -qw $DATABASE_NAME; then
+    psql -v ON_ERROR_STOP=1 --username growerlab --dbname $DATABASE_NAME <<-EOSQL
       create database $DATABASE_NAME;
       grant all privileges on database $DATABASE_NAME to growerlab;
       ${DB_STRUCTURE}
