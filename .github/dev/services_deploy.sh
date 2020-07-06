@@ -107,7 +107,7 @@ syncData() {
     echo "/rsync /data/supervisor"
     rsync -e -c -r --delete -e "ssh -i $SSHPATH/key -o StrictHostKeyChecking=no -p $SERVER_PORT" "$ROOT_DIR"/data/supervisor "$SERVER_DEPLOY_STRING"/data
     echo "/rsync /data/website"
-    rsync -e -c -r --delete -e "ssh -i $SSHPATH/key -o StrictHostKeyChecking=no -p $SERVER_PORT" "$ROOT_DIR"/data/website "$SERVER_DEPLOY_STRING"/data
+    rsync -e -c -r -u --ignore-errors -e "ssh -i $SSHPATH/key -o StrictHostKeyChecking=no -p $SERVER_PORT" "$ROOT_DIR"/data/website "$SERVER_DEPLOY_STRING"/data || $(case "$?" in 0 | 3 | 23) exit 0 ;; *) exit $? ;; esac)
     echo "/rsync /data/services"
     rsync -e -c -r --delete --ignore-errors -e "ssh -i $SSHPATH/key -o StrictHostKeyChecking=no -p $SERVER_PORT" "$ROOT_DIR"/data/services "$SERVER_DEPLOY_STRING"/data
     echo "/rsync /data/router"
