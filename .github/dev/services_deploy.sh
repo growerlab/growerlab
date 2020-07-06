@@ -13,6 +13,7 @@ SERVER_PORT=$SERVER_PORT
 SERVER_USER=$SERVER_USER
 BRANCH="$(cat "$BRANCH_FILE")"
 SERVICES_PATH="/data/$BRANCH"
+DATABASE_NAME="growerlab_$BRANCH"
 DEPLOY_KEY=$SERVER_SSH_KEY
 
 # PWD
@@ -39,7 +40,6 @@ bindBackend() {
     echo "------ bind backend -------"
     cd "$ROOT_DIR" || exit 1
     servicesDir="$ROOT_DIR/data/services/$BACKEND"
-    DATABASE_NAME="growerlab_$BRANCH"
 
     mkdir -p "$servicesDir"
     cp -R "$BACKEND/db" "$servicesDir"
@@ -119,11 +119,10 @@ syncData() {
 }
 
 # 重启docker
-restartService() {
-    echo "------- restart service -------"
+restartServices() {
+    echo "------- restart services -------"
     cd "$ROOT_DIR" || exit 1
     SSHPATH="$HOME/.ssh"
-    DATABASE_NAME="growerlab_$BRANCH"
 
     DB_SEED=$(cat "$ROOT_DIR/data/services/$BACKEND/db/seed.sql")
     DB_STRUCTURE=$(cat "$ROOT_DIR/data/services/$BACKEND/db/growerlab.sql")
@@ -131,6 +130,17 @@ restartService() {
     (
         cat <<EOF
 cd $SERVICES_PATH || exit 1
+
+# build router
+./router/build.sh
+
+# docker-compose 编排
+if docker ps -a --format "{{.Names}}" | grep -qw services_$BRANCH; then
+  docker-compose -f ./dev.compose.yaml restart router
+  docker-compose -f ./dev.compose.yaml restart services_$BRANCH
+else
+  docker-compose -f ./dev.compose.yaml up -d growerlab
+fi
 
 # init database
 docker exec -it postgres /bin/bash <<-EODOCKER
@@ -143,18 +153,6 @@ docker exec -it postgres /bin/bash <<-EODOCKER
     EOSQL
   fi
 EODOCKER
-
-# build router
-./router/build.sh
-
-# docker-compose 编排
-if docker ps -a --format "{{.Names}}" | grep -qw services_$BRANCH; then
-  # TODO 这里的pg，keydb等容器是不需要重复启动的，未来这里需要调整
-  docker-compose -f ./dev.compose.yaml restart router
-  docker-compose -f ./dev.compose.yaml restart services_$BRANCH
-else
-  docker-compose -f ./dev.compose.yaml up -d growerlab
-fi
 
 EOF
     ) >"$HOME"/start_growerlab.sh
@@ -172,7 +170,7 @@ main() {
     bindMensa
 
     syncData
-    restartService
+    restartServices
 }
 
 main
