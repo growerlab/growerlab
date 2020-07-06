@@ -156,7 +156,7 @@ docker exec -i postgres /bin/bash <<-EODOCKER
       grant all privileges on database $DATABASE_NAME to growerlab;
       ${DB_STRUCTURE}
       ${DB_SEED}
-    EOSQL
+EOSQL
   fi
 EODOCKER
 
