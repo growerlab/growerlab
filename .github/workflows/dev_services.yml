@@ -15,6 +15,7 @@ env:
   SERVER_PORT: ${{ secrets.GROWERLAB_SERVER_PORT }}
   SERVER_USER: ${{ secrets.GROWERLAB_SERVER_USER }}
   SERVER_SSH_KEY: ${{ secrets.GROWERLAB_SERVER_SSH_KEY }}
+  SERVER_POSTGRES_PASSWORD: ${{ secrets.GROWERLAB_POSTGRES_PASSWORD }}
   BRANCH_FILE: ".github/events/services.event"
 
 jobs:

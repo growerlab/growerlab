@@ -15,6 +15,7 @@ BRANCH="$(cat "$BRANCH_FILE")"
 SERVICES_PATH="/data/$BRANCH"
 DATABASE_NAME="growerlab_$BRANCH"
 DEPLOY_KEY=$SERVER_SSH_KEY
+POSTGRES_PASSWORD=$SERVER_POSTGRES_PASSWORD
 
 # PWD
 ROOT_DIR=$GITHUB_WORKSPACE
@@ -47,7 +48,7 @@ bindBackend() {
     cp "$BACKEND/$BACKEND" "$servicesDir"
 
     sed -i "s/namespace: master/namespace: ${BRANCH}/g" "$servicesDir/conf/config.yaml"
-    sed -i "s/postgresql:.*/postgresql:\/\/growerlab:growerlab@postgres:5432\/$DATABASE_NAME?sslmode=disable/g" "$servicesDir/conf/config.yaml"
+    sed -i "s/postgresql:.*/postgresql:\/\/growerlab:$POSTGRES_PASSWORD@postgres:5432\/$DATABASE_NAME?sslmode=disable/g" "$servicesDir/conf/config.yaml"
     sed -i "s/host: 127.0.0.1/host: keydb/g" "$servicesDir/conf/config.yaml"
 
     echo "------ done backend -------"
@@ -130,6 +131,11 @@ restartServices() {
     (
         cat <<EOF
 cd $SERVICES_PATH || exit 1
+
+# 写环境变量
+cat > .env <<-EOENV
+POSTGRES_PASSWORD=$POSTGRES_PASSWORD
+EOENV
 
 # build router
 ./router/build.sh
