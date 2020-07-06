@@ -6,7 +6,7 @@ services:
     restart: "no"
     environment:
       POSTGRES_USER: growerlab
-      POSTGRES_PASSWORD: growerlab
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: growerlab_master
     volumes:
       - ./data/pgdata:/var/lib/postgresql/data
