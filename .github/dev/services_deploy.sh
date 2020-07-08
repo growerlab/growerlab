@@ -16,6 +16,7 @@ SERVICES_PATH="/data/$BRANCH"
 DATABASE_NAME="growerlab_$BRANCH"
 DEPLOY_KEY=$SERVER_SSH_KEY
 POSTGRES_PASSWORD=$SERVER_POSTGRES_PASSWORD
+DOMAIN="$BRANCH.dev.growerlab.net"
 
 # PWD
 ROOT_DIR=$GITHUB_WORKSPACE
@@ -47,9 +48,10 @@ bindBackend() {
     cp -R "$BACKEND/conf" "$servicesDir"
     cp "$BACKEND/$BACKEND" "$servicesDir"
 
-    sed -i "s/namespace: master/namespace: ${BRANCH}/g" "$servicesDir/conf/config.yaml"
+    sed -i "s/namespace: master/namespace: $BRANCH/g" "$servicesDir/conf/config.yaml"
     sed -i "s/postgresql:.*/postgresql:\/\/growerlab:$POSTGRES_PASSWORD@postgres:5432\/$DATABASE_NAME?sslmode=disable/g" "$servicesDir/conf/config.yaml"
     sed -i "s/host: 127.0.0.1/host: keydb/g" "$servicesDir/conf/config.yaml"
+    sed -i "s/localhost/$DOMAIN/g" "$servicesDir/conf/config.yaml"
 
     echo "------ done backend -------"
 }
