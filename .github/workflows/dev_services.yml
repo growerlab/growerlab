@@ -2,14 +2,17 @@ name: Services
 
 on:
   workflow_dispatch:
-  push:
-    branches: [master]
-    paths:
-      - ".github/events/services.event"
-      - ".github/events/touch.event"
-      - ".github/dev/services_deploy.sh"
-      - ".github/workflows/dev_services.yml"
-      - "dev.compose.yaml"
+    inputs:
+      buildBranch:
+        required: true
+        default: "master"
+        description: "编译的分支"
+  # push:
+  #   branches: [master]
+  #   paths:
+  #     - ".github/dev/services_deploy.sh"
+  #     - ".github/workflows/dev_services.yml"
+  #     - "dev.compose.yaml"
 
 env:
   SERVER: ${{ secrets.GROWERLAB_SERVER }}
@@ -17,7 +20,7 @@ env:
   SERVER_USER: ${{ secrets.GROWERLAB_SERVER_USER }}
   SERVER_SSH_KEY: ${{ secrets.GROWERLAB_SERVER_SSH_KEY }}
   SERVER_POSTGRES_PASSWORD: ${{ secrets.GROWERLAB_POSTGRES_PASSWORD }}
-  BRANCH_FILE: ".github/events/services.event"
+  BUILD_BRANCH: ${{ github.event.inputs.buildBranch }}
 
 jobs:
   build:

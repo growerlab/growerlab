@@ -2,20 +2,25 @@ name: Frontend
 
 on:
   workflow_dispatch:
-  push:
-    branches: [master]
-    paths:
-      - ".github/events/frontend.event"
-      - ".github/events/touch.event"
-      - ".github/workflows/dev_frontend.yml"
-      - "dev.compose.yaml"
+    inputs:
+      buildBranch:
+        required: true
+        default: "master"
+        description: "编译的分支"
+  # push:
+  #   branches: [master]
+  #   paths:
+  #     - ".github/events/frontend.event"
+  #     - ".github/events/touch.event"
+  #     - ".github/workflows/dev_frontend.yml"
+  #     - "dev.compose.yaml"
 
 env:
   SERVER: ${{ secrets.GROWERLAB_SERVER }}
   SERVER_PORT: ${{ secrets.GROWERLAB_SERVER_PORT }}
   SERVER_USER: ${{ secrets.GROWERLAB_SERVER_USER }}
   SERVER_SSH_KEY: ${{ secrets.GROWERLAB_SERVER_SSH_KEY }}
-  BRANCH_FILE: ".github/events/services.event"
+  BUILD_BRANCH: ${{ github.event.inputs.buildBranch }}
 
 jobs:
   build:
