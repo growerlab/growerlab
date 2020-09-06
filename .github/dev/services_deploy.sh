@@ -145,7 +145,15 @@ EOENV
 # docker-compose 编排
 if docker ps -a --format "{{.Names}}" | grep -qw services_$BRANCH; then
   docker-compose -f ./dev.compose.yaml restart router
+  if test $? -ne 0; then
+    docker-compose -f ./dev.compose.yaml up -d router
+  fi
+
   docker-compose -f ./dev.compose.yaml restart growerlab
+  if test $? -ne 0; then
+    docker-compose -f ./dev.compose.yaml up -d growerlab
+  fi
+
 else
   docker-compose -f ./dev.compose.yaml up -d growerlab
 fi
