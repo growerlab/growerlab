@@ -150,7 +150,8 @@ runOrRestartContainer() {
     service_name=\$name
     if [ -n \$alias ]; then
       service_name=\$alias
-    end
+    fi
+
     if docker ps --format "{{.Names}}" | grep -qw \$name ; then
       echo "\$service_name 已启动，重启中.."
       docker-compose -f ./dev.compose.yaml restart \$service_name
