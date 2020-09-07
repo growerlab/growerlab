@@ -143,6 +143,7 @@ EOENV
 ./router/build.sh
 
 # docker-compose 编排
+echo "docker compose..."
 runOrRestartContainer() {
     name=\$1
     alias=\$2
@@ -150,7 +151,7 @@ runOrRestartContainer() {
     if [ -n \$alias ]; then
       service_name=\$alias
     end
-    if docker ps -a --format "{{.Names}}" | grep -qw \$name ; then
+    if docker ps --format "{{.Names}}" | grep -qw \$name ; then
       echo "\$service_name 已启动，重启中.."
       docker-compose -f ./dev.compose.yaml restart \$service_name
     else
@@ -168,6 +169,7 @@ runOrRestartContainer "router"
 runOrRestartContainer "services_$BRANCH" "growerlab"
 
 # init database
+echo "init database..."
 docker exec -i postgres /bin/bash <<-EODOCKER
   if ! psql --username growerlab -lqt | cut -d \| -f 1 | grep -qw $DATABASE_NAME; then
     psql -v ON_ERROR_STOP=1 --username growerlab --dbname $DATABASE_NAME <<-EOSQL
@@ -180,9 +182,9 @@ EOSQL
 EODOCKER
 
 EOF
-    ) >"$HOME"/start_growerlab.sh
+    ) >"$HOME"/growerlab.sh
 
-    sh -c "ssh -i $SSHPATH/key -o StrictHostKeyChecking=no -p $SERVER_PORT $SERVER_USER@$SERVER_HOST < $HOME/start_growerlab.sh"
+    sh -c "ssh -i $SSHPATH/key -o StrictHostKeyChecking=no -p $SERVER_PORT $SERVER_USER@$SERVER_HOST < $HOME/growerlab.sh"
 }
 
 main() {

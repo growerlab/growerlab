@@ -2,8 +2,7 @@
 #
 FROM ubuntu:latest
 
-RUN apt-get update
-RUN apt-get install -y git supervisor
+RUN apt-get update && apt-get install -y git supervisor
 
 COPY ./data/supervisor/default.conf /etc/supervisor/supervisord.conf
 
