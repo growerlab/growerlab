@@ -145,12 +145,12 @@ EOENV
 # docker-compose 编排
 runOrRestartContainer() {
     name=\$1
-    if docker ps -a --format "{{.Names}}" | grep -qw $name ; then
-      echo "$name 已启动，重启中.."
-      docker-compose -f ./dev.compose.yaml restart $name
+    if docker ps -a --format "{{.Names}}" | grep -qw \$name ; then
+      echo "\$name 已启动，重启中.."
+      docker-compose -f ./dev.compose.yaml restart \$name
     else
-      echo "$name 未启动，启动中.."
-      docker-compose -f ./dev.compose.yaml up -d $name
+      echo "\$name 未启动，启动中.."
+      docker-compose -f ./dev.compose.yaml up -d \$name
     fi
 }
 
