@@ -4,9 +4,6 @@
 # $ ./touch.sh backend BRANCH
 # $ ./touch.sh fronend BRANCH
 
-echo '$(GITHUB_WORKFLOW_TOKEN)'
-exit 1
-
 GITHUB_WORKFLOW_TOKEN=$GITHUB_WORKFLOW_TOKEN
 
 BACKEND_WORKFLOW_ID=772220
