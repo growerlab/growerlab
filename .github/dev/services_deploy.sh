@@ -80,7 +80,7 @@ bindMensa() {
   cp -R "$MENSA/conf" "$servicesDir"
   cp "$MENSA/$MENSA" "$servicesDir"
 
-  sed -i "s/growerlab:growerlab@127.0.0.1:5432\/growerlab/growerlab:$POSTGRES_PASSWORD@postgres:5432/$DATABASE_NAME/g" $servicesDir/conf/config.yaml
+  sed -i "s/growerlab:growerlab@127.0.0.1:5432\/growerlab/growerlab:$POSTGRES_PASSWORD@postgres:5432\/$DATABASE_NAME/g" $servicesDir/conf/config.yaml
   sed -i "s/host: 127.0.0.1/host: keydb/g" $servicesDir/conf/config.yaml
   sed -i "s/master/${BRANCH}/g" $servicesDir/conf/config.yaml
 
