@@ -154,13 +154,13 @@ runOrRestartContainer() {
     fi
 }
 
-runOrRestartContainer("postgres")
-runOrRestartContainer("keydb")
-runOrRestartContainer("nginx")
+runOrRestartContainer "postgres"
+runOrRestartContainer "keydb"
+runOrRestartContainer "nginx"
 # waiting for services
 sleep 2
-runOrRestartContainer("router")
-runOrRestartContainer("services_$BRANCH")
+runOrRestartContainer "router"
+runOrRestartContainer "services_$BRANCH"
 
 # init database
 docker exec -i postgres /bin/bash <<-EODOCKER
