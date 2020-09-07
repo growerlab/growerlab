@@ -65,8 +65,8 @@ bindSVC() {
     cp -R "$SVC/.env.example" "$servicesDir"/.env
     cp "$SVC/$SVC" "$servicesDir"
 
-    ESCAPE_SERVICES_PATH=$(echo "${SERVICES_PATH}" | sed 's/\//\\\//g')
-    sed -i "s/logs/${ESCAPE_SERVICES_PATH}\/data\/logs/g" $servicesDir/.env
+    # ESCAPE_SERVICES_PATH=$(echo "${SERVICES_PATH}" | sed 's/\//\\\//g')
+    sed -i "s/logs\//\/data\/logs\/svc-/g" $servicesDir/.env
 
     echo "------ done svc -------"
 }
@@ -79,6 +79,11 @@ bindMensa() {
     mkdir -p "$servicesDir"
     cp -R "$MENSA/conf" "$servicesDir"
     cp "$MENSA/$MENSA" "$servicesDir"
+
+    sed -i "s/127.0.0.1:5432/postgres:5432/g" $servicesDir/conf/config.yaml
+    sed -i "s/host: 127.0.0.1/host: keydb/g" $servicesDir/conf/config.yaml
+    sed -i "s/master/${BRANCH}/g" $servicesDir/conf/config.yaml
+
     echo "------ done mensa -------"
 }
 
