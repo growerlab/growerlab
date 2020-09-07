@@ -143,20 +143,24 @@ EOENV
 ./router/build.sh
 
 # docker-compose 编排
-if docker ps -a --format "{{.Names}}" | grep -qw services_$BRANCH; then
-  docker-compose -f ./dev.compose.yaml restart router
-  if test $? -ne 0; then
-    docker-compose -f ./dev.compose.yaml up -d router
-  fi
+runOrRestartContainer() {
+    name = $1
+    if docker ps -a --format "{{.Names}}" | grep -qw $name ; then
+      echo "$name 已启动，重启中.."
+      docker-compose -f ./dev.compose.yaml restart $name
+    else
+      echo "$name 未启动，启动中.."
+      docker-compose -f ./dev.compose.yaml up -d $name
+    fi
+}
 
-  docker-compose -f ./dev.compose.yaml restart growerlab
-  if test $? -ne 0; then
-    docker-compose -f ./dev.compose.yaml up -d growerlab
-  fi
-
-else
-  docker-compose -f ./dev.compose.yaml up -d growerlab
-fi
+runOrRestartContainer("postgres")
+runOrRestartContainer("keydb")
+runOrRestartContainer("nginx")
+# waiting for services
+sleep 2
+runOrRestartContainer("router")
+runOrRestartContainer("services_$BRANCH")
 
 # init database
 docker exec -i postgres /bin/bash <<-EODOCKER

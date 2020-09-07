@@ -16,6 +16,13 @@ ACTION_TARGET_FRONEND='fronend'
 
 ACTION_TARGET_BRANCH=$2
 
+if [ -z $1 ]; then
+    echo "err!"
+    echo "target is must"
+    echo "eg: ./touch.sh backend master"
+    exit 1
+fi
+
 if [ $1 = $ACTION_TARGET_BACKEND ]; then
     TARGET_WORKFLOW_ID=$BACKEND_WORKFLOW_ID
 else
@@ -24,7 +31,7 @@ fi
 
 if [ -z $GITHUB_WORKFLOW_TOKEN ]; then
     echo "err!"
-    echo "github token is required"
+    echo "github token is required, must set GITHUB_WORKFLOW_TOKEN to env."
     exit 1
 fi
 
