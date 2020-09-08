@@ -63,6 +63,7 @@ bindSVC() {
 
   mkdir -p "$servicesDir"
   cp -R "$SVC/.env.example" "$servicesDir"/.env
+  cp -R "$SVC/template" "$servicesDir"/
   cp "$SVC/$SVC" "$servicesDir"
 
   # ESCAPE_SERVICES_PATH=$(echo "${SERVICES_PATH}" | sed 's/\//\\\//g')
