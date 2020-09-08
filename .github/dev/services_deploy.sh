@@ -68,7 +68,7 @@ bindSVC() {
 
   # ESCAPE_SERVICES_PATH=$(echo "${SERVICES_PATH}" | sed 's/\//\\\//g')
   sed -i "s/logs\//\/data\/logs\/svc-/g" $servicesDir/.env
-  sed -i "s/REPOS_DIR=repos\//REPOS_DIR=$SERVICES_PATH\/data\/repositories\//g" $servicesDir/.env
+  sed -i "s/REPOS_DIR=repos\//REPOS_DIR=\/data\/$BRANCH\/data\/repositories\//g" $servicesDir/.env
 
   echo "------ done svc -------"
 }
