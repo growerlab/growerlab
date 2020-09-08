@@ -17,7 +17,6 @@ import (
 	"os"
 	"path/filepath"
 	"regexp"
-	"time"
 )
 
 const (
@@ -67,37 +66,24 @@ func (w *WebSiteRouter) fileLocation(branch string, resp http.ResponseWriter, re
 	root := filepath.Join("/data", branch, "data/website")
 	file := filepath.Join(root, path)
 
-	modtime := time.Now()
-	var fp *os.File
-
 	switch path {
 	case "/":
 		path = DefaultIndex
 		file = filepath.Join(root, path)
-		stat, err := os.Stat(file)
-		if os.IsNotExist(err) {
-			resp.WriteHeader(http.StatusNotFound)
-			return
-		}
-		modtime = stat.ModTime()
-		fp, err = os.Open(file)
-		if err != nil {
-			resp.Write([]byte(err.Error()))
-			return
-		}
 	default:
 		file = filepath.Join(root, path)
-		stat, err := os.Stat(file)
-		if os.IsNotExist(err) {
-			path = DefaultIndex
-		}
-		file = filepath.Join(root, path)
-		modtime = stat.ModTime()
-		fp, err = os.Open(file)
-		if err != nil {
-			resp.Write([]byte(err.Error()))
-			return
-		}
+	}
+
+	stat, err := os.Stat(file)
+	if os.IsNotExist(err) {
+		resp.WriteHeader(http.StatusNotFound)
+		return
+	}
+	modtime := stat.ModTime()
+	fp, err := os.Open(file)
+	if err != nil {
+		resp.Write([]byte(err.Error()))
+		return
 	}
 
 	log.Printf("url: %s, client: %s, path: %s", req.URL.String(), req.RemoteAddr, file)
