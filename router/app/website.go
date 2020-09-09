@@ -76,9 +76,10 @@ func (w *WebSiteRouter) fileLocation(branch string, resp http.ResponseWriter, re
 
 	stat, err := os.Stat(file)
 	if os.IsNotExist(err) {
-		resp.WriteHeader(http.StatusNotFound)
-		return
+		path = DefaultIndex
+		file = filepath.Join(root, path)
 	}
+
 	modtime := stat.ModTime()
 	fp, err := os.Open(file)
 	if err != nil {
