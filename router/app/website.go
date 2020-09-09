@@ -78,6 +78,7 @@ func (w *WebSiteRouter) fileLocation(branch string, resp http.ResponseWriter, re
 	if os.IsNotExist(err) {
 		path = DefaultIndex
 		file = filepath.Join(root, path)
+		stat, _ = os.Stat(file)
 	}
 
 	modtime := stat.ModTime()
