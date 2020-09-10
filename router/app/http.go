@@ -34,7 +34,7 @@ func (w *GitHttpRouter) ServeHTTP(resp http.ResponseWriter, req *http.Request) {
 
 // api路由到后端
 func (w *GitHttpRouter) location(branch string, resp http.ResponseWriter, req *http.Request) {
-	log.Printf("url: %s, client: %s", req.URL.String(), req.RemoteAddr)
+	log.Printf("branch: %s, url: %s, client: %s", branch, req.URL.String(), req.RemoteAddr)
 
 	uri, err := url.Parse(fmt.Sprintf("http://services_%s:8080", branch))
 	if err != nil {
