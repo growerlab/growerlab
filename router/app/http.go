@@ -7,7 +7,6 @@ import (
 	"net/http"
 	"net/http/httputil"
 	"net/url"
-	"strings"
 )
 
 func RunGitHTTPRouter() {
@@ -29,12 +28,8 @@ type GitHttpRouter struct {
 
 func (w *GitHttpRouter) ServeHTTP(resp http.ResponseWriter, req *http.Request) {
 	branch := BranchByHost(req.Host)
-	isGitURL := strings.HasSuffix(req.URL.Path, ".git")
-	if isGitURL {
-		w.location(branch, resp, req)
-	} else {
-		resp.WriteHeader(http.StatusInternalServerError)
-	}
+
+	w.location(branch, resp, req)
 }
 
 // api路由到后端
