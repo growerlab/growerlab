@@ -4,6 +4,14 @@
 
 代码托管平台
 
+### 运行环境
+
+```
+ENV=test         # 测试环境
+ENV=production   # 生产环境
+ENV=dev || null  # ENV是dev或空值则默认为开发环境
+```
+
 ### 安装教程
 
 主要介绍 growerlab 在 ubuntu 的安装，你应拥有 sudo 权限
