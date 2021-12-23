@@ -7,9 +7,9 @@
 ### 运行环境
 
 ```
-ENV=test         # 测试环境
-ENV=production   # 生产环境
-ENV=dev || null  # ENV是dev或空值则默认为开发环境
+ENV=dev            # 测试开发环境
+ENV=production     # 生产环境
+ENV=local || null  # ENV是local或空值则默认为本地开发环境
 ```
 
 ### 安装教程
@@ -21,13 +21,14 @@ ENV=dev || null  # ENV是dev或空值则默认为开发环境
 
 需要安装运行的服务：
 
-- mensa - SSH/HTTP git 仓库服务
-  - 端口 8022、8080
-- svc - 仓库相关的操作服务（文件列表、分支、tag 等）
-  - 端口 9000
-- frontend - web 网站前端
-- backend - web 网站后端
-  - 端口 8081
+- `mensa` - SSH/HTTP git 仓库服务中间件
+  - 暴露端口 8022(ssh)、8080(http)
+- `go-git-grpc` - GRPC git服务（文件列表、分支、tag 等）、推送拉取服务
+  - 内部端口 9001
+  - `hulk` - 推送hook服务
+- `frontend` - web 网站前端
+- `backend` - web 网站后端
+  - 暴露端口 8081
 
 #### 依赖
 
