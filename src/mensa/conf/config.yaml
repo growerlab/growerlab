@@ -1,0 +1,32 @@
+default: &base
+  user: git
+  listen: 0.0.0.0:22
+  http_listen: 0.0.0.0:8080
+  go_git_grpc_addr: 127.0.0.1:9001
+  deadline: 3600
+  idle_timeout: 30
+  git_path: /usr/bin/git
+  git_repo_dir: /data/repositories # repos base dir
+  db_url: growerlab:growerlab@tcp(127.0.0.1:3306)/growerlab
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    max_idle: 5
+    max_active: 512
+    idle_timeout: 120
+    namespace: "master:mensa"
+    permission_namespace: "master" # 权限所在的redis命名空间
+
+production:
+  <<: *base
+
+dev:
+  <<: *base
+
+local:
+  <<: *base
+  user: moli
+  listen: 0.0.0.0:8022
+  http_listen: 0.0.0.0:8080
+  git_repo_dir: test/repos
+  db_url: growerlab:growerlab@tcp(127.0.0.1:3306)/growerlab

@@ -1,18 +1,19 @@
-![Services](https://github.com/growerlab/growerlab/workflows/Services/badge.svg)
 
-## Growerlab
+# Growerlab
+
+![Services](https://github.com/growerlab/growerlab/workflows/Services/badge.svg)
 
 代码托管平台
 
-### 运行环境
+## 运行环境
 
-```
+```shell
 ENV=dev            # 测试开发环境
 ENV=production     # 生产环境
 ENV=local || null  # ENV是local或空值则默认为本地开发环境
 ```
 
-### 安装教程
+## 安装教程
 
 主要介绍 growerlab 在 ubuntu 的安装，你应拥有 sudo 权限
 
@@ -30,7 +31,7 @@ ENV=local || null  # ENV是local或空值则默认为本地开发环境
 - `backend` - web 网站后端
   - 暴露端口 8081
 
-#### 依赖
+### 依赖
 
 ```shell
 $ sudo apt install -y golang-go
@@ -49,7 +50,7 @@ $ echo "export PATH=$PATH:/usr/local/go/bin" >> ~/.profile
 $ source ~/.profile
 ```
 
-#### 创建 Git 账号
+### 创建 Git 账号
 
 创建系统账号，便于 ssh 访问以及托管网站服务。
 
@@ -61,12 +62,12 @@ $ sudo adduser growerlab --system --group --disabled-password
 $ sudo usermod -aG docker growerlab
 ```
 
-#### 配置 SSH
+### 配置 SSH
 
 如果需要 ssh 操作仓库时使用 22 端口，则需要修改 /etc/ssh/sshd_config 中的端口设置为非 22 端口（系统中默认可能是`Port 22`）。
 并修改`mensa`服务的端口为 22 端口。
 
-#### 依赖的 docker 镜像
+### 依赖的 docker 镜像
 
 ```
 REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE

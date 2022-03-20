@@ -1,0 +1,29 @@
+default: &base
+  debug: true
+  website_url: http://localhost
+  port: 8081
+  db:
+    url: growerlab:growerlab@tcp(localhost:3306)/growerlab
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    max_idle: 5
+    max_active: 512
+    idle_timeout: 120
+    namespace: master
+  mensa:
+    ssh_user: git
+    ssh_host: localhost
+    ssh_port: 8022
+    http_host: localhost
+    http_port: 8080
+
+local:
+  <<: *base
+
+dev:
+  <<: *base
+
+production:
+  debug: false
+  <<: *base

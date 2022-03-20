@@ -1,0 +1,58 @@
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test binary, build with `go test -c`
+*.test
+
+# Output of the go coverage tool, specifically when used with LiteIDE
+*.out
+
+vendor
+
+.idea
+
+main
+
+test.go
+
+/test/repos
+/test/test
+local
+
+/test/*.txt
+
+# Logs
+logs/*
+!logs/.gitkeep
+*.log
+
+# Runtime data
+pids/*
+!pids/.gitkeep
+*.pid
+*.seed
+repos
+
+# IDE
+.sw*
+tags
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+ehthumbs.db
+Icon?
+Thumbs.db
+
+# .env
+.env
+.env.*
+!.env.example
+
+hooks

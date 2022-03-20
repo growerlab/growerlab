@@ -1,0 +1,13 @@
+{
+    "WorkingDir": "{GOPATH}/src/github.com/growerlab/backend",
+    "SourceDir": [
+        "{GOPATH}/src/github.com/growerlab/backend"
+    ],
+    "SourceExt": [".go", ".graphql"],
+    "BuildCmd": "go build main.go",
+    "RunCmd": "main",
+    "Decreasing": 1,
+    "ENV": {
+        "enable_amqp": "true"
+    }
+}

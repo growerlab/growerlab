@@ -1,0 +1,16 @@
+package common
+
+const (
+	_               = iota
+	ErrAbort        // 中间件终止
+	ErrNoPermission // 无操作权限
+)
+
+// git运行时传入的环境变量
+const (
+	GROWERLAB_REPO_OWNER     = "GROWERLAB_REPO_OWNER"
+	GROWERLAB_REPO_NAME      = "GROWERLAB_REPO_NAME"
+	GROWERLAB_REPO_ACTION    = "GROWERLAB_REPO_ACTION"
+	GROWERLAB_REPO_PROT_TYPE = "GROWERLAB_REPO_PROT_TYPE"
+	GROWERLAB_REPO_OPERATOR  = "GROWERLAB_REPO_OPERATOR"
+)
