@@ -1,5 +1,4 @@
 // 全局接受系统消息（kill -INT 等消息）
-//
 package notify
 
 import (
@@ -16,8 +15,8 @@ func InitNotify() error {
 	go func() {
 		c := make(chan os.Signal, 1)
 		signal.Notify(c,
-			os.Interrupt,
-			os.Kill,
+			syscall.SIGINT,
+			syscall.SIGKILL,
 			syscall.SIGQUIT,
 			syscall.SIGSTOP,
 			syscall.SIGUSR1,
@@ -39,6 +38,6 @@ func Subscribe(fn func()) {
 	notifySubscribes = append(notifySubscribes, fn)
 }
 
-func Done() {
+func WaitDone() {
 	<-allOfDone
 }

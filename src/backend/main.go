@@ -20,5 +20,5 @@ func main() {
 			panic(err)
 		}
 	}
-	notify.Done()
+	notify.WaitDone()
 }
