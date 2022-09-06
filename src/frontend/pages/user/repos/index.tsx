@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 import { RepositoryList } from "../../../components/repository/List";
-import { Session, LoginInfo } from "../../../services/auth/session";
+import { Session } from "../../../services/auth/session";
 import i18n from "../../../i18n/i18n";
 import UserLayout from "../../layouts/user";
 
@@ -16,7 +16,7 @@ export default function Index() {
 
   return (
     <div>
-      <UserLayout title={i18n.t("repository.list")}>
+      <UserLayout title={i18n.t("repository.menu")}>
         <RepositoryList ownerPath={namespace} />
       </UserLayout>
     </div>

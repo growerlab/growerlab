@@ -23,7 +23,6 @@ function UserLayout(props: any) {
     });
   });
 
-  // eslint-disable-next-line react-hooks/rules-of-hooks
   const [collapsed, setCollapsed] = useState(false);
   const plusMenu = (
     <Link href={Router.User.Repository.New}>{t("repository.new")}</Link>
@@ -44,7 +43,7 @@ function UserLayout(props: any) {
                 ["Your Profile", "/", PeopleIcon],
                 ["Settings", "/", CircleArrowRightIcon],
               ].map(([title, url, icon]) => (
-                <Menu.Item icon={icon as IconComponent}>
+                <Menu.Item key={url as string} icon={icon as IconComponent}>
                   <a href={url as string}>
                     {title}
                   </a>
@@ -111,12 +110,11 @@ function UserLayout(props: any) {
               </div>
               <div className="px-2 pt-2 pb-3 space-y-1 ">
                 {[
-                  ["Home", Router.User.Index, <HomeIcon size={20} className="inline" />],
-                  [t("repository.list"), Router.User.Repository.List, <GitRepoIcon size={20} className="inline" />],
-                  ["Projects", "/", <ProjectsIcon size={20} className="inline" />],
+                  ["Home", Router.User.Index, <HomeIcon key={"home"} size={20} className="inline" />],
+                  [t("repository.menu"), Router.User.Repository.List, <GitRepoIcon key={"repository"} size={20} className="inline" />],
+                  [t("project.menu"), "/", <ProjectsIcon key={"project"} size={20} className="inline" />],
                 ].map(([title, href, icon]) => (
-                  // <menuItem icon={icon} title={title} href={href}></menuItem>
-                  <MenuItem icon={icon} href={href} title={title}></MenuItem>
+                  <MenuItem key={title} icon={icon} href={href} title={title}></MenuItem>
                 ))}
               </div>
             </div>
