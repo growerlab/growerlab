@@ -2,14 +2,25 @@ import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { withTranslation } from "react-i18next";
-import { HomeIcon, ProjectsIcon, GitRepoIcon, IconComponent, BuggyIcon, SearchInput, Popover, Menu, TrashIcon, EditIcon, CircleArrowRightIcon, PeopleIcon, Button } from 'evergreen-ui'
+import {
+  HomeIcon,
+  ProjectsIcon,
+  GitRepoIcon,
+  IconComponent,
+  BuggyIcon,
+  SearchInput,
+  Popover,
+  Menu,
+  TrashIcon,
+  EditIcon,
+  CircleArrowRightIcon,
+  PeopleIcon,
+  Button,
+} from "evergreen-ui";
 
 import { Session } from "../../services/auth/session";
 import { Message } from "../../api/common/notice";
 import { Router } from "../../config/router";
-
-
-
 
 function UserLayout(props: any) {
   const { t } = props;
@@ -35,7 +46,7 @@ function UserLayout(props: any) {
   const userMenu = (
     <div>
       <Popover
-        position={'bottom-left'}
+        position={"bottom-left"}
         content={
           <Menu>
             <Menu.Group title="Actions">
@@ -44,9 +55,7 @@ function UserLayout(props: any) {
                 ["Settings", "/", CircleArrowRightIcon],
               ].map(([title, url, icon]) => (
                 <Menu.Item key={url as string} icon={icon as IconComponent}>
-                  <a href={url as string}>
-                    {title}
-                  </a>
+                  <a href={url as string}>{title}</a>
                 </Menu.Item>
               ))}
             </Menu.Group>
@@ -54,11 +63,7 @@ function UserLayout(props: any) {
             <Menu.Group title="destructive">
               <Menu.Item icon={TrashIcon} intent="danger">
                 <Link passHref href={""}>
-                  <a
-                    onClick={() => logoutClick()}
-                  >
-                    {t("user.logout")}
-                  </a>
+                  <a onClick={() => logoutClick()}>{t("user.logout")}</a>
                 </Link>
               </Menu.Item>
             </Menu.Group>
@@ -76,22 +81,28 @@ function UserLayout(props: any) {
 
   // const path = window.location.pathname.split('/').slice(0, 3);
   // const menuKey = [path.join('/')];
-  const MenuItem = (props: { icon: IconComponent, title: string, href: string, selected?: boolean }) => {
+  const MenuItem = (props: {
+    icon: IconComponent;
+    title: string;
+    href: string;
+    selected?: boolean;
+  }) => {
     const iconRef = useRef(null);
 
     return (
       <div>
         <div className="opacity-70 hover:opacity-100">
-          <a href={props.href} className="text-white block px-4 py-3 rounded-md text-sm hover:bg-blue-900 text-center">
-            <div className=" mb-2">
-              {props.icon}
-            </div>
+          <a
+            href={props.href}
+            className="text-white block px-4 py-3 rounded-md text-sm hover:bg-blue-900 text-center"
+          >
+            <div className=" mb-2">{props.icon}</div>
             {props.title}
           </a>
         </div>
       </div>
-    )
-  }
+    );
+  };
 
   return (
     <div>
@@ -110,16 +121,40 @@ function UserLayout(props: any) {
               </div>
               <div className="px-2 pt-2 pb-3 space-y-1 ">
                 {[
-                  ["Home", Router.User.Index, <HomeIcon key={"home"} size={20} className="inline" />],
-                  [t("repository.menu"), Router.User.Repository.List, <GitRepoIcon key={"repository"} size={20} className="inline" />],
-                  [t("project.menu"), "/", <ProjectsIcon key={"project"} size={20} className="inline" />],
+                  [
+                    "Home",
+                    Router.User.Index,
+                    <HomeIcon key={"home"} size={20} className="inline" />,
+                  ],
+                  [
+                    t("repository.menu"),
+                    Router.User.Repository.List,
+                    <GitRepoIcon
+                      key={"repository"}
+                      size={20}
+                      className="inline"
+                    />,
+                  ],
+                  [
+                    t("project.menu"),
+                    "/",
+                    <ProjectsIcon
+                      key={"project"}
+                      size={20}
+                      className="inline"
+                    />,
+                  ],
                 ].map(([title, href, icon]) => (
-                  <MenuItem key={title} icon={icon} href={href} title={title}></MenuItem>
+                  <MenuItem
+                    key={title}
+                    icon={icon}
+                    href={href}
+                    title={title}
+                  ></MenuItem>
                 ))}
               </div>
             </div>
             <div className="flex-auto">{/* 填充 */}</div>
-
           </nav>
         </div>
 
@@ -132,9 +167,7 @@ function UserLayout(props: any) {
                     <SearchInput placeholder="Search..." />
                   </div>
                   <div className="grow"></div>
-                  <div className="flex-none">
-                    {userMenu}
-                  </div>
+                  <div className="flex-none">{userMenu}</div>
                 </div>
               </div>
             </header>

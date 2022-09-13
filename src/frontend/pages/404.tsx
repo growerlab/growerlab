@@ -1,8 +1,8 @@
 import React from "react";
-import { getTitle } from "../common/document";
 import Link from "next/link";
+import { getTitle } from "../core/common/document";
 
-export default function () {
+export default function fn404() {
   getTitle("404 Not Found");
 
   return (

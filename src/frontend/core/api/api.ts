@@ -1,5 +1,4 @@
 import axios, { AxiosInstance, AxiosResponse } from "axios";
-import { Message } from "./common/notice";
 import i18n from "../i18n/i18n";
 
 const baseUrl = "http://localhost:8081/api/v1/";
@@ -31,7 +30,6 @@ export const request = function (): AxiosInstance {
       const status = response.status;
 
       if (status >= 300 || status < 200) {
-        Message.Error(response.data.message);
         return Promise.reject(response);
       }
       return response;
@@ -39,9 +37,11 @@ export const request = function (): AxiosInstance {
     (error: any) => {
       if (error.response && error.response.data) {
         const msg = error.response.data.message;
-        Message.Error(msg);
+        console.error(msg);
+        // notice.error(msg);
       } else {
-        Message.Error(error.message);
+        console.error(error.message);
+        // notice.error(error.message);
       }
       // 吃掉http网络错误（例如后端无法链接）
       return Promise.resolve({});

@@ -1,6 +1,6 @@
-import { AxiosResponse } from 'axios';
-import { LoginInfo } from '../../services/auth/session';
-import { API, request } from '../api';
+import { AxiosResponse } from "axios";
+import { LoginInfo } from "../../services/auth/session";
+import { API, request } from "../api";
 
 export class Login {
   private email: string;

@@ -6,7 +6,8 @@
     "activate_user": "用户激活"
   },
   "notice": {
-    "required": "必填项"
+    "required": "必填项",
+    "title": "提示"
   },
   "user": {
     "username": "用户名",

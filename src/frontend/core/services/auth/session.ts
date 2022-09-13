@@ -1,8 +1,5 @@
-import { Router } from "../../config/router";
-import i18n from "../../i18n/i18n";
+import { Router } from "../../../config/router";
 import { NextRouter } from "next/router";
-import { Message } from "../../api/common/notice";
-import { reject } from "q";
 
 const AuthUserToken = "auth-user-token";
 

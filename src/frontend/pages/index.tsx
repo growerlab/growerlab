@@ -1,11 +1,10 @@
-import React from 'react';
-import {withTranslation} from 'react-i18next';
-import {getTitle} from '../common/document';
-import Head from 'next/head'
-import Link from 'next/link'
-import {Button} from "evergreen-ui";
-import {Router} from "../config/router";
+import React, { useContext, useEffect } from "react";
+import { withTranslation } from "react-i18next";
+import Head from "next/head";
+import { getTitle } from "../core/common/document";
 
+import { EuiButton } from "@elastic/eui";
+import { Router } from "../config/router";
 
 const index = function (props: any) {
   return (
@@ -16,11 +15,7 @@ const index = function (props: any) {
 
       <h2 className="text-6xl font-bold text-center mt-7">Rethinking Git</h2>
       <div className="text-center mt-7">
-        <Link href={Router.Home.Login}>
-          <Button marginRight={16} appearance="primary" size={"large"}>
-            Login
-          </Button>
-        </Link>
+        <EuiButton href={Router.Home.Login}>Login</EuiButton>
       </div>
     </div>
   );
