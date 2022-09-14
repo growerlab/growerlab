@@ -1,17 +1,33 @@
-import { Login } from "../../api/auth/login";
-import { LoginInfo, Session } from "./session";
+import { AxiosResponse } from "axios";
+
+import { LoginInfo } from "./session";
+import { API, request } from "../../api/api";
+import { Notice } from "../../global/recoil/notice";
+
+type Login = {
+  email: string;
+  password: string;
+};
 
 export class LoginService {
-  constructor() {
+  notice: Notice;
+
+  constructor(notice: Notice) {
+    this.notice = notice;
     return;
   }
 
-  static login(email: string, password: string): Promise<LoginInfo> {
-    const login = new Login(email, password);
-    return login.do().then((res) => {
-      const info = res.data;
-      Session.storeLogin(info);
-      return info;
-    });
+  public login(
+    email: string,
+    password: string
+  ): Promise<AxiosResponse<LoginInfo>> {
+    return request(this.notice)
+      .post<Login, AxiosResponse<LoginInfo>>(API.Login, {
+        email: email,
+        password: password,
+      })
+      .then((res) => {
+        return res;
+      });
   }
 }

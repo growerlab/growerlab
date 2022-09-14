@@ -17,7 +17,7 @@ import { noticeState, useNotice } from "../../global/recoil/notice";
 
 function LoginForm(props: WithTranslation) {
   // 这里本想在 useNotice 中调用 useSetRecoilState，但不知为啥调用不了（前端菜狗的疑惑）
-  const notice = useNotice(useSetRecoilState(noticeState));
+  const notice = useNotice();
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -27,7 +27,8 @@ function LoginForm(props: WithTranslation) {
   const { t } = props;
 
   const onSubmit = (e: React.MouseEvent) => {
-    LoginService.login(email, password).then((res) => {
+    const service = new LoginService(notice);
+    service.login(email, password).then((res) => {
       if (res === undefined) {
         notice.error(t("user.tooltip.login_fail"));
         return;
