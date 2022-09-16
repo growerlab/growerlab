@@ -15,7 +15,6 @@ import { LoginService } from "../../services/auth/login";
 import { useGlobal } from "../../global/init";
 
 function LoginForm(props: WithTranslation) {
-  // 这里本想在 useNotice 中调用 useSetRecoilState，但不知为啥调用不了（前端菜狗的疑惑）
   const global = useGlobal();
   const notice = global.notice!;
   const router = useRouter();
