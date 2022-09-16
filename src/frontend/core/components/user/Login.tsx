@@ -9,16 +9,17 @@ import {
   EuiFieldPassword,
   EuiButton,
 } from "@elastic/eui";
-import { useSetRecoilState } from "recoil";
 
 import { Router } from "../../../config/router";
 import { LoginService } from "../../services/auth/login";
-import { noticeState, useNotice } from "../../global/recoil/notice";
+import { useGlobal } from "../../global/init";
 
 function LoginForm(props: WithTranslation) {
   // 这里本想在 useNotice 中调用 useSetRecoilState，但不知为啥调用不了（前端菜狗的疑惑）
-  const notice = useNotice();
+  const global = useGlobal();
+  const notice = global.notice!;
   const router = useRouter();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [emailValidateMsg, setEmailValidateMsg] = useState(null);
@@ -27,7 +28,7 @@ function LoginForm(props: WithTranslation) {
   const { t } = props;
 
   const onSubmit = (e: React.MouseEvent) => {
-    const service = new LoginService(notice);
+    const service = new LoginService();
     service.login(email, password).then((res) => {
       if (res === undefined) {
         notice.error(t("user.tooltip.login_fail"));

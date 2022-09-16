@@ -4,7 +4,7 @@ import i18n from "../../i18n/i18n";
 type typeNotice = "model";
 type colorNotice = "primary" | "success" | "warning" | "danger";
 
-export type noticeValue = {
+type noticeValue = {
   id: string;
   type: typeNotice;
   color: colorNotice;
