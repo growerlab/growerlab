@@ -1,9 +1,4 @@
-import {
-  atom,
-  selector,
-  SetterOrUpdater,
-  useSetRecoilState,
-} from "recoil";
+import { atom, SetterOrUpdater, useSetRecoilState } from "recoil";
 import i18n from "../../i18n/i18n";
 
 type typeNotice = "model";
