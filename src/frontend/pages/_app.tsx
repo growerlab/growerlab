@@ -18,7 +18,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     <NoSSR>
       <RecoilRoot>
         <Notice />
-        <EuiProvider>
+        <EuiProvider colorMode="light">
           <Component {...pageProps} />
         </EuiProvider>
       </RecoilRoot>
