@@ -1,35 +1,31 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { withTranslation } from "react-i18next";
-import {
-  HomeIcon,
-  ProjectsIcon,
-  GitRepoIcon,
-  IconComponent,
-  BuggyIcon,
-  SearchInput,
-  Popover,
-  Menu,
-  TrashIcon,
-  EditIcon,
-  CircleArrowRightIcon,
-  PeopleIcon,
-  Button,
-} from "evergreen-ui";
 
-import { Session } from "../../services/auth/session";
-import { Message } from "../../api/common/notice";
 import { Router } from "../../config/router";
+import { Session } from "../../core/services/auth/session";
+import { useGlobal } from "../../core/global/init";
+
+import {
+  EuiFieldSearch,
+  EuiIcon,
+  EuiPopover,
+  EuiContextMenu,
+  useGeneratedHtmlId,
+  EuiContextMenuPanelDescriptor,
+} from "@elastic/eui";
 
 function UserLayout(props: any) {
   const { t } = props;
   const router = useRouter();
+  const global = useGlobal();
+  const notice = global.notice!;
 
   useEffect((): void => {
     // 验证用户是否登录
     Session.isLogin().catch(() => {
-      Message.Warning(t("user.tooltip.not_login"));
+      notice.warning(t("user.tooltip.not_login"));
       router.push(Router.Home.Login);
     });
   });
@@ -43,52 +39,76 @@ function UserLayout(props: any) {
     Session.logout(router);
   };
 
+  const [isPopoverOpen, setIsPopoverOpen] = useState(false);
+
+  const onButtonClick = () =>
+    setIsPopoverOpen((isPopoverOpen) => !isPopoverOpen);
+  const closePopover = () => setIsPopoverOpen(false);
+
+  const userMenuButton = (
+    <img
+      className="h-8 w-8 rounded-full"
+      src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+      alt=""
+      onClick={onButtonClick}
+    />
+  );
+
+  const contextMenuPopoverId = useGeneratedHtmlId({
+    prefix: "contextMenuPopover",
+  });
+
+  const panels: EuiContextMenuPanelDescriptor[] = [
+    {
+      id: 0,
+      title: "This is a context menu",
+      items: [
+        {
+          name: "Your Profile",
+          icon: "user",
+          href: "/",
+        },
+        {
+          name: "Settings",
+          icon: "indexSettings",
+          href: "/",
+        },
+        {
+          isSeparator: true,
+          key: "sep",
+        },
+        {
+          name: t("user.logout"),
+          onClick: () => {
+            logoutClick();
+          },
+        },
+      ],
+    },
+  ];
+
   const userMenu = (
     <div>
-      <Popover
-        position={"bottom-left"}
-        content={
-          <Menu>
-            <Menu.Group title="Actions">
-              {[
-                ["Your Profile", "/", PeopleIcon],
-                ["Settings", "/", CircleArrowRightIcon],
-              ].map(([title, url, icon]) => (
-                <Menu.Item key={url as string} icon={icon as IconComponent}>
-                  <a href={url as string}>{title}</a>
-                </Menu.Item>
-              ))}
-            </Menu.Group>
-            <Menu.Divider />
-            <Menu.Group title="destructive">
-              <Menu.Item icon={TrashIcon} intent="danger">
-                <Link passHref href={""}>
-                  <a onClick={() => logoutClick()}>{t("user.logout")}</a>
-                </Link>
-              </Menu.Item>
-            </Menu.Group>
-          </Menu>
-        }
+      <EuiPopover
+        id={contextMenuPopoverId}
+        button={userMenuButton}
+        isOpen={isPopoverOpen}
+        closePopover={closePopover}
+        panelPaddingSize="none"
+        anchorPosition="downLeft"
+        tabIndex={undefined}
       >
-        <img
-          className="h-8 w-8 rounded-full"
-          src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-          alt=""
-        />
-      </Popover>
+        <EuiContextMenu initialPanelId={0} panels={panels} />
+      </EuiPopover>
     </div>
   );
 
-  // const path = window.location.pathname.split('/').slice(0, 3);
-  // const menuKey = [path.join('/')];
   const MenuItem = (props: {
-    icon: IconComponent;
+    icon: JSX.Element;
     title: string;
     href: string;
     selected?: boolean;
   }) => {
-    const iconRef = useRef(null);
-
     return (
       <div>
         <div className="opacity-70 hover:opacity-100">
@@ -116,7 +136,7 @@ function UserLayout(props: any) {
                   className="text-white block px-3 py-5  text-base font-medium text-center"
                   aria-current="page"
                 >
-                  <BuggyIcon size={45} className="inline" />
+                  <EuiIcon type={"color"} className="inline" />
                 </a>
               </div>
               <div className="px-2 pt-2 pb-3 space-y-1 ">
@@ -124,23 +144,23 @@ function UserLayout(props: any) {
                   [
                     "Home",
                     Router.User.Index,
-                    <HomeIcon key={"home"} size={20} className="inline" />,
+                    <EuiIcon type="grid" key={"home"} />,
                   ],
                   [
                     t("repository.menu"),
                     Router.User.Repository.List,
-                    <GitRepoIcon
+                    <EuiIcon
+                      type={"visVega"}
                       key={"repository"}
-                      size={20}
                       className="inline"
                     />,
                   ],
                   [
                     t("project.menu"),
                     "/",
-                    <ProjectsIcon
+                    <EuiIcon
+                      type={"sessionViewer"}
                       key={"project"}
-                      size={20}
                       className="inline"
                     />,
                   ],
@@ -164,7 +184,13 @@ function UserLayout(props: any) {
               <div className="max-w-full  mx-auto py-3 px-4 sm:px-2 lg:px-6">
                 <div className="flex columns-2">
                   <div className="flex-none">
-                    <SearchInput placeholder="Search..." />
+                    <EuiFieldSearch
+                      placeholder="Search this"
+                      // value={value}
+                      // onChange={(e) => onChange(e)}
+                      // isClearable={isClearable}
+                      aria-label="Use aria labels when no actual label is in use"
+                    />
                   </div>
                   <div className="grow"></div>
                   <div className="flex-none">{userMenu}</div>

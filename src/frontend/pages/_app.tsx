@@ -8,18 +8,21 @@ import { EuiProvider } from "@elastic/eui";
 import "@elastic/eui/dist/eui_theme_light.css";
 
 import Notice from "../core/components/notice/Notice";
+import NoSSR from "../core/components/global/NoSSR";
 import { setup } from "../core/global/init";
 
 function MyApp({ Component, pageProps }: AppProps) {
   setup();
 
   return (
-    <RecoilRoot>
-      <Notice />
-      <EuiProvider>
-        <Component {...pageProps} />
-      </EuiProvider>
-    </RecoilRoot>
+    <NoSSR>
+      <RecoilRoot>
+        <Notice />
+        <EuiProvider>
+          <Component {...pageProps} />
+        </EuiProvider>
+      </RecoilRoot>
+    </NoSSR>
   );
 }
 
