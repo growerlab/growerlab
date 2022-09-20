@@ -26,9 +26,10 @@ const mockRepositories: TypeRepositories = {
   repositories: [
     {
       uuid: "1",
-      name: "1",
+      name: "hello",
       path: "repo1",
-      description: "好了浪迹顺利打开降落伞肯德基镂空设计旅客大幅减少了咖啡就算了就；阿拉山口多久；阿拉山口就",
+      description:
+        "这是一个仓库描述这是一个仓库描述这是一个仓库描述这是一个仓库描述;这是一个仓库描述；这是一个仓库描述",
       createdAt: 1222,
       public: true,
       pathGroup: "",
@@ -40,4 +41,4 @@ const mockRepositories: TypeRepositories = {
       },
     },
   ],
-}
+};

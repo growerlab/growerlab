@@ -9,11 +9,16 @@ import {
   RepositoryEntity,
 } from "../../services/repository/types";
 import { Repository } from "../../services/repository/repository";
-import { EuiButton, EuiIcon } from "@elastic/eui";
+import {
+  EuiButton,
+  EuiIcon,
+  EuiButtonEmpty,
+  EuiEmptyPrompt,
+} from "@elastic/eui";
 
 export function RepositoryList(props: TypeRepositoriesArgs) {
   const { ownerPath } = props;
-  const [initLoading, setInitLoading] = useState(false);
+  // const [initLoading, setInitLoading] = useState(false);
 
   const repo = new Repository({ ownerPath: ownerPath });
   const repoData = repo.list();
@@ -21,18 +26,18 @@ export function RepositoryList(props: TypeRepositoriesArgs) {
   if (repoData === null) {
     return (
       <div>
-        <div className="text-center text-1xl">
-          <EuiIcon type={"folderOpen"} className="text-sky-400 inline" />
-          <div className="mt-2">暂无仓库</div>
-          <div className="mt-2">
+        <EuiEmptyPrompt
+          title={<h2>无任何仓库，立即创建！</h2>}
+          actions={[
             <Link href={Router.User.Repository.New}>
               <EuiButton type="button" color={"primary"}>
                 <EuiIcon type={"plus"}></EuiIcon>
                 创建仓库
               </EuiButton>
-            </Link>
-          </div>
-        </div>
+            </Link>,
+            // <EuiButtonEmpty color="primary">Start a trial</EuiButtonEmpty>,
+          ]}
+        />
       </div>
     );
   }
@@ -54,7 +59,7 @@ export function RepositoryList(props: TypeRepositoriesArgs) {
   return (
     <div>
       {repositories.map((repo: RepositoryEntity) => (
-        <ListItem repo={repo} />
+        <ListItem repo={repo} key={repo.uuid} />
       ))}
     </div>
   );

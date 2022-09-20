@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import { EuiHorizontalRule } from "@elastic/eui";
 
 import { repoIcon, repoPath } from "./common";
 import { RepositoryEntity } from "../../services/repository/types";
@@ -14,12 +15,13 @@ export function ListItem(props: Args) {
   return (
     <div>
       <Link href={repoPath(repo.owner, repo.path)}>
-        <a>
+        <div className={"text-xl font-bold"}>
           {repoIcon(repo.public)}
-          {repo.name}
-        </a>
+          <a className={"ml-3"}>{repo.name}</a>
+        </div>
       </Link>
-      <div>{repo.description}</div>
+      <div className={"text-slate-500 mt-5"}>{repo.description}</div>
+      <EuiHorizontalRule />
     </div>
   );
 }
