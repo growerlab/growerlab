@@ -2,11 +2,10 @@ import React from "react";
 import Link from "next/link";
 
 import { repoIcon, repoPath } from "./common";
-import { RepositoryEntity } from "../../api/repository/types";
-import { Router } from "../../config/router";
+import { RepositoryEntity } from "../../services/repository/types";
 
 interface Args {
-  repo: RepositoryEntity
+  repo: RepositoryEntity;
 }
 
 export function ListItem(props: Args) {

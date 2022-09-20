@@ -1,15 +1,15 @@
 import React from "react";
 import { useState } from "react";
 import Link from "next/link";
-import { FolderOpenIcon, Button, PlusIcon } from "evergreen-ui";
 
-import { Router } from "../../config/router";
+import { Router } from "../../../config/router";
 import { ListItem } from "./ListItem";
 import {
   TypeRepositoriesArgs,
   RepositoryEntity,
-} from "../../api/repository/types";
-import { Repository } from "../../api/repository/repository";
+} from "../../services/repository/types";
+import { Repository } from "../../services/repository/repository";
+import { EuiButton, EuiIcon } from "@elastic/eui";
 
 export function RepositoryList(props: TypeRepositoriesArgs) {
   const { ownerPath } = props;
@@ -22,14 +22,14 @@ export function RepositoryList(props: TypeRepositoriesArgs) {
     return (
       <div>
         <div className="text-center text-1xl">
-          <FolderOpenIcon size={60} className="text-sky-400 inline" />
+          <EuiIcon type={"folderOpen"} className="text-sky-400 inline" />
           <div className="mt-2">暂无仓库</div>
           <div className="mt-2">
             <Link href={Router.User.Repository.New}>
-              <Button appearance="primary">
-                <PlusIcon></PlusIcon>
+              <EuiButton type="button" color={"primary"}>
+                <EuiIcon type={"plus"}></EuiIcon>
                 创建仓库
-              </Button>
+              </EuiButton>
             </Link>
           </div>
         </div>
@@ -56,6 +56,6 @@ export function RepositoryList(props: TypeRepositoriesArgs) {
       {repositories.map((repo: RepositoryEntity) => (
         <ListItem repo={repo} />
       ))}
-    </div >
+    </div>
   );
 }
