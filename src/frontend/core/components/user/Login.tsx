@@ -13,6 +13,7 @@ import {
 import { Router } from "../../../config/router";
 import { LoginService } from "../../services/auth/login";
 import { useGlobal } from "../../global/init";
+import { Session } from "../../services/auth/session";
 
 function LoginForm(props: WithTranslation) {
   const global = useGlobal();
@@ -33,6 +34,8 @@ function LoginForm(props: WithTranslation) {
         notice.error(t("user.tooltip.login_fail"));
         return;
       }
+
+      Session.storeLogin(res.data);
       notice.success(t("user.tooltip.login_success"));
       router.push(Router.User.Index);
     });

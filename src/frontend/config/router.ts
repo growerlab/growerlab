@@ -27,7 +27,7 @@ export const Router = {
     Repository: {
       New: '/user/repos/new',
       List: '/user/repos',
-      Show: '/user/repos/:repoPath',
+      Show: dynamicRouter.new('/user/repos/:repoPath'),
     },
   },
   Namespace: {

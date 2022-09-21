@@ -37,7 +37,7 @@ const mockRepositories: TypeRepositories = {
       gitSshURL: "",
       owner: {
         name: "moli",
-        namespace: "moli",
+        namespace: "admin",
       },
     },
   ],

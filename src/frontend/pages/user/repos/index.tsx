@@ -10,7 +10,7 @@ export default function Index() {
 
   useEffect((): void => {
     Session.getUserInfo().then((info) => {
-      setNamespace(info.namespacePath);
+      setNamespace(info.namespace_path);
     });
   }, []);
 

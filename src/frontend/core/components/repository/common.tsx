@@ -14,9 +14,16 @@ export function repoIcon(pub: boolean) {
   return pub ? repoPublicIcon : repoPrivateIcon;
 }
 
-export function repoPath(owner: Owner, path: string): string {
+export function builtInRepoPath(repoPath: string): string {
+  return Router.User.Repository.Show.render({
+    repoPath: repoPath,
+  });
+}
+
+// 公共路径
+export function repoPath(namespace: string, repoPath: string): string {
   return Router.Namespace.Repository.render({
-    namespacePath: owner.namespace,
-    repoPath: path,
+    namespacePath: namespace,
+    repoPath: repoPath,
   });
 }

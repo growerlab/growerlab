@@ -5,10 +5,10 @@ const AuthUserToken = "auth-user-token";
 
 export interface LoginInfo {
   token: string;
-  namespacePath: string;
+  namespace_path: string;
   email: string;
   name: string;
-  publicEmail: string;
+  public_email: string;
 }
 
 export class Session {
@@ -18,19 +18,17 @@ export class Session {
 
   /**
    * 用户是否登录
-   * @returns {boolean}
    */
   static async isLogin(): Promise<boolean> {
     const result = await Session.getUserInfo();
     if (result === null) {
       return Promise.reject(false);
     }
-    return Promise.resolve(true);
+    return true;
   }
 
   /**
    * 登录，将保存token并可以设置过期时间，默认不过期
-   * @param info
    */
   static storeLogin(info: LoginInfo): Promise<LoginInfo> {
     localStorage.setItem(AuthUserToken, JSON.stringify(info));
@@ -39,8 +37,6 @@ export class Session {
 
   /**
    * 退出登录
-   * @param router
-   * @param callback
    */
   static logout(router: NextRouter, callback?: () => void) {
     localStorage.removeItem(AuthUserToken);

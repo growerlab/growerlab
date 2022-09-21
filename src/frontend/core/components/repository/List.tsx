@@ -1,24 +1,20 @@
 import React from "react";
-import { useState } from "react";
 import Link from "next/link";
 
 import { Router } from "../../../config/router";
-import { ListItem } from "./ListItem";
+import { Item } from "./Item";
 import {
   TypeRepositoriesArgs,
   RepositoryEntity,
 } from "../../services/repository/types";
 import { Repository } from "../../services/repository/repository";
-import {
-  EuiButton,
-  EuiIcon,
-  EuiButtonEmpty,
-  EuiEmptyPrompt,
-} from "@elastic/eui";
+import { EuiButton, EuiIcon, EuiEmptyPrompt } from "@elastic/eui";
+import { useGlobal } from "../../global/init";
 
 export function RepositoryList(props: TypeRepositoriesArgs) {
   const { ownerPath } = props;
   // const [initLoading, setInitLoading] = useState(false);
+  const global = useGlobal();
 
   const repo = new Repository({ ownerPath: ownerPath });
   const repoData = repo.list();
@@ -29,7 +25,7 @@ export function RepositoryList(props: TypeRepositoriesArgs) {
         <EuiEmptyPrompt
           title={<h2>无任何仓库，立即创建！</h2>}
           actions={[
-            <Link href={Router.User.Repository.New}>
+            <Link href={Router.User.Repository.New} key={""}>
               <EuiButton type="button" color={"primary"}>
                 <EuiIcon type={"plus"}></EuiIcon>
                 创建仓库
@@ -59,7 +55,7 @@ export function RepositoryList(props: TypeRepositoriesArgs) {
   return (
     <div>
       {repositories.map((repo: RepositoryEntity) => (
-        <ListItem repo={repo} key={repo.uuid} />
+        <Item global={global} repo={repo} key={repo.uuid} />
       ))}
     </div>
   );
