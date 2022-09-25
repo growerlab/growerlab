@@ -4,19 +4,19 @@ import Link from "next/link";
 import { Router } from "../../../config/router";
 import { Item } from "./Item";
 import {
-  TypeRepositoriesArgs,
+  RepositoriesArgs,
   RepositoryEntity,
 } from "../../services/repository/types";
 import { Repository } from "../../services/repository/repository";
 import { EuiButton, EuiIcon, EuiEmptyPrompt } from "@elastic/eui";
 import { useGlobal } from "../../global/init";
 
-export function RepositoryList(props: TypeRepositoriesArgs) {
+export function RepositoryList(props: RepositoriesArgs) {
   const { ownerPath } = props;
   // const [initLoading, setInitLoading] = useState(false);
   const global = useGlobal();
 
-  const repo = new Repository({ ownerPath: ownerPath });
+  const repo = new Repository(ownerPath);
   const repoData = repo.list();
 
   if (repoData === null) {

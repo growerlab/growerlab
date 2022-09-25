@@ -1,26 +1,37 @@
-import React, {useEffect, useState} from 'react';
-// @ts-ignore
-import {FormComponentProps} from '@ant-design/compatible/lib/form';
-import {Empty, Menu, PageHeader, Popover, Tag} from 'antd';
+import React, { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import Head from "next/head";
 
-import {RepositoryDetail} from '../../../components/repository/RepositoryDetail';
-import {getTitle} from '../../../common/document';
-import {Repository} from '../../../api/repository/repository';
-import {Message} from '../../../api/common/notice';
-import i18n from '../../../i18n';
+import { RepositoryDetail } from "../../../core/components/repository/RepositoryDetail";
+import { getTitle } from "../../../core/common/document";
+import i18n from "../../../core/i18n/i18n";
+import { useGlobal } from "../../../core/global/init";
+import { LoginInfo } from "../../../core/services/auth/session";
 
-interface RepoPath {
-  repoPath: string;
-}
+export default function ShowRepoPage() {
+  const global = useGlobal();
+  const router = useRouter();
+  const repoPath = router.query.repoPath as string;
+  const [ownerPath, setOwnerPath] = useState<string>("");
+  const [currentUser, setCurrentUser] = useState<LoginInfo>();
 
-export default function (props: FormComponentProps) {
-  const {repoPath} = props.match.params as RepoPath;
-
-  getTitle(i18n.t(repoPath));
+  useEffect(() => {
+    global.getUserInfo().then((user) => {
+      setCurrentUser(user);
+      setOwnerPath(user.namespace_path);
+    });
+  }, []);
 
   return (
     <div>
-      <RepositoryDetail repoPath={repoPath}/>
+      <Head>
+        <title>{getTitle(i18n.t(repoPath))}</title>
+      </Head>
+      <RepositoryDetail
+        currentUser={currentUser}
+        ownerPath={ownerPath}
+        repoPath={repoPath}
+      />
     </div>
   );
 }

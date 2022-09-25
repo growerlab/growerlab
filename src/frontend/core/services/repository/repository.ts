@@ -1,11 +1,11 @@
-import { RepositoryArgs, TypeRepositories, TypeRepository } from "./types";
+import { TypeRepositories, TypeRepository } from "./types";
 
 export class Repository {
-  repo: RepositoryArgs;
+  ownerPath: string
 
-  constructor(args: RepositoryArgs) {
-    this.repo = args;
-    if (this.repo.ownerPath === undefined) {
+  constructor(ownerPath: string) {
+    this.ownerPath = ownerPath;
+    if (this.ownerPath === undefined) {
       // const current = getUserInfo();
       // if (current !== null) {
       //   this.repo.ownerPath = current.namespacePath;
@@ -14,10 +14,11 @@ export class Repository {
   }
 
   get(repoPath: string): TypeRepository | null {
+    console.info(repoPath)
     return null;
   }
 
-  list(): TypeRepositories | null {
+  list(page = 0): TypeRepositories | null {
     return mockRepositories;
   }
 }

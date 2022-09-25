@@ -1,28 +1,24 @@
-import React, { useState } from "react";
-import {
-  SettingOutlined,
-  CodeOutlined,
-  IssuesCloseOutlined,
-  CloudDownloadOutlined,
-} from "@ant-design/icons";
-import { Menu, PageHeader, Popover, Tag, Tabs, Input, Empty } from "antd";
-import { LockOutlined, UnlockOutlined } from "@ant-design/icons/lib";
+import React, { useEffect, useState } from "react";
 
-import { RepositoryArgs } from "../../api/repository/types";
-import { Repository } from "../../api/repository/repository";
+import { LoginInfo } from "../../services/auth/session";
+import { Repository } from "../../services/repository/repository";
+import { RepositoryArgs } from "../../services/repository/types";
 import { repoIcon } from "./common";
 
-export function RepositoryDetail(props: RepositoryArgs) {
-  const { repoPath } = props;
-  const [current, setCurrent] = useState("code");
-  const { TabPane } = Tabs;
+interface RepositoryDetailProps extends RepositoryArgs {
+  currentUser?: LoginInfo; // 当前登录的用户，不一定是仓库的所有者
+}
 
-  const repo = new Repository({ repoPath: repoPath });
-  const repoData = repo.get();
+export function RepositoryDetail(props: RepositoryDetailProps) {
+  const { ownerPath, repoPath } = props;
+  const [current, setCurrent] = useState("code");
+
+  const repo = new Repository(ownerPath);
+  const repoData = repo.get(repoPath);
   if (repoData === null) {
     return (
       <div>
-        <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+        <h3 className="text-xl">404 - Not found</h3>
       </div>
     );
   }

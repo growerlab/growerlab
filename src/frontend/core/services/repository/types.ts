@@ -6,7 +6,7 @@ export interface Owner {
 export interface RepositoryEntity {
   uuid: string;
   name: string;
-  path: string;
+  path: string; // repo path
   description: string;
   createdAt: number;
   public: boolean;
@@ -27,50 +27,11 @@ export interface TypeRepository {
   repository: RepositoryEntity;
 }
 
-export interface TypeRepositoriesArgs {
+export interface RepositoriesArgs {
   ownerPath: string;
 }
 
 export interface RepositoryArgs {
-  ownerPath?: string;
+  ownerPath: string;
+  repoPath: string;
 }
-
-// export const GQL_QUERY_REPOSITORIES = gql`
-//   query repositories($ownerPath: String!) {
-//     repositories(ownerPath: $ownerPath) {
-//       uuid
-//       path
-//       name
-//       description
-//       createdAt
-//       owner {
-//         name
-//         username
-//       }
-//       pathGroup
-//       gitHttpURL
-//       gitSshURL
-//       public
-//     }
-//   }
-// `;
-//
-// export const GQL_QUERY_REPOSITORY = gql`
-//   query repository($ownerPath: String!, $repoPath: String!) {
-//     repository(ownerPath: $ownerPath, path: $repoPath) {
-//       uuid
-//       path
-//       name
-//       description
-//       createdAt
-//       owner {
-//         name
-//         username
-//       }
-//       pathGroup
-//       gitHttpURL
-//       gitSshURL
-//       public
-//     }
-//   }
-// `;
