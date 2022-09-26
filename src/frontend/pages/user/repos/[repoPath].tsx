@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
 
+import UserLayout from "../../layouts/user";
 import { RepositoryDetail } from "../../../core/components/repository/RepositoryDetail";
 import { getTitle } from "../../../core/common/document";
 import i18n from "../../../core/i18n/i18n";
@@ -27,11 +28,13 @@ export default function ShowRepoPage() {
       <Head>
         <title>{getTitle(i18n.t(repoPath))}</title>
       </Head>
-      <RepositoryDetail
-        currentUser={currentUser}
-        ownerPath={ownerPath}
-        repoPath={repoPath}
-      />
+      <UserLayout title={i18n.t("repository.menu")}>
+        <RepositoryDetail
+          currentUser={currentUser}
+          ownerPath={ownerPath}
+          repoPath={repoPath}
+        />
+      </UserLayout>
     </div>
   );
 }

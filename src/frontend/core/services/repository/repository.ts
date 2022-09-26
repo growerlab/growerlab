@@ -1,4 +1,4 @@
-import { TypeRepositories, TypeRepository } from "./types";
+import { TypeRepository } from "./types";
 
 export class Repository {
   ownerPath: string
@@ -15,17 +15,17 @@ export class Repository {
 
   get(repoPath: string): TypeRepository | null {
     console.info(repoPath)
-    return null;
+    return mockRepositories[0];
   }
 
-  list(page = 0): TypeRepositories | null {
+  list(page = 0): TypeRepository[] | null {
     return mockRepositories;
   }
 }
 
-const mockRepositories: TypeRepositories = {
-  repositories: [
-    {
+const mockRepositories: TypeRepository[] = [
+  {
+    repository: {
       uuid: "1",
       name: "hello",
       path: "repo1",
@@ -33,7 +33,7 @@ const mockRepositories: TypeRepositories = {
         "这是一个仓库描述这是一个仓库描述这是一个仓库描述这是一个仓库描述;这是一个仓库描述；这是一个仓库描述",
       createdAt: 1222,
       public: true,
-      pathGroup: "",
+      // pathGroup: "123123/sdfsdf",
       gitHttpURL: "",
       gitSshURL: "",
       owner: {
@@ -41,5 +41,5 @@ const mockRepositories: TypeRepositories = {
         namespace: "admin",
       },
     },
-  ],
-};
+  }
+];

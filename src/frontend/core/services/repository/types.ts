@@ -13,7 +13,7 @@ export interface RepositoryEntity {
   // StartCount: number;
   // ForkCount: number;
   // LastUpdatedAt: number;
-  pathGroup: string;
+  // pathGroup: string;
   gitHttpURL: string;
   gitSshURL: string;
   owner: Owner;

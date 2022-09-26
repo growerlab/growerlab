@@ -5,7 +5,7 @@ import { Router } from "../../../config/router";
 import { Item } from "./Item";
 import {
   RepositoriesArgs,
-  RepositoryEntity,
+  TypeRepository,
 } from "../../services/repository/types";
 import { Repository } from "../../services/repository/repository";
 import { EuiButton, EuiIcon, EuiEmptyPrompt } from "@elastic/eui";
@@ -38,7 +38,7 @@ export function RepositoryList(props: RepositoriesArgs) {
     );
   }
 
-  const repositories = repoData.repositories;
+  const repositories = repoData;
   // const loadMoreBtn = !initLoading ? (
   //   <div
   //     style={{
@@ -54,8 +54,12 @@ export function RepositoryList(props: RepositoriesArgs) {
 
   return (
     <div>
-      {repositories.map((repo: RepositoryEntity) => (
-        <Item global={global} repo={repo} key={repo.uuid} />
+      {repositories.map((repo: TypeRepository) => (
+        <Item
+          global={global}
+          repo={repo.repository}
+          key={repo.repository.uuid}
+        />
       ))}
     </div>
   );
