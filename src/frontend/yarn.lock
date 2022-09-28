@@ -1723,9 +1723,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@elastic/eui@npm:^67.1.0":
-  version: 67.1.0
-  resolution: "@elastic/eui@npm:67.1.0"
+"@elastic/eui@npm:^68.0.0":
+  version: 68.0.0
+  resolution: "@elastic/eui@npm:68.0.0"
   dependencies:
     "@types/chroma-js": ^2.0.0
     "@types/lodash": ^4.14.160
@@ -1777,7 +1777,7 @@ __metadata:
     react: ^16.12 || ^17.0
     react-dom: ^16.12 || ^17.0
     typescript: ~4.5.3
-  checksum: ff324c42858d28f4f84a187cb54888c87734a552505271cd1b26f3cdeb90f4765348321b2f6a933916141638b79a0101070b20918597541f58c8703d3b3442d3
+  checksum: 23a6247d4b34d71ee1464fce38b5242651c92a73f638911450595d9ef6dc79a23d0c5720bdfd16e56c94d623745a606d07378bafe3c2db4ed267814451705422
   languageName: node
   linkType: hard
 
@@ -8071,7 +8071,7 @@ __metadata:
   resolution: "frontend@workspace:."
   dependencies:
     "@elastic/datemath": ^5.0.3
-    "@elastic/eui": ^67.1.0
+    "@elastic/eui": ^68.0.0
     "@emotion/cache": ^11.10.3
     "@emotion/react": ^11.10.4
     "@types/axios": ^0.14.0

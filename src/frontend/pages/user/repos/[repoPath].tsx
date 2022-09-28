@@ -17,11 +17,22 @@ export default function ShowRepoPage() {
   const [currentUser, setCurrentUser] = useState<UserInfo>();
 
   useEffect(() => {
-    global.getUserInfo().then((user) => {
+    const user = global.getUserInfo();
+    if (user !== undefined) {
       setCurrentUser(user);
       setOwnerPath(user.namespace_path);
-    });
+    } else {
+      return undefined;
+    }
   }, []);
+
+  if (
+    currentUser === undefined ||
+    ownerPath.length == 0 ||
+    repoPath.length == 0
+  ) {
+    return <h1>404</h1>;
+  }
 
   return (
     <div>

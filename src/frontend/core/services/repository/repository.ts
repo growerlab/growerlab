@@ -12,7 +12,6 @@ export class Repository {
   }
 
   get(repoPath: string): Promise<AxiosResponse<TypeRepository>> {
-    console.info(this.ownerPath)
     return request(global.notice!)
       .get<TypeRepository, AxiosResponse<TypeRepository>>(API.Repositories.Detail.render({ owenrPath: this.ownerPath, repoPath: repoPath }))
       .then((res) => {

@@ -30,9 +30,8 @@ export class Session {
   /**
    * 登录，将保存token并可以设置过期时间，默认不过期
    */
-  static storeLogin(info: UserInfo): Promise<UserInfo> {
+  static storeLogin(info: UserInfo): void {
     localStorage.setItem(AuthUserToken, JSON.stringify(info));
-    return Session.getUserInfo();
   }
 
   /**
@@ -51,19 +50,18 @@ export class Session {
   /**
    * 获取用户信息
    */
-  static getUserInfo(): Promise<UserInfo> {
+  static getUserInfo(): UserInfo | undefined {
     const info = localStorage.getItem(AuthUserToken);
 
-    return new Promise((resolve, reject) => {
-      if (info === null) {
-        return reject(new Error("not found user token"));
-      }
-      try {
-        resolve(JSON.parse(info) as UserInfo);
-      } catch (error) {
-        console.warn("Can't parse json for login info.");
-        reject(error);
-      }
-    });
+    if (info === null) {
+      console.error("not found user token");
+      return undefined
+    }
+    try {
+      return JSON.parse(info) as UserInfo;
+    } catch (error) {
+      console.warn("Can't parse json for login info.");
+      return undefined
+    }
   }
 }

@@ -9,9 +9,10 @@ export default function Index() {
   const [namespace, setNamespace] = useState<string>("");
 
   useEffect((): void => {
-    Session.getUserInfo().then((info) => {
-      setNamespace(info.namespace_path);
-    });
+    const user = Session.getUserInfo();
+    if (user !== undefined) {
+      setNamespace(user.namespace_path);
+    }
   }, []);
 
   return (

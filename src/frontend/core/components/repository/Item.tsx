@@ -17,12 +17,13 @@ export function Item(props: Args) {
   const [path, setPath] = useState(repoPath(repo.owner.namespace, repo.path));
 
   useEffect(() => {
-    global.getUserInfo().then((currentUser) => {
+    const currentUser = global.getUserInfo();
+    if (currentUser !== undefined) {
       console.info(currentUser, repo.owner);
       if (currentUser.namespace_path == repo.owner.namespace) {
         setPath(builtInRepoPath(repo.path));
       }
-    });
+    }
   }, []);
 
   return (

@@ -3,7 +3,7 @@ import { Notice, useNotice } from "./recoil/notice";
 
 export type globalTypes = {
   notice: Notice | null;
-  getUserInfo: () => Promise<UserInfo>;
+  getUserInfo: () => UserInfo | undefined;
 };
 
 export let global: globalTypes;
@@ -11,7 +11,7 @@ export let global: globalTypes;
 export const setup = () => {
   global = {
     notice: null,
-    getUserInfo: () => Promise.reject("not found user"),
+    getUserInfo: () => undefined,
   };
   return;
 };

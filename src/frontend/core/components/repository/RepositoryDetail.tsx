@@ -22,8 +22,9 @@ interface RepositoryDetailProps extends RepositoryArgs {
 export function RepositoryDetail(props: RepositoryDetailProps) {
   const { ownerPath, repoPath } = props;
   const [currentTab, setCurrentTab] = useState<"code" | "clone">("code");
-
   const [repository, setRepository] = useState<RepositoryEntity>();
+
+  // console.info("RepositoryDetail: ", props);
 
   useEffect(() => {
     const repo = new Repository(ownerPath);
@@ -77,7 +78,6 @@ export function RepositoryDetail(props: RepositoryDetailProps) {
     return tabs.map((tab, index) => (
       <EuiTab
         key={index}
-        href={tab.href}
         onClick={() => setCurrentTab(tab.id)}
         isSelected={tab.id === currentTab}
         disabled={tab.disabled}
