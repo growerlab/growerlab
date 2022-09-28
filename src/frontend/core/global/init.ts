@@ -1,9 +1,9 @@
-import { LoginInfo, Session } from "../services/auth/session";
+import { UserInfo, Session } from "../services/auth/session";
 import { Notice, useNotice } from "./recoil/notice";
 
 export type globalTypes = {
   notice: Notice | null;
-  getUserInfo: () => Promise<LoginInfo>;
+  getUserInfo: () => Promise<UserInfo>;
 };
 
 export let global: globalTypes;

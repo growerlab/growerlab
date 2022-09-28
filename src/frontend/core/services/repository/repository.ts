@@ -1,21 +1,23 @@
+import { AxiosResponse } from "axios";
+
 import { TypeRepository } from "./types";
+import { global } from "../../global/init";
+import { API, request } from "../../api/api";
 
 export class Repository {
   ownerPath: string
 
   constructor(ownerPath: string) {
     this.ownerPath = ownerPath;
-    if (this.ownerPath === undefined) {
-      // const current = getUserInfo();
-      // if (current !== null) {
-      //   this.repo.ownerPath = current.namespacePath;
-      // }
-    }
   }
 
-  get(repoPath: string): TypeRepository | null {
-    console.info(repoPath)
-    return mockRepositories[0];
+  get(repoPath: string): Promise<AxiosResponse<TypeRepository>> {
+    console.info(this.ownerPath)
+    return request(global.notice!)
+      .get<TypeRepository, AxiosResponse<TypeRepository>>(API.Repositories.Detail.render({ owenrPath: this.ownerPath, repoPath: repoPath }))
+      .then((res) => {
+        return res;
+      });
   }
 
   list(page = 0): TypeRepository[] | null {

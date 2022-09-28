@@ -1,11 +1,16 @@
 import axios, { AxiosInstance, AxiosResponse } from "axios";
 import i18n from "../i18n/i18n";
 import { Notice } from "../global/recoil/notice";
+import { dynamicRouter } from "../../config/router";
 
-const baseUrl = "http://localhost:8081/api/v1/";
+const baseUrl = "http://localhost:8081/api/v1";
+
 
 export const API = {
   Login: "/auth/login",
+  Repositories: {
+    Detail: dynamicRouter.new("/repositories/:owenrPath/detail/:repoPath")
+  }
 };
 
 /**

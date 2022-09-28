@@ -7,14 +7,14 @@ import { RepositoryDetail } from "../../../core/components/repository/Repository
 import { getTitle } from "../../../core/common/document";
 import i18n from "../../../core/i18n/i18n";
 import { useGlobal } from "../../../core/global/init";
-import { LoginInfo } from "../../../core/services/auth/session";
+import { UserInfo } from "../../../core/services/auth/session";
 
 export default function ShowRepoPage() {
   const global = useGlobal();
   const router = useRouter();
   const repoPath = router.query.repoPath as string;
   const [ownerPath, setOwnerPath] = useState<string>("");
-  const [currentUser, setCurrentUser] = useState<LoginInfo>();
+  const [currentUser, setCurrentUser] = useState<UserInfo>();
 
   useEffect(() => {
     global.getUserInfo().then((user) => {

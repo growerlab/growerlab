@@ -1,6 +1,6 @@
 import { AxiosResponse } from "axios";
 
-import { LoginInfo } from "./session";
+import { UserInfo } from "./session";
 import { API, request } from "../../api/api";
 import { global } from "../../global/init";
 
@@ -13,9 +13,9 @@ export class LoginService {
   public login(
     email: string,
     password: string
-  ): Promise<AxiosResponse<LoginInfo>> {
+  ): Promise<AxiosResponse<UserInfo>> {
     return request(global.notice!)
-      .post<Login, AxiosResponse<LoginInfo>>(API.Login, {
+      .post<Login, AxiosResponse<UserInfo>>(API.Login, {
         email: email,
         password: password,
       })

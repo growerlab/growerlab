@@ -3,7 +3,7 @@ import { NextRouter } from "next/router";
 
 const AuthUserToken = "auth-user-token";
 
-export interface LoginInfo {
+export interface UserInfo {
   token: string;
   namespace_path: string;
   email: string;
@@ -30,7 +30,7 @@ export class Session {
   /**
    * 登录，将保存token并可以设置过期时间，默认不过期
    */
-  static storeLogin(info: LoginInfo): Promise<LoginInfo> {
+  static storeLogin(info: UserInfo): Promise<UserInfo> {
     localStorage.setItem(AuthUserToken, JSON.stringify(info));
     return Session.getUserInfo();
   }
@@ -51,7 +51,7 @@ export class Session {
   /**
    * 获取用户信息
    */
-  static getUserInfo(): Promise<LoginInfo> {
+  static getUserInfo(): Promise<UserInfo> {
     const info = localStorage.getItem(AuthUserToken);
 
     return new Promise((resolve, reject) => {
@@ -59,7 +59,7 @@ export class Session {
         return reject(new Error("not found user token"));
       }
       try {
-        resolve(JSON.parse(info) as LoginInfo);
+        resolve(JSON.parse(info) as UserInfo);
       } catch (error) {
         console.warn("Can't parse json for login info.");
         reject(error);

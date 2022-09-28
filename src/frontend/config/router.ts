@@ -1,4 +1,4 @@
-class dynamicRouter {
+export class dynamicRouter {
   private r: string
 
   constructor(r: string) {

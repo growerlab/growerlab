@@ -5,39 +5,37 @@ import {
   EuiTabs,
   EuiText,
 } from "@elastic/eui";
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 
-import { LoginInfo } from "../../services/auth/session";
+import { UserInfo } from "../../services/auth/session";
 import { Repository } from "../../services/repository/repository";
-import { RepositoryArgs } from "../../services/repository/types";
+import {
+  RepositoryArgs,
+  RepositoryEntity,
+} from "../../services/repository/types";
 import { repoIcon } from "./common";
 
 interface RepositoryDetailProps extends RepositoryArgs {
-  currentUser?: LoginInfo; // 当前登录的用户，不一定是仓库的所有者
+  currentUser?: UserInfo; // 当前登录的用户，不一定是仓库的所有者
 }
 
 export function RepositoryDetail(props: RepositoryDetailProps) {
   const { ownerPath, repoPath } = props;
   const [currentTab, setCurrentTab] = useState<"code" | "clone">("code");
 
-  const repo = new Repository(ownerPath);
-  const repoData = repo.get(repoPath);
-  if (repoData === null) {
-    return (
-      <div>
-        <h3 className="text-xl">404 - Not found</h3>
-      </div>
-    );
-  }
-  const repository = repoData.repository;
+  const [repository, setRepository] = useState<RepositoryEntity>();
 
-  const handleClick = (e: any) => {
-    console.log(e.key);
-    if (e.key === "clone") {
-      return;
-    }
-    setCurrentTab(e.key);
-  };
+  useEffect(() => {
+    const repo = new Repository(ownerPath);
+    repo
+      .get(repoPath)
+      .then((res) => {
+        setRepository(res.data.repository);
+      })
+      .catch(() => {
+        return <>404</>;
+      });
+  }, []);
 
   const tabs: EuiTabbedContentProps["tabs"] = [
     {
@@ -93,11 +91,11 @@ export function RepositoryDetail(props: RepositoryDetailProps) {
   return (
     <div>
       <h3 className={"text-xl"}>
-        {repoIcon(repoData.repository.public)}
+        {repoIcon(repository?.public ? true : false)}
         <span className="ml-4"></span>
-        {repository.path}
+        {repository?.path}
       </h3>
-      <div className={"mt-6 mb-4 text-gray-400"}>{repository.description}</div>
+      <div className={"mt-6 mb-4 text-gray-400"}>{repository?.description}</div>
 
       <EuiTabs>{renderTabs()}</EuiTabs>
     </div>
