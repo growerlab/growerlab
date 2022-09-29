@@ -6,6 +6,7 @@ import {
   EuiText,
 } from "@elastic/eui";
 import React, { Fragment, useEffect, useState } from "react";
+import useSWR, { Fetcher } from "swr";
 
 import { UserInfo } from "../../services/auth/session";
 import { Repository } from "../../services/repository/repository";
@@ -19,24 +20,32 @@ interface RepositoryDetailProps extends RepositoryArgs {
   currentUser?: UserInfo; // 当前登录的用户，不一定是仓库的所有者
 }
 
+const fetcher: Fetcher<RepositoryEntity, RepositoryArgs> = (
+  args: RepositoryArgs
+) => {
+  const repo = new Repository(args.ownerPath);
+  return repo.get(args.repoPath).then((res) => {
+    return res.data.repository;
+  });
+};
+
 export function RepositoryDetail(props: RepositoryDetailProps) {
   const { ownerPath, repoPath } = props;
   const [currentTab, setCurrentTab] = useState<"code" | "clone">("code");
   const [repository, setRepository] = useState<RepositoryEntity>();
 
-  // console.info("RepositoryDetail: ", props);
+  const { data } = useSWR<RepositoryEntity>(
+    { ownerPath: ownerPath, repoPath: repoPath },
+    fetcher,
+    { suspense: true }
+  );
+  console.info("----", data);
+  setRepository(data);
 
-  useEffect(() => {
-    const repo = new Repository(ownerPath);
-    repo
-      .get(repoPath)
-      .then((res) => {
-        setRepository(res.data.repository);
-      })
-      .catch(() => {
-        return <>404</>;
-      });
-  }, []);
+  // const repo = new Repository(ownerPath);
+  // repo.get(repoPath).then((res) => {
+  //   setRepository(res.data.repository);
+  // });
 
   const tabs: EuiTabbedContentProps["tabs"] = [
     {

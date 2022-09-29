@@ -19,7 +19,7 @@ export class Repository {
       });
   }
 
-  list(page = 0): TypeRepository[] | null {
+  list(page = 0): TypeRepository[] | undefined {
     return mockRepositories;
   }
 }

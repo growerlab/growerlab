@@ -37,11 +37,13 @@ export class Session {
   /**
    * 退出登录
    */
-  static logout(router: NextRouter, callback?: () => void) {
+  static logout(router?: NextRouter, callback?: () => void) {
     localStorage.removeItem(AuthUserToken);
     if (callback === undefined) {
       callback = () => {
-        router.push(Router.Home.Login);
+        if (router !== undefined) {
+          router.push(Router.Home.Login);
+        }
       };
     }
     callback?.();
@@ -50,18 +52,19 @@ export class Session {
   /**
    * 获取用户信息
    */
-  static getUserInfo(): UserInfo | undefined {
+  static getUserInfo(): UserInfo {
     const info = localStorage.getItem(AuthUserToken);
 
     if (info === null) {
-      console.error("not found user token");
-      return undefined
+      console.error("not found user info");
+      throw new Error()
     }
     try {
       return JSON.parse(info) as UserInfo;
     } catch (error) {
+      Session.logout()
       console.warn("Can't parse json for login info.");
-      return undefined
+      throw new Error()
     }
   }
 }
