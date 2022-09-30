@@ -1,0 +1,183 @@
+import React, { useState } from "react";
+import { withTranslation, WithTranslation } from "react-i18next";
+import validator from "validator";
+import { redirect } from "react-router-dom";
+
+import {
+  EuiButton,
+  EuiFieldPassword,
+  EuiFieldText,
+  EuiForm,
+  EuiFormRow,
+} from "@elastic/eui";
+
+import { Auth } from "../../services/auth/auth";
+import { Router } from "../../../config/router";
+import { useGlobal } from "../../global/init";
+import { userRules, UserRules } from "../../api/rule";
+
+function RegisterForm(props: WithTranslation) {
+  const { t } = props;
+
+  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [usernameValidateMsg, setUsernameValidateMsg] = useState(null);
+  const [emailValidateMsg, setEmailValidateMsg] = useState(null);
+  const [pwdValidateMsg, setPwdValidateMsg] = useState(null);
+
+  const { notice } = useGlobal();
+
+  const onSubmit = (e: React.MouseEvent) => {
+    const auth = new Auth();
+    auth
+      .registerUser({
+        username: username,
+        email: email,
+        password: password,
+      })
+      .then((res) => {
+        notice?.success(t("user.tooltip.register_success"));
+        redirect(Router.Home.Login);
+        return;
+      });
+  };
+
+  const validate = {
+    email: (obj: HTMLInputElement) => {
+      const val = obj.value;
+      if (!validator.isEmail(val)) {
+        setEmailValidateMsg(t("user.login_tooltip.email_invalid"));
+      } else {
+        setEmailValidateMsg(null);
+      }
+    },
+    password: (obj: HTMLInputElement) => {
+      const val = obj.value;
+      if (
+        validator.isEmpty(val) ||
+        validator.isLength(val, {
+          min: userRules.pwdMinLength,
+          max: userRules.pwdMaxLength,
+        })
+      ) {
+        setPwdValidateMsg(t("user.login_tooltip.password_invalid"));
+      } else {
+        setPwdValidateMsg(null);
+      }
+    },
+    username: (obj: HTMLInputElement) => {
+      const val = obj.value;
+
+      if (
+        validator.isEmpty(val) ||
+        validator.isLength(val, {
+          min: userRules.usernameMinLength,
+          max: userRules.usernameMaxLength,
+        })
+      ) {
+        setUsernameValidateMsg(t("user.login_tooltip.username_invalid"));
+      } else {
+        setUsernameValidateMsg(null);
+      }
+    },
+  };
+
+  const onBlur = (event: React.FocusEvent<HTMLInputElement>) => {
+    const obj = event.target;
+    const name = obj.name;
+    switch (name) {
+      case "username":
+        validate.username(obj);
+        break;
+      case "email":
+        validate.email(obj);
+        break;
+      case "password":
+        validate.password(obj);
+        break;
+    }
+    return;
+  };
+
+  return (
+    <div>
+      <div className="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-md w-full space-y-8">
+          <div>
+            <h1 className="mx-auto h-12 w-auto text-center text-3xl">
+              {t("user.register")}
+            </h1>
+            <span>{t("user.tooltip.register_notice")}</span>
+          </div>
+          <div>
+            <div className="-space-y-px shadow-2xl p-8 rounded-xl">
+              <EuiForm component="form">
+                <EuiFormRow
+                  label={t("user.username")}
+                  isInvalid={usernameValidateMsg != null}
+                  error={usernameValidateMsg}
+                >
+                  <EuiFieldText
+                    name={"username"}
+                    required={true}
+                    autoFocus={true}
+                    onChange={(event) => {
+                      setUsername(event.target.value);
+                    }}
+                    isInvalid={false}
+                    onBlur={onBlur}
+                  />
+                </EuiFormRow>
+                <EuiFormRow
+                  label="Email"
+                  isInvalid={emailValidateMsg != null}
+                  error={emailValidateMsg}
+                >
+                  <EuiFieldText
+                    name={"email"}
+                    type={"email"}
+                    required={true}
+                    onChange={(event) => {
+                      setEmail(event.target.value);
+                    }}
+                    isInvalid={false}
+                    onBlur={onBlur}
+                  />
+                </EuiFormRow>
+                <EuiFormRow
+                  label="Password"
+                  isInvalid={pwdValidateMsg != null}
+                  error={pwdValidateMsg}
+                >
+                  <EuiFieldPassword
+                    type={"password"}
+                    name={"password"}
+                    isInvalid={false}
+                    required={true}
+                    onBlur={onBlur}
+                    onChange={(event): void => {
+                      setPassword(event.target.value);
+                    }}
+                  />
+                </EuiFormRow>
+                <EuiFormRow>
+                  <EuiButton
+                    fill
+                    color="primary"
+                    onClick={onSubmit}
+                    className={"w-full"}
+                  >
+                    {t("user.login")}
+                  </EuiButton>
+                </EuiFormRow>
+              </EuiForm>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default withTranslation()(RegisterForm);
