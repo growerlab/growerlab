@@ -1,7 +1,7 @@
 import React from "react";
 import UserLayout from "../layouts/UserLayout";
 
-export default function Index() {
+export default function User() {
   return (
     <div>
       <UserLayout title="Dashboard">
