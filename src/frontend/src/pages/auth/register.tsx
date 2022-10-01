@@ -1,8 +1,8 @@
 import React from "react";
-import { Row, Col } from "antd";
-import RegisterForm from "../components/user/Register";
 import { withTranslation } from "react-i18next";
-import { getTitle } from "../common/document";
+
+import { getTitle } from "../../core/common/document";
+import RegisterForm from "../../core/components/user/Register";
 
 const register = function Register(props: any) {
   const { t } = props;
@@ -10,13 +10,11 @@ const register = function Register(props: any) {
 
   return (
     <div>
-      <Row>
-        <Col span={6} />
-        <Col span={12}>
+      <div className="grid grid-cols-6 gap-4">
+        <div className="col-start-2 col-span-4 ">
           <RegisterForm />
-        </Col>
-        <Col span={6} />
-      </Row>
+        </div>
+      </div>
     </div>
   );
 };

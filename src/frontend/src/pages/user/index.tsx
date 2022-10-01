@@ -1,5 +1,5 @@
 import React from "react";
-import UserLayout from "../layouts/user";
+import UserLayout from "../layouts/UserLayout";
 
 export default function Index() {
   return (

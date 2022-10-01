@@ -14,7 +14,7 @@ import {
 import { Auth } from "../../services/auth/auth";
 import { Router } from "../../../config/router";
 import { useGlobal } from "../../global/init";
-import { userRules, UserRules } from "../../api/rule";
+import { userRules } from "../../api/rule";
 
 function RegisterForm(props: WithTranslation) {
   const { t } = props;
