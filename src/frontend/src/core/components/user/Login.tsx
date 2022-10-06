@@ -1,5 +1,4 @@
 import React, { ChangeEvent, useState } from "react";
-import { withTranslation, WithTranslation } from "react-i18next";
 import validator from "validator";
 import {
   EuiFieldText,
@@ -15,7 +14,7 @@ import { useGlobal } from "../../global/init";
 import { Session } from "../../services/auth/session";
 import { Auth } from "../../services/auth/auth";
 
-function LoginForm(props: WithTranslation) {
+export default function LoginForm(props: any) {
   const global = useGlobal();
   const notice = global.notice!;
 
@@ -134,5 +133,3 @@ function LoginForm(props: WithTranslation) {
     </div>
   );
 }
-
-export default withTranslation()(LoginForm);

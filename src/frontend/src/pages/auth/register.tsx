@@ -1,12 +1,11 @@
 import React from "react";
-import { withTranslation } from "react-i18next";
 
 import { getTitle } from "../../core/common/document";
 import RegisterForm from "../../core/components/user/Register";
+import i18n from "../../core/i18n/i18n";
 
-const register = function Register(props: any) {
-  const { t } = props;
-  getTitle(t("website.register"));
+export default function Register(props: any) {
+  getTitle(i18n.t("website.register"));
 
   return (
     <div>
@@ -17,6 +16,4 @@ const register = function Register(props: any) {
       </div>
     </div>
   );
-};
-
-export default withTranslation()(register);
+}

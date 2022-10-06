@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { withTranslation, WithTranslation } from "react-i18next";
 import validator from "validator";
 import { redirect } from "react-router-dom";
 
@@ -15,10 +14,9 @@ import { Auth } from "../../services/auth/auth";
 import { Router } from "../../../config/router";
 import { useGlobal } from "../../global/init";
 import { userRules } from "../../api/rule";
+import i18n from "../../i18n/i18n";
 
-function RegisterForm(props: WithTranslation) {
-  const { t } = props;
-
+export default function RegisterForm(props: any) {
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -37,7 +35,7 @@ function RegisterForm(props: WithTranslation) {
         password: password,
       })
       .then((res) => {
-        notice?.success(t("user.tooltip.register_success"));
+        notice?.success(i18n.t("user.tooltip.register_success"));
         redirect(Router.Home.Login);
         return;
       });
@@ -47,7 +45,7 @@ function RegisterForm(props: WithTranslation) {
     email: (obj: HTMLInputElement) => {
       const val = obj.value;
       if (!validator.isEmail(val)) {
-        setEmailValidateMsg(t("user.login_tooltip.email_invalid"));
+        setEmailValidateMsg(i18n.t("user.login_tooltip.email_invalid"));
       } else {
         setEmailValidateMsg(null);
       }
@@ -61,7 +59,7 @@ function RegisterForm(props: WithTranslation) {
           max: userRules.pwdMaxLength,
         })
       ) {
-        setPwdValidateMsg(t("user.login_tooltip.password_invalid"));
+        setPwdValidateMsg(i18n.t("user.login_tooltip.password_invalid"));
       } else {
         setPwdValidateMsg(null);
       }
@@ -76,7 +74,7 @@ function RegisterForm(props: WithTranslation) {
           max: userRules.usernameMaxLength,
         })
       ) {
-        setUsernameValidateMsg(t("user.login_tooltip.username_invalid"));
+        setUsernameValidateMsg(i18n.t("user.login_tooltip.username_invalid"));
       } else {
         setUsernameValidateMsg(null);
       }
@@ -106,15 +104,15 @@ function RegisterForm(props: WithTranslation) {
         <div className="max-w-md w-full space-y-8">
           <div>
             <h1 className="mx-auto h-12 w-auto text-center text-3xl">
-              {t("user.register")}
+              {i18n.t("user.register") as string}
             </h1>
-            <span>{t("user.tooltip.register_notice")}</span>
+            <span>{i18n.t<string>("user.tooltip.register_notice")}</span>
           </div>
           <div>
             <div className="-space-y-px shadow-2xl p-8 rounded-xl">
               <EuiForm component="form">
                 <EuiFormRow
-                  label={t("user.username")}
+                  label={i18n.t("user.username") as string}
                   isInvalid={usernameValidateMsg != null}
                   error={usernameValidateMsg}
                 >
@@ -168,7 +166,7 @@ function RegisterForm(props: WithTranslation) {
                     onClick={onSubmit}
                     className={"w-full"}
                   >
-                    {t("user.login")}
+                    {i18n.t<string>("user.login")}
                   </EuiButton>
                 </EuiFormRow>
               </EuiForm>
@@ -179,5 +177,3 @@ function RegisterForm(props: WithTranslation) {
     </div>
   );
 }
-
-export default withTranslation()(RegisterForm);

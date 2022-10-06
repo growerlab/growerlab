@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { EuiGlobalToastList } from "@elastic/eui";
-import { withTranslation } from "react-i18next";
 import { useRecoilValue } from "recoil";
 
 import { noticeState } from "../../global/recoil/notice";
@@ -12,7 +11,7 @@ interface Toast {
   color?: "primary" | "success" | "warning" | "danger";
 }
 
-function Notice(props: any) {
+export default function Notice(props: any) {
   const [toasts, setToasts] = useState<Toast[]>([]);
 
   const value = useRecoilValue(noticeState);
@@ -37,5 +36,3 @@ function Notice(props: any) {
     />
   );
 }
-
-export default withTranslation()(Notice);

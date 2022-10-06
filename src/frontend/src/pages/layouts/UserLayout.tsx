@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { withTranslation } from "react-i18next";
 import { Link, redirect } from "react-router-dom";
 
 import {
@@ -14,23 +13,25 @@ import {
 import { Router } from "../../config/router";
 import { Session } from "../../core/services/auth/session";
 import { useGlobal } from "../../core/global/init";
+import i18n from "../../core/i18n/i18n";
 
-function UserLayout(props: any) {
-  const { t } = props;
+export default function UserLayout(props: any) {
   const global = useGlobal();
   const notice = global.notice!;
 
   useEffect((): void => {
     // 验证用户是否登录
     Session.isLogin().catch(() => {
-      notice.warning(t("user.tooltip.not_login"));
+      notice.warning(i18n.t("user.tooltip.not_login"));
       redirect(Router.Home.Login);
     });
   });
 
   const [collapsed, setCollapsed] = useState(false);
   const plusMenu = (
-    <Link to={Router.User.Repository.New}>{t("repository.new")}</Link>
+    <Link to={Router.User.Repository.New}>
+      {i18n.t<string>("repository.new")}
+    </Link>
   );
 
   const logoutClick = (): void => {
@@ -76,7 +77,7 @@ function UserLayout(props: any) {
           key: "sep",
         },
         {
-          name: t("user.logout"),
+          name: i18n.t<string>("user.logout"),
           onClick: () => {
             logoutClick();
           },
@@ -102,7 +103,7 @@ function UserLayout(props: any) {
   );
 
   const MenuItem = (props: {
-    icon: JSX.Element;
+    icon: React.ReactNode;
     title: string;
     href: string;
     selected?: boolean;
@@ -141,11 +142,13 @@ function UserLayout(props: any) {
                 {[
                   [
                     "Home",
+                    "/",
                     Router.User.Index,
                     <EuiIcon type="grid" key={"home"} />,
                   ],
                   [
-                    t("repository.menu"),
+                    i18n.t<string>("repository.menu"),
+                    "/",
                     Router.User.Repository.List,
                     <EuiIcon
                       type={"visVega"}
@@ -154,7 +157,7 @@ function UserLayout(props: any) {
                     />,
                   ],
                   [
-                    t("project.menu"),
+                    i18n.t<string>("project.menu"),
                     "/",
                     <EuiIcon
                       type={"sessionViewer"}
@@ -164,10 +167,10 @@ function UserLayout(props: any) {
                   ],
                 ].map(([title, href, icon]) => (
                   <MenuItem
-                    key={title}
+                    key={title.toString()}
                     icon={icon}
-                    href={href}
-                    title={title}
+                    href={href.toString()}
+                    title={title.toString()}
                   ></MenuItem>
                 ))}
               </div>
@@ -210,5 +213,3 @@ function UserLayout(props: any) {
     </div>
   );
 }
-
-export default withTranslation()(UserLayout);

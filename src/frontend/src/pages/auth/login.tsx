@@ -1,17 +1,13 @@
 import React from "react";
-import { withTranslation } from "react-i18next";
 import { getTitle } from "../../core/common/document";
 import LoginForm from "../../core/components/user/Login";
+import i18n from "../../core/i18n/i18n";
 
-const login = function (props: any) {
-  const { t } = props;
-
+export default function Login(props: any) {
   return (
     <div>
-      <div>{getTitle(t("website.login"))}</div>
+      <div>{getTitle(i18n.t("website.login"))}</div>
       <LoginForm />
     </div>
   );
-};
-
-export default withTranslation()(login);
+}

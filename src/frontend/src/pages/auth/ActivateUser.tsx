@@ -1,12 +1,11 @@
 import React from "react";
-import { withTranslation } from "react-i18next";
 
 import Activate from "../../core/components/user/Activate";
 import { getTitle } from "../../core/common/document";
+import i18n from "../../core/i18n/i18n";
 
-const activateUser = function (props: any) {
-  const { t } = props;
-  getTitle(t("website.activate_user"));
+export default function ActivateUser(props: any) {
+  getTitle(i18n.t("website.activate_user"));
 
   return (
     <div>
@@ -17,6 +16,4 @@ const activateUser = function (props: any) {
       </div>
     </div>
   );
-};
-
-export default withTranslation()(activateUser);
+}
