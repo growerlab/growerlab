@@ -1,11 +1,12 @@
 import React from "react";
+import { useTitle } from "react-use";
 
 import Activate from "../../core/components/user/Activate";
 import { getTitle } from "../../core/common/document";
 import i18n from "../../core/i18n/i18n";
 
 export default function ActivateUser(props: any) {
-  getTitle(i18n.t("website.activate_user"));
+  useTitle(getTitle(i18n.t("website.activate_user")));
 
   return (
     <div>

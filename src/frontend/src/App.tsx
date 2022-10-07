@@ -12,21 +12,32 @@ import { setup } from "./core/global/init";
 import Home from "./Home";
 import User from "./pages/user/User";
 import Login from "./pages/auth/Login";
+import Register from "./pages/auth/Register";
+import ActivateUser from "./pages/auth/ActivateUser";
+import { Router } from "./config/router";
 
 export default function App() {
   setup();
 
   const router = createBrowserRouter([
     {
-      path: "/",
+      path: Router.Home.Index,
       element: <Home />,
     },
     {
-      path: "/login",
+      path: Router.Home.Login,
       element: <Login />,
     },
     {
-      path: "/user",
+      path: Router.Home.Register,
+      element: <Register />,
+    },
+    {
+      path: Router.Home.ActivateUser,
+      element: <ActivateUser />,
+    },
+    {
+      path: Router.User.Index,
       element: <User />,
     },
   ]);

@@ -13,6 +13,7 @@ import { Router } from "../../../config/router";
 import { useGlobal } from "../../global/init";
 import { Session } from "../../services/auth/session";
 import { Auth } from "../../services/auth/auth";
+import i18n from "../../i18n/i18n";
 
 export default function LoginForm(props: any) {
   const global = useGlobal();
@@ -23,18 +24,16 @@ export default function LoginForm(props: any) {
   const [emailValidateMsg, setEmailValidateMsg] = useState(null);
   const [pwdValidateMsg, setPwdValidateMsg] = useState(null);
 
-  const { t } = props;
-
   const onSubmit = (e: React.MouseEvent) => {
     const service = new Auth();
     service.login(email, password).then((res) => {
       if (res === undefined) {
-        notice.error(t("user.tooltip.login_fail"));
+        notice.error(i18n.t("user.tooltip.login_fail"));
         return;
       }
 
       Session.storeLogin(res.data);
-      notice.success(t("user.tooltip.login_success"));
+      notice.success(i18n.t("user.tooltip.login_success"));
       redirect(Router.User.Index);
     });
   };
@@ -43,7 +42,7 @@ export default function LoginForm(props: any) {
     email: (obj: HTMLInputElement) => {
       const val = obj.value;
       if (!validator.isEmail(val)) {
-        setEmailValidateMsg(t("user.login_tooltip.email_invalid"));
+        setEmailValidateMsg(i18n.t("user.login_tooltip.email_invalid"));
       } else {
         setEmailValidateMsg(null);
       }
@@ -51,7 +50,7 @@ export default function LoginForm(props: any) {
     password: (obj: HTMLInputElement) => {
       const val = obj.value;
       if (validator.isEmpty(val)) {
-        setPwdValidateMsg(t("user.login_tooltip.password_invalid"));
+        setPwdValidateMsg(i18n.t("user.login_tooltip.password_invalid"));
       } else {
         setPwdValidateMsg(null);
       }
@@ -123,7 +122,7 @@ export default function LoginForm(props: any) {
                   onClick={onSubmit}
                   className={"w-full"}
                 >
-                  {t("user.login")}
+                  {i18n.t<string>("user.login")}
                 </EuiButton>
               </EuiFormRow>
             </EuiForm>

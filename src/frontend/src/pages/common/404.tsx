@@ -1,10 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useTitle } from "react-use";
 
 import { getTitle } from "../../core/common/document";
 
 export default function Error404() {
-  getTitle("404 Not Found");
+  useTitle(getTitle("404 Not Found"));
 
   return (
     <div>

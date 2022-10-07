@@ -1,4 +1,5 @@
 import React from "react";
+import { useTitle } from "react-use";
 import { EuiLoadingSpinner } from "@elastic/eui";
 import { useParams } from "react-router-dom";
 
@@ -15,6 +16,7 @@ export default function ShowRepoPage() {
   if (repoPath === undefined) {
     return <Error404 />;
   }
+  useTitle(getTitle(i18n.t(repoPath)));
 
   const user = global.getUserInfo();
   if (user == null) {
@@ -23,7 +25,6 @@ export default function ShowRepoPage() {
 
   return (
     <div>
-      <div>{getTitle(i18n.t(repoPath))}</div>
       <UserLayout title={i18n.t("repository.menu")}>
         <React.Suspense fallback={<EuiLoadingSpinner size="xl" />}>
           <RepositoryDetail

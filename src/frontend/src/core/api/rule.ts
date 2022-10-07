@@ -8,5 +8,5 @@ export const userRules = {
 };
 
 export const repositoryRules = {
-  repositoryNameRegex: /^[a-zA-Z0-9_\-\.]{2,50}$/,
+  repositoryNameRegex: /^[a-zA-Z0-9_\-.]{2,50}$/,
 };
