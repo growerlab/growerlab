@@ -6,7 +6,7 @@ import { Router } from "./config/router";
 import HomeLayout from "./pages/layouts/HomeLayout";
 import { getTitle } from "./core/common/document";
 
-const Home = () => {
+export default function Home() {
   useTitle(getTitle());
 
   return (
@@ -19,6 +19,4 @@ const Home = () => {
       </HomeLayout>
     </div>
   );
-};
-
-export default Home;
+}
