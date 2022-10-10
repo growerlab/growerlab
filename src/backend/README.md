@@ -27,7 +27,7 @@ USE `growerlab`;
 如果有种子数据，应该放入 `db/seed.sql` 文件中
 
 ```
-初始账号 admin@growerlab.com
+初始账号 admin@admin.com
 初始密码 growerlabadmin
 ```
 
