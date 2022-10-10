@@ -16,14 +16,13 @@ import { useGlobal } from "../../core/global/init";
 import i18n from "../../core/i18n/i18n";
 
 export default function UserLayout(props: any) {
-  const global = useGlobal();
-  const notice = global.notice!;
+  const { notice } = useGlobal();
   const navigate = useNavigate();
 
   useEffect((): void => {
     // 验证用户是否登录
     Session.isLogin().catch(() => {
-      notice.warning(i18n.t("user.tooltip.not_login"));
+      notice!.warning(i18n.t("user.tooltip.not_login"));
       navigate(Router.Home.Login);
     });
   });
@@ -35,22 +34,15 @@ export default function UserLayout(props: any) {
     </Link>
   );
 
-  const logoutClick = (): void => {
-    Session.logout();
-  };
-
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
-
-  const onButtonClick = () =>
-    setIsPopoverOpen((isPopoverOpen) => !isPopoverOpen);
-  const closePopover = () => setIsPopoverOpen(false);
-
+  const onOpenUserMenu = () => setIsPopoverOpen(!isPopoverOpen);
+  const onCloseUserMenu = () => setIsPopoverOpen(false);
   const userMenuButton = (
     <img
       className="h-8 w-8 rounded-full"
       src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
       alt=""
-      onClick={onButtonClick}
+      onClick={onOpenUserMenu}
     />
   );
 
@@ -65,7 +57,7 @@ export default function UserLayout(props: any) {
       items: [
         {
           name: "Your Profile",
-          icon: "user",
+          icon: <EuiIcon type="user" />,
           href: "/",
         },
         {
@@ -79,28 +71,25 @@ export default function UserLayout(props: any) {
         },
         {
           name: i18n.t<string>("user.logout"),
-          onClick: () => {
-            logoutClick();
-          },
+          onClick: () => Session.logout(),
         },
       ],
     },
   ];
 
   const userMenu = (
-    <div>
+    <>
       <EuiPopover
         id={contextMenuPopoverId}
         button={userMenuButton}
         isOpen={isPopoverOpen}
-        closePopover={closePopover}
+        closePopover={onCloseUserMenu}
         panelPaddingSize="none"
         anchorPosition="downLeft"
-        tabIndex={undefined}
       >
         <EuiContextMenu initialPanelId={0} panels={panels} />
       </EuiPopover>
-    </div>
+    </>
   );
 
   const MenuItem = (props: {
@@ -182,18 +171,27 @@ export default function UserLayout(props: any) {
           <div className="flex flex-col h-full">
             <header className="bg-white shadow">
               <div className="max-w-full  mx-auto py-3 px-4 sm:px-2 lg:px-6">
-                <div className="flex columns-2">
-                  <div className="flex-none">
-                    <EuiFieldSearch
-                      placeholder="Search this"
-                      // value={value}
-                      // onChange={(e) => onChange(e)}
-                      // isClearable={isClearable}
-                      aria-label="Use aria labels when no actual label is in use"
-                    />
+                <div className="flex">
+                  <div className="flex-none "></div>
+                  {/* search */}
+                  <div className="grow">
+                    <div className="flex">
+                      <div className="flex-1"></div>
+                      <div className="flex-1">
+                        <EuiFieldSearch
+                          placeholder="Search cmd+k"
+                          // value={value}
+                          // onChange={(e) => onChange(e)}
+                          // isClearable={isClearable}
+                          fullWidth={true}
+                          aria-label="Use aria labels when no actual label is in use"
+                        />
+                      </div>
+                      <div className="flex-1"></div>
+                    </div>
                   </div>
-                  <div className="grow"></div>
-                  <div className="flex-none">{userMenu}</div>
+                  {/* user */}
+                  <div className="flex-none ">{userMenu}</div>
                 </div>
               </div>
             </header>

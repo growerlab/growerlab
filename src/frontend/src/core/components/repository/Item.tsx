@@ -19,7 +19,6 @@ export function Item(props: Args) {
   useEffect(() => {
     const currentUser = global.getUserInfo();
     if (currentUser !== undefined) {
-      console.info(currentUser, repo.owner);
       if (currentUser.namespace_path == repo.owner.namespace) {
         setPath(builtInRepoPath(repo.path));
       }
