@@ -15,7 +15,7 @@ export class Repository {
     return request(global.notice!)
       .get<TypeRepository, AxiosResponse<TypeRepository>>(
         API.Repositories.Detail.render({
-          owenrPath: this.ownerPath,
+          ownerPath: this.ownerPath,
           repoPath: repoPath,
         })
       )

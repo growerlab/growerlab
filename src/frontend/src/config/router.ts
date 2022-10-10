@@ -15,6 +15,10 @@ export class dynamicRouter {
       (_: any, p: string | number) => params[p]
     );
   }
+
+  public string() {
+    return this.r;
+  }
 }
 
 export const Router = {
@@ -27,9 +31,12 @@ export const Router = {
   User: {
     Index: "/user/",
     Repository: {
+      Index: "/user/repos",
       New: "/user/repos/new",
-      List: "/user/repos",
       Show: dynamicRouter.new("/user/repos/:repoPath"),
+    },
+    Project: {
+      Index: "/user/projects",
     },
   },
   Namespace: {

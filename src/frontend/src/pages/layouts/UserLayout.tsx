@@ -143,14 +143,12 @@ export default function UserLayout(props: any) {
                 {[
                   [
                     "Home",
-                    "/",
                     Router.User.Index,
                     <EuiIcon type="grid" key={"home"} />,
                   ],
                   [
                     i18n.t<string>("repository.menu"),
-                    "/",
-                    Router.User.Repository.List,
+                    Router.User.Repository.Index,
                     <EuiIcon
                       type={"visVega"}
                       key={"repository"}
@@ -159,7 +157,7 @@ export default function UserLayout(props: any) {
                   ],
                   [
                     i18n.t<string>("project.menu"),
-                    "/",
+                    Router.User.Project.Index,
                     <EuiIcon
                       type={"sessionViewer"}
                       key={"project"}

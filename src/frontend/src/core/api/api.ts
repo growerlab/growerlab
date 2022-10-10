@@ -12,7 +12,7 @@ export const API = {
     Register: "/auth/register",
   },
   Repositories: {
-    Detail: dynamicRouter.new("/repositories/:owenrPath/detail/:repoPath"),
+    Detail: dynamicRouter.new("/repositories/:ownerPath/detail/:repoPath"),
   },
 };
 

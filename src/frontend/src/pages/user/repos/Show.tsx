@@ -10,13 +10,14 @@ import i18n from "../../../core/i18n/i18n";
 import { useGlobal } from "../../../core/global/init";
 import Error404 from "../../common/404";
 
-export default function ShowRepoPage() {
+export default function RepositoryShow() {
   const global = useGlobal();
   const { repoPath } = useParams();
+  useTitle(getTitle(repoPath));
+
   if (repoPath === undefined) {
     return <Error404 />;
   }
-  useTitle(getTitle(i18n.t(repoPath)));
 
   const user = global.getUserInfo();
   if (user == null) {

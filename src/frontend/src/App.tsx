@@ -9,12 +9,15 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import Notice from "./core/components/notice/Notice";
 import { setup } from "./core/global/init";
+import { Router } from "./config/router";
+
 import Home from "./Home";
 import User from "./pages/user/User";
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
 import ActivateUser from "./pages/auth/ActivateUser";
-import { Router } from "./config/router";
+import RepositoryIndex from "./pages/user/repos/Index";
+import RepositoryShow from "./pages/user/repos/Show";
 
 export default function App() {
   setup();
@@ -39,6 +42,16 @@ export default function App() {
     {
       path: Router.User.Index,
       element: <User />,
+      children: [
+        {
+          path: Router.User.Repository.Index,
+          element: <RepositoryIndex />,
+        },
+        {
+          path: Router.User.Repository.Show.string(),
+          element: <RepositoryShow />,
+        },
+      ],
     },
   ]);
 
