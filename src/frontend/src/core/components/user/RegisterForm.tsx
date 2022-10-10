@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import validator from "validator";
-import { redirect } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import {
   EuiButton,
@@ -25,6 +25,7 @@ export default function RegisterForm(props: any) {
   const [pwdValidateMsg, setPwdValidateMsg] = useState(null);
 
   const { notice } = useGlobal();
+  const navigate = useNavigate();
 
   const onSubmit = (e: React.MouseEvent) => {
     const auth = new Auth();
@@ -36,7 +37,7 @@ export default function RegisterForm(props: any) {
       })
       .then((res) => {
         notice?.success(i18n.t("user.tooltip.register_success"));
-        redirect(Router.Home.Login);
+        navigate(Router.Home.Login);
         return;
       });
   };

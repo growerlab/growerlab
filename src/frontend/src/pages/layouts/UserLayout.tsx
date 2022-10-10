@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, redirect } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import {
   EuiFieldSearch,
@@ -18,12 +18,13 @@ import i18n from "../../core/i18n/i18n";
 export default function UserLayout(props: any) {
   const global = useGlobal();
   const notice = global.notice!;
+  const navigate = useNavigate();
 
   useEffect((): void => {
     // 验证用户是否登录
     Session.isLogin().catch(() => {
       notice.warning(i18n.t("user.tooltip.not_login"));
-      redirect(Router.Home.Login);
+      navigate(Router.Home.Login);
     });
   });
 

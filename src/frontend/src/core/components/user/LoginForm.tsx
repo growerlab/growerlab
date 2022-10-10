@@ -7,17 +7,20 @@ import {
   EuiFieldPassword,
   EuiButton,
 } from "@elastic/eui";
-import { redirect } from "react-router-dom";
 
-import { Router } from "../../../config/router";
+import i18n from "../../i18n/i18n";
 import { useGlobal } from "../../global/init";
 import { Session } from "../../services/auth/session";
 import { Auth } from "../../services/auth/auth";
-import i18n from "../../i18n/i18n";
 
-export default function LoginForm(props: any) {
+interface Options {
+  onSuccess: () => any;
+}
+
+export default function LoginForm(props: Options) {
   const global = useGlobal();
   const notice = global.notice!;
+  const { onSuccess } = props;
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -34,7 +37,7 @@ export default function LoginForm(props: any) {
 
       Session.storeLogin(res.data);
       notice.success(i18n.t("user.tooltip.login_success"));
-      redirect(Router.User.Index);
+      onSuccess();
     });
   };
 
@@ -72,63 +75,52 @@ export default function LoginForm(props: any) {
   };
 
   return (
-    <div className="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
-        <div>
-          <h1 className="mx-auto h-12 w-auto text-center text-3xl">Logo</h1>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            Sign in to your account
-          </h2>
-        </div>
-        <div>
-          <div className="-space-y-px shadow-2xl p-8 rounded-xl">
-            <EuiForm component="form">
-              <EuiFormRow
-                label="Email"
-                isInvalid={emailValidateMsg != null}
-                error={emailValidateMsg}
-              >
-                <EuiFieldText
-                  name={"email"}
-                  type={"email"}
-                  required={true}
-                  onChange={(event) => {
-                    setEmail(event.target.value);
-                  }}
-                  isInvalid={false}
-                  onBlur={onBlur}
-                />
-              </EuiFormRow>
-              <EuiFormRow
-                label="Password"
-                isInvalid={pwdValidateMsg != null}
-                error={pwdValidateMsg}
-              >
-                <EuiFieldPassword
-                  type={"password"}
-                  name={"password"}
-                  isInvalid={false}
-                  required={true}
-                  onBlur={onBlur}
-                  onChange={(event: ChangeEvent<HTMLInputElement>): void => {
-                    setPassword(event.target.value);
-                  }}
-                />
-              </EuiFormRow>
-              <EuiFormRow>
-                <EuiButton
-                  fill
-                  color="primary"
-                  onClick={onSubmit}
-                  className={"w-full"}
-                >
-                  {i18n.t<string>("user.login")}
-                </EuiButton>
-              </EuiFormRow>
-            </EuiForm>
-          </div>
-        </div>
-      </div>
-    </div>
+    <>
+      <EuiForm component="form">
+        <EuiFormRow
+          label="Email"
+          isInvalid={emailValidateMsg != null}
+          error={emailValidateMsg}
+        >
+          <EuiFieldText
+            name={"email"}
+            type={"email"}
+            required={true}
+            onChange={(event) => {
+              setEmail(event.target.value);
+            }}
+            icon={"user"}
+            isInvalid={false}
+            onBlur={onBlur}
+          />
+        </EuiFormRow>
+        <EuiFormRow
+          label="Password"
+          isInvalid={pwdValidateMsg != null}
+          error={pwdValidateMsg}
+        >
+          <EuiFieldPassword
+            type={"password"}
+            name={"password"}
+            isInvalid={false}
+            required={true}
+            onBlur={onBlur}
+            onChange={(event: ChangeEvent<HTMLInputElement>): void => {
+              setPassword(event.target.value);
+            }}
+          />
+        </EuiFormRow>
+        <EuiFormRow>
+          <EuiButton
+            fill
+            color="primary"
+            onClick={onSubmit}
+            className={"w-full"}
+          >
+            {i18n.t<string>("user.login")}
+          </EuiButton>
+        </EuiFormRow>
+      </EuiForm>
+    </>
   );
 }

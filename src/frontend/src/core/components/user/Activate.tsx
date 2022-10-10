@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { EuiButton, EuiIcon, EuiEmptyPrompt } from "@elastic/eui";
 
-import { useParams, redirect } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { Router } from "../../../config/router";
 import { Auth } from "../../services/auth/auth";
 import Error404 from "../../../pages/common/404";
@@ -19,11 +19,13 @@ interface Status {
 //  1. 请求参数中未包含code 2. 请求接口中 3|4. 接口返回正常|错误  5. 激活码已被使用过(服务器端返回)
 //
 export default function Activate(props: any) {
+  const navigate = useNavigate();
+
   const loginBtn = (
     <EuiButton
       color="primary"
       onClick={() => {
-        redirect(Router.Home.Login);
+        navigate(Router.Home.Login);
       }}
     >
       {i18n.t("user.login") as string}
