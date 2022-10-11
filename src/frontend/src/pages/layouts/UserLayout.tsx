@@ -8,6 +8,7 @@ import {
   EuiContextMenu,
   useGeneratedHtmlId,
   EuiContextMenuPanelDescriptor,
+  EuiButtonIcon,
 } from "@elastic/eui";
 
 import { Router } from "../../config/router";
@@ -29,9 +30,14 @@ export default function UserLayout(props: any) {
 
   const [collapsed, setCollapsed] = useState(false);
   const plusMenu = (
-    <Link to={Router.User.Repository.New}>
-      {i18n.t<string>("repository.new")}
-    </Link>
+    <EuiButtonIcon
+      display="base"
+      iconType="plus"
+      color={"primary"}
+      size={"s"}
+      title={i18n.t<string>("repository.new")}
+      onClick={() => navigate(Router.User.Repository.New)}
+    />
   );
 
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
@@ -101,13 +107,13 @@ export default function UserLayout(props: any) {
     return (
       <div>
         <div className="opacity-70 hover:opacity-100">
-          <a
-            href={props.href}
+          <Link
+            to={props.href}
             className="text-white block px-4 py-3 rounded-md text-sm hover:bg-blue-900 text-center"
           >
             <div className=" mb-2">{props.icon}</div>
             {props.title}
-          </a>
+          </Link>
         </div>
       </div>
     );
@@ -172,7 +178,7 @@ export default function UserLayout(props: any) {
             <header className="bg-white shadow">
               <div className="max-w-full  mx-auto py-3 px-4 sm:px-2 lg:px-6">
                 <div className="flex">
-                  <div className="flex-none "></div>
+                  <div className="flex-none"></div>
                   {/* search */}
                   <div className="grow">
                     <div className="flex">
@@ -191,7 +197,12 @@ export default function UserLayout(props: any) {
                     </div>
                   </div>
                   {/* user */}
-                  <div className="flex-none ">{userMenu}</div>
+                  <div className="flex-none">
+                    <div className="flex">
+                      <div className={"mr-5"}>{plusMenu}</div>
+                      <div>{userMenu}</div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </header>

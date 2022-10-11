@@ -17,6 +17,7 @@ import Register from "./pages/auth/Register";
 import ActivateUser from "./pages/auth/ActivateUser";
 import RepositoryIndex from "./pages/user/repos/Index";
 import RepositoryShow from "./pages/user/repos/Show";
+import RepositoryNew from "./pages/user/repos/New";
 
 export default function App() {
   setup();
@@ -49,6 +50,10 @@ export default function App() {
         {
           path: Router.User.Repository.Show.string(),
           element: <RepositoryShow />,
+        },
+        {
+          path: Router.User.Repository.New,
+          element: <RepositoryNew />,
         },
       ],
     },
