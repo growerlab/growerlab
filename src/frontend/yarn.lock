@@ -7238,6 +7238,7 @@ __metadata:
     prop-types: ^15.8.1
     react: 18.0.0
     react-dom: 18.2.0
+    react-hook-form: ^7.37.0
     react-i18next: ^11.0.1
     react-router-dom: ^6.4.1
     react-scripts: ^5.0.1
@@ -12534,6 +12535,15 @@ __metadata:
     "@types/react":
       optional: true
   checksum: 834675b4f1a186df2df450e0e3c85c1257625e0c0a431cafd947864f6e9785768781d6ac3c6acfad3b1ae8f8c55c2312436e7d83ef36ca74730d576a00e326bc
+  languageName: node
+  linkType: hard
+
+"react-hook-form@npm:^7.37.0":
+  version: 7.37.0
+  resolution: "react-hook-form@npm:7.37.0"
+  peerDependencies:
+    react: ^16.8.0 || ^17 || ^18
+  checksum: 9dedc9a419c1f4cff35bc4e5d1cc39fa019e2c72401af04ac456dc1d5b87070156ee97070834d7d308293470bac45f652e12ab3cc86f36abd0e0a3ed32e89628
   languageName: node
   linkType: hard
 

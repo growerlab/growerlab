@@ -6,19 +6,12 @@ import { Session } from "../../../core/services/auth/session";
 import i18n from "../../../core/i18n/i18n";
 
 export default function RepositoryIndex() {
-  const [namespace, setNamespace] = useState<string>("");
   useTitle(i18n.t("repository.menu"));
-
-  useEffect((): void => {
-    const user = Session.getUserInfo();
-    if (user !== undefined) {
-      setNamespace(user.namespace_path);
-    }
-  }, []);
+  const user = Session.getUserInfo();
 
   return (
     <>
-      <RepositoryList ownerPath={namespace} />
+      <RepositoryList ownerPath={user.namespace_path} />
     </>
   );
 }
