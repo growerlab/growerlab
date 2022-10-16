@@ -2,9 +2,8 @@ package service
 
 import (
 	"github.com/go-redis/redis/v7"
-	"github.com/growerlab/growerlab/src/backend/app/common/errors"
-	"github.com/growerlab/growerlab/src/backend/app/model/db"
-	selfDB "github.com/growerlab/growerlab/src/mensa/app/db"
+	"github.com/growerlab/growerlab/src/common/db"
+	"github.com/growerlab/growerlab/src/common/errors"
 )
 
 type getFunc func() (value string, err error)
@@ -14,7 +13,7 @@ type Cache struct {
 }
 
 func NewCache() *Cache {
-	return &Cache{memDB: selfDB.MemDB}
+	return &Cache{memDB: db.MemDB}
 }
 
 func (c *Cache) GetOrSet(key, field string, getf getFunc) (string, error) {

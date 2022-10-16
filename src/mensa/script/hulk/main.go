@@ -5,7 +5,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/growerlab/growerlab/src/hulk/app"
+	"github.com/growerlab/growerlab/src/mensa/script/hulk/app"
 )
 
 func main() {

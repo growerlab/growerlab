@@ -2,12 +2,12 @@ package repository
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/growerlab/growerlab/src/backend/app/common/errors"
 	"github.com/growerlab/growerlab/src/backend/app/common/permission"
-	"github.com/growerlab/growerlab/src/backend/app/model/db"
 	namespaceModel "github.com/growerlab/growerlab/src/backend/app/model/namespace"
 	repositoryModel "github.com/growerlab/growerlab/src/backend/app/model/repository"
 	"github.com/growerlab/growerlab/src/backend/app/service/common/session"
+	"github.com/growerlab/growerlab/src/common/db"
+	"github.com/growerlab/growerlab/src/common/errors"
 )
 
 func GetRepository(c *gin.Context, namespace, path string) (*repositoryModel.Repository, error) {

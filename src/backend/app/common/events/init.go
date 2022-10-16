@@ -3,7 +3,7 @@ package events
 import (
 	"github.com/growerlab/growerlab/src/backend/app/common/mq"
 	"github.com/growerlab/growerlab/src/backend/app/common/notify"
-	"github.com/growerlab/growerlab/src/backend/app/model/db"
+	"github.com/growerlab/growerlab/src/common/db"
 )
 
 var MQ *mq.MessageQueue

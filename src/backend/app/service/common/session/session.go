@@ -3,9 +3,9 @@ package session
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/growerlab/growerlab/src/backend/app/common/env"
-	"github.com/growerlab/growerlab/src/backend/app/model/db"
 	userModel "github.com/growerlab/growerlab/src/backend/app/model/user"
 	"github.com/growerlab/growerlab/src/backend/app/utils/logger"
+	"github.com/growerlab/growerlab/src/common/db"
 )
 
 const (

@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/go-redis/redis/v7"
-	"github.com/growerlab/growerlab/src/backend/app/model/db"
+	"github.com/growerlab/growerlab/src/common/db"
 )
 
 func InitRedis() error {

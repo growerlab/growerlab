@@ -3,12 +3,13 @@ package db
 import (
 	"database/sql"
 	"fmt"
+	"github.com/growerlab/growerlab/src/common/errors"
 	"io"
 	"runtime/debug"
 
+	"github.com/growerlab/growerlab/src/common/configurator"
+
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/growerlab/growerlab/src/backend/app/common/errors"
-	"github.com/growerlab/growerlab/src/backend/app/utils/conf"
 	"github.com/growerlab/growerlab/src/backend/app/utils/logger"
 	"github.com/jmoiron/sqlx"
 )
@@ -20,8 +21,8 @@ var (
 
 func InitDatabase() error {
 	var err error
-	var config = conf.GetConf()
-	DB, err = DoInitDatabase(config.Database.URL, config.Debug)
+	var config = configurator.GetConf()
+	DB, err = DoInitDatabase(config.DBUrl, config.Debug)
 	return err
 }
 

@@ -5,10 +5,10 @@ import (
 	"path"
 	"time"
 
-	"github.com/growerlab/growerlab/src/backend/app/model/db"
 	namespaceModel "github.com/growerlab/growerlab/src/backend/app/model/namespace"
 	repositoryModel "github.com/growerlab/growerlab/src/backend/app/model/repository"
 	userModel "github.com/growerlab/growerlab/src/backend/app/model/user"
+	"github.com/growerlab/growerlab/src/common/db"
 )
 
 func InitDIR() {

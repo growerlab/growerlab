@@ -1,8 +1,8 @@
 package events
 
 import (
-	"github.com/growerlab/growerlab/src/backend/app/common/errors"
 	"github.com/growerlab/growerlab/src/backend/app/common/mq"
+	"github.com/growerlab/growerlab/src/common/errors"
 )
 
 type EmailPayload struct {

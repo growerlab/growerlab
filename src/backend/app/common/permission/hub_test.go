@@ -3,16 +3,16 @@ package permission
 import (
 	"testing"
 
-	"github.com/growerlab/growerlab/src/backend/app/model/db"
-	"github.com/growerlab/growerlab/src/backend/app/utils/conf"
 	"github.com/growerlab/growerlab/src/backend/test"
+	"github.com/growerlab/growerlab/src/common/configurator"
+	"github.com/growerlab/growerlab/src/common/db"
 	"github.com/stretchr/testify/assert"
 )
 
 func init() {
 	test.InitDIR()
 
-	onStart(conf.LoadConfig)
+	onStart(configurator.InitConfig)
 	onStart(db.InitMemDB)
 	onStart(db.InitDatabase)
 	onStart(InitPermission)

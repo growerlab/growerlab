@@ -5,8 +5,8 @@ import (
 	"strconv"
 
 	repoModel "github.com/growerlab/growerlab/src/backend/app/model/repository"
-	"github.com/growerlab/growerlab/src/mensa/app/db"
-	"github.com/pkg/errors"
+	"github.com/growerlab/growerlab/src/common/db"
+	"github.com/growerlab/growerlab/src/common/errors"
 )
 
 var NotFoundRepoError = errors.New("not found repo")
@@ -30,7 +30,7 @@ func GetRepository(repoOwner, repoName string) (*repoModel.Repository, error) {
 				return "", err
 			}
 			if repo == nil {
-				return "", errors.WithMessage(NotFoundRepoError, fmt.Sprintf("%s/%s", repoOwner, repoName))
+				return "", errors.Message(NotFoundRepoError, fmt.Sprintf("%s/%s", repoOwner, repoName))
 			}
 			return strconv.FormatInt(repo.ID, 10), nil
 		})
@@ -40,7 +40,7 @@ func GetRepository(repoOwner, repoName string) (*repoModel.Repository, error) {
 
 	repoID, err := strconv.ParseInt(repoIDRaw, 10, 64)
 	if err != nil {
-		return nil, errors.WithStack(err)
+		return nil, errors.Trace(err)
 	}
 
 	return repoModel.GetRepository(db.DB, repoID)

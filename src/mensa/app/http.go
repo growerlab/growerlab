@@ -10,15 +10,16 @@ import (
 	"strings"
 	"time"
 
+	"github.com/growerlab/growerlab/src/common/configurator"
+
 	"github.com/gin-gonic/gin"
+	"github.com/growerlab/growerlab/src/common/errors"
 	"github.com/growerlab/growerlab/src/mensa/app/common"
-	"github.com/growerlab/growerlab/src/mensa/app/conf"
-	"github.com/pkg/errors"
 )
 
 const BannerMessage = "----- Power by GrowerLab.net -----"
 
-func NewGitHttpServer(cfg *conf.Config) *GitHttpServer {
+func NewGitHttpServer(cfg *configurator.Mensa) *GitHttpServer {
 	deadline := DefaultDeadline * time.Second
 	idleTimeout := DefaultIdleTimeout * time.Second
 
@@ -30,7 +31,7 @@ func NewGitHttpServer(cfg *conf.Config) *GitHttpServer {
 	}
 
 	server := &GitHttpServer{
-		listen:      cfg.HttpListen,
+		listen:      cfg.HTTPListen,
 		gitBinPath:  cfg.GitPath,
 		deadline:    deadline,
 		idleTimeout: idleTimeout,
@@ -43,7 +44,7 @@ func NewGitHttpServer(cfg *conf.Config) *GitHttpServer {
 
 	server.server = &http.Server{
 		Handler:      engine,
-		Addr:         cfg.HttpListen,
+		Addr:         cfg.HTTPListen,
 		WriteTimeout: deadline,
 		ReadTimeout:  deadline,
 		IdleTimeout:  idleTimeout,
@@ -52,11 +53,11 @@ func NewGitHttpServer(cfg *conf.Config) *GitHttpServer {
 }
 
 type requestContext struct {
-	c       *gin.Context
-	w       http.ResponseWriter
-	r       *http.Request
-	Rpc     string
-	RepoDir string
+	c        *gin.Context
+	w        http.ResponseWriter
+	r        *http.Request
+	Rpc      string
+	RepoPath string
 }
 
 type GitHttpServer struct {
@@ -94,7 +95,7 @@ func (g *GitHttpServer) handlerBuildRequestContext(c *gin.Context) {
 	r := c.Request
 	w := c.Writer
 	// file := r.URL.Path
-	_, _, repoDir, err := common.BuildRepoInfoByPath(r.URL.Path)
+	_, _, repoPath, err := common.BuildRepoInfoByPath(r.URL.Path)
 	if err != nil {
 		log.Printf("build repo info was err: %+v\n", err)
 		c.AbortWithStatus(http.StatusInternalServerError)
@@ -104,11 +105,11 @@ func (g *GitHttpServer) handlerBuildRequestContext(c *gin.Context) {
 	rpc := g.getServiceType(c)
 
 	req := &requestContext{
-		c:       c,
-		w:       w,
-		r:       r,
-		Rpc:     rpc,
-		RepoDir: repoDir,
+		c:        c,
+		w:        w,
+		r:        r,
+		Rpc:      rpc,
+		RepoPath: repoPath,
 	}
 	c.Request = c.Request.WithContext(context.WithValue(c.Request.Context(), "request_context", req))
 }
@@ -175,7 +176,7 @@ func (g *GitHttpServer) runMiddlewares(ctx *common.Context) error {
 }
 
 func (g *GitHttpServer) serviceRpc(ctx *requestContext) error {
-	var w, r, rpc, dir = ctx.w, ctx.r, ctx.Rpc, ctx.RepoDir
+	var w, r, rpc, dir = ctx.w, ctx.r, ctx.Rpc, ctx.RepoPath
 
 	var body = r.Body
 	defer body.Close()
@@ -219,7 +220,7 @@ func (g *GitHttpServer) serviceRpc(ctx *requestContext) error {
 }
 
 func (g *GitHttpServer) getInfoRefs(ctx *requestContext) error {
-	w, r, rpc, dir := ctx.w, ctx.r, ctx.Rpc, ctx.RepoDir
+	w, r, rpc, dir := ctx.w, ctx.r, ctx.Rpc, ctx.RepoPath
 
 	access := g.hasAccess(r, dir, rpc, false)
 	if access {

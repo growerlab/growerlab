@@ -18,7 +18,7 @@ import (
 	"os/exec"
 	"path/filepath"
 
-	"github.com/growerlab/growerlab/src/backend/app/utils/conf"
+	"github.com/growerlab/growerlab/src/common/configurator"
 )
 
 var projectPath = filepath.Join(os.Getenv("GOPATH"), "src", "github.com/growerlab/growerlab/src/backend")
@@ -67,12 +67,12 @@ func Export(info *DBInfo) error {
 }
 
 func Prepare() (*DBInfo, error) {
-	err := conf.LoadConfig()
+	err := configurator.InitConfig()
 	if err != nil {
 		return nil, err
 	}
 
-	dbUrl := conf.GetConf().Database.URL
+	dbUrl := configurator.GetConf().DBUrl
 
 	u, err := url.Parse(dbUrl)
 	if err != nil {

@@ -3,7 +3,7 @@ package repo
 import (
 	"encoding/json"
 
-	"github.com/pkg/errors"
+	"github.com/growerlab/growerlab/src/common/errors"
 
 	"github.com/go-git/go-git/v5/plumbing/object"
 )

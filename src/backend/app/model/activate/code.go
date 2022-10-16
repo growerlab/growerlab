@@ -1,10 +1,10 @@
 package activate
 
 import (
+	"github.com/growerlab/growerlab/src/common/errors"
 	"time"
 
 	sq "github.com/Masterminds/squirrel"
-	"github.com/growerlab/growerlab/src/backend/app/common/errors"
 	"github.com/jmoiron/sqlx"
 )
 

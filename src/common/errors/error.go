@@ -164,7 +164,8 @@ var (
 		}
 		return pkgerr.WithStack(err)
 	}
-	Cause  = pkgerr.Cause
-	Errorf = pkgerr.Errorf
-	New    = pkgerr.New
+	WithStack = Trace
+	Cause     = pkgerr.Cause
+	Errorf    = pkgerr.Errorf
+	New       = pkgerr.New
 )

@@ -3,7 +3,7 @@ package app
 import (
 	"sort"
 
-	"github.com/pkg/errors"
+	"github.com/growerlab/growerlab/src/common/errors"
 )
 
 var app *App

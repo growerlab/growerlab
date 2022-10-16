@@ -1,8 +1,8 @@
 package userdomain
 
 import (
-	"github.com/growerlab/growerlab/src/backend/app/common/errors"
 	"github.com/growerlab/growerlab/src/backend/app/model/user"
+	"github.com/growerlab/growerlab/src/common/errors"
 )
 
 type Person struct {

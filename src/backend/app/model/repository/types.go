@@ -2,12 +2,13 @@ package repository
 
 import (
 	"fmt"
+	"net"
 	"strings"
 
-	"github.com/growerlab/growerlab/src/backend/app/model/db"
 	"github.com/growerlab/growerlab/src/backend/app/model/namespace"
 	"github.com/growerlab/growerlab/src/backend/app/model/user"
-	"github.com/growerlab/growerlab/src/backend/app/utils/conf"
+	"github.com/growerlab/growerlab/src/common/configurator"
+	"github.com/growerlab/growerlab/src/common/db"
 )
 
 type Repository struct {
@@ -55,20 +56,10 @@ func (r *Repository) PathGroup() string {
 
 // https://domain.com:port/user/path.git
 func (r *Repository) GitHttpURL() string {
-	cfg := conf.GetConf().Mensa
-	port := fmt.Sprintf(":%d", cfg.HttpPort)
-	if cfg.HttpPort == 80 || cfg.HttpPort == 443 {
-		port = ""
-	}
+	cfg := configurator.GetConf()
 
 	var sb strings.Builder
-	if conf.GetConf().EnableHTTPS() {
-		sb.WriteString("https://")
-	} else {
-		sb.WriteString("http://")
-	}
-	sb.WriteString(cfg.HttpHost)
-	sb.WriteString(port)
+	sb.WriteString(cfg.WebsiteURL)
 	sb.WriteByte('/')
 	sb.WriteString(r.PathGroup())
 	sb.WriteString(".git")
@@ -77,16 +68,17 @@ func (r *Repository) GitHttpURL() string {
 
 // git@domain.com:port/user/path.git
 func (r *Repository) GitSshURL() string {
-	cfg := conf.GetConf().Mensa
-	port := fmt.Sprintf(":%d", cfg.SshPort)
-	if cfg.SshPort == 22 {
+	cfg := configurator.GetConf().Mensa
+	host, rawPort, _ := net.SplitHostPort(cfg.SSHListen)
+	port := fmt.Sprintf(":%s", rawPort)
+	if rawPort == "22" {
 		port = ""
 	}
 
 	var sb strings.Builder
-	sb.WriteString(cfg.SshUser)
+	sb.WriteString(cfg.User)
 	sb.WriteByte('@')
-	sb.WriteString(cfg.SshHost)
+	sb.WriteString(host)
 	sb.WriteString(port)
 	sb.WriteByte('/')
 	sb.WriteString(r.PathGroup())

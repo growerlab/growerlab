@@ -2,8 +2,8 @@ package namespace
 
 import (
 	sq "github.com/Masterminds/squirrel"
-	"github.com/growerlab/growerlab/src/backend/app/common/errors"
 	"github.com/growerlab/growerlab/src/backend/app/model/utils"
+	"github.com/growerlab/growerlab/src/common/errors"
 	"github.com/jmoiron/sqlx"
 )
 

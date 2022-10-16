@@ -1,8 +1,8 @@
 package user
 
 import (
-	"github.com/growerlab/growerlab/src/backend/app/model/db"
 	"github.com/growerlab/growerlab/src/backend/app/model/namespace"
+	"github.com/growerlab/growerlab/src/common/db"
 )
 
 type User struct {

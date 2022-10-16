@@ -3,12 +3,12 @@ package user
 import (
 	"time"
 
-	"github.com/growerlab/growerlab/src/backend/app/common/errors"
-	"github.com/growerlab/growerlab/src/backend/app/model/db"
 	nsModel "github.com/growerlab/growerlab/src/backend/app/model/namespace"
 	userModel "github.com/growerlab/growerlab/src/backend/app/model/user"
 	"github.com/growerlab/growerlab/src/backend/app/utils/pwd"
 	"github.com/growerlab/growerlab/src/backend/app/utils/regex"
+	"github.com/growerlab/growerlab/src/common/db"
+	"github.com/growerlab/growerlab/src/common/errors"
 	"github.com/jmoiron/sqlx"
 	"gopkg.in/asaskevich/govalidator.v9"
 )

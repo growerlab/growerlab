@@ -3,14 +3,14 @@
 package db
 
 import (
+	"github.com/growerlab/growerlab/src/common/errors"
 	"net"
 	"strconv"
 	"strings"
 	"time"
 
 	"github.com/go-redis/redis/v7"
-	"github.com/growerlab/growerlab/src/backend/app/common/errors"
-	"github.com/growerlab/growerlab/src/backend/app/utils/conf"
+	"github.com/growerlab/growerlab/src/common/configurator"
 )
 
 const KeySep = ":"
@@ -19,13 +19,13 @@ var MemDB *MemDBClient
 
 func InitMemDB() error {
 	var err error
-	var config = conf.GetConf().Redis
+	var config = configurator.GetConf().Redis
 
 	MemDB, err = DoInitMemDB(config, 0)
 	return err
 }
 
-func DoInitMemDB(cfg *conf.Redis, db int) (*MemDBClient, error) {
+func DoInitMemDB(cfg *configurator.Redis, db int) (*MemDBClient, error) {
 	mem := newPool(cfg, db)
 
 	// Test
@@ -43,7 +43,7 @@ func testMemDB(mem *MemDBClient) error {
 	return nil
 }
 
-func newPool(cfg *conf.Redis, db int) *MemDBClient {
+func newPool(cfg *configurator.Redis, db int) *MemDBClient {
 	addr := net.JoinHostPort(cfg.Host, strconv.Itoa(cfg.Port))
 	idleTimeout := time.Duration(cfg.IdleTimeout) * time.Second
 

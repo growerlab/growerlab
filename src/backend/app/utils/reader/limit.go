@@ -1,10 +1,9 @@
 package reader
 
 import (
+	"github.com/growerlab/growerlab/src/common/errors"
 	"io"
 	"io/ioutil"
-
-	"github.com/growerlab/growerlab/src/backend/app/common/errors"
 )
 
 func LimitReader(r io.Reader, n int64) ([]byte, error) {

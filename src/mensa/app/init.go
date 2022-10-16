@@ -5,9 +5,10 @@ import (
 	"log"
 	"os"
 
+	"github.com/growerlab/growerlab/src/common/configurator"
+
+	"github.com/growerlab/growerlab/src/common/db"
 	"github.com/growerlab/growerlab/src/mensa/app/common"
-	"github.com/growerlab/growerlab/src/mensa/app/conf"
-	"github.com/growerlab/growerlab/src/mensa/app/db"
 	"github.com/growerlab/growerlab/src/mensa/app/middleware"
 )
 
@@ -21,7 +22,7 @@ func initialize() {
 	log.SetOutput(logger)
 
 	// 初始化依赖顺序的「初始化」
-	startInit(conf.LoadConfig)
+	startInit(configurator.InitConfig)
 	startInit(db.InitDatabase)
 	startInit(db.InitMemDB)
 	startInit(common.InitPermission)
@@ -36,13 +37,15 @@ func startInit(fn func() error) {
 func Run() {
 	initialize()
 
+	mensaConf := configurator.GetConf().Mensa
+
 	// 初始化中间件
 	entry := new(middleware.Middleware)
 	entry.Add(middleware.Authenticate)
 
 	// 初始化管理器
 	manager = NewManager(entry)
-	manager.RegisterServer(NewGitHttpServer(conf.GetConfig()))
-	manager.RegisterServer(NewGitSSHServer(conf.GetConfig()))
+	manager.RegisterServer(NewGitHttpServer(mensaConf))
+	manager.RegisterServer(NewGitSSHServer(mensaConf))
 	manager.Run()
 }

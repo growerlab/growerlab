@@ -1,7 +1,7 @@
 package context
 
 import (
-	"github.com/growerlab/growerlab/src/backend/app/model/db"
+	"github.com/growerlab/growerlab/src/common/db"
 	"github.com/jmoiron/sqlx"
 )
 

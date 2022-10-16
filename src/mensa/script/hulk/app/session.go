@@ -6,8 +6,8 @@ import (
 
 	"github.com/asaskevich/govalidator"
 	"github.com/go-git/go-git/v5/plumbing"
-	"github.com/growerlab/growerlab/src/hulk/app/repo"
-	"github.com/pkg/errors"
+	"github.com/growerlab/growerlab/src/common/errors"
+	"github.com/growerlab/growerlab/src/mensa/script/hulk/app/repo"
 )
 
 type Action string

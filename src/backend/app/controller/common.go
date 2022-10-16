@@ -1,12 +1,12 @@
 package controller
 
 import (
+	"github.com/growerlab/growerlab/src/common/errors"
 	"net/http"
 
 	"github.com/growerlab/growerlab/src/backend/app/utils/logger"
 
 	"github.com/gin-gonic/gin"
-	"github.com/growerlab/growerlab/src/backend/app/common/errors"
 )
 
 const (

@@ -2,10 +2,10 @@ package common
 
 import (
 	"github.com/growerlab/growerlab/src/backend/app/common/permission"
-	"github.com/growerlab/growerlab/src/mensa/app/db"
+	"github.com/growerlab/growerlab/src/common/db"
 )
 
 func InitPermission() error {
-	err := permission.InitPermissionHub(db.DB, db.PermissionDB)
+	err := permission.InitPermissionHub(db.DB, db.MemDB)
 	return err
 }

@@ -6,9 +6,9 @@ import (
 	"os"
 
 	"github.com/growerlab/growerlab/src/backend/app/common/permission"
+	"github.com/growerlab/growerlab/src/common/errors"
 	"github.com/growerlab/growerlab/src/mensa/app/common"
 	"github.com/growerlab/growerlab/src/mensa/app/service"
-	"github.com/pkg/errors"
 )
 
 var (
@@ -38,9 +38,9 @@ func Authenticate(ctx *common.Context) (httpCode int, appendText string, err err
 }
 
 // 检查是否有读取、推送权限
-//	公共项目：可读、只有项目成员可写
-// 	私有项目：项目成员可读/写
 //
+//	公共项目：可读、只有项目成员可写
+//	私有项目：项目成员可读/写
 func checkPermission(ctx *common.Context) error {
 	repo, err := service.GetRepository(ctx.RepoOwner, ctx.RepoName)
 	if err != nil {

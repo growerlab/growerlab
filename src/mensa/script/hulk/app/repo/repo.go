@@ -5,7 +5,7 @@ import (
 	"github.com/go-git/go-git/v5/plumbing"
 	"github.com/go-git/go-git/v5/plumbing/object"
 	"github.com/go-git/go-git/v5/plumbing/storer"
-	"github.com/pkg/errors"
+	"github.com/growerlab/growerlab/src/common/errors"
 )
 
 const (

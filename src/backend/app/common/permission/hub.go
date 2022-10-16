@@ -2,15 +2,15 @@ package permission
 
 import (
 	"fmt"
+	"github.com/growerlab/growerlab/src/common/errors"
 	"time"
 
 	"github.com/go-redis/redis/v7"
 	"github.com/growerlab/growerlab/src/backend/app/common/context"
-	"github.com/growerlab/growerlab/src/backend/app/common/errors"
 	"github.com/growerlab/growerlab/src/backend/app/common/userdomain"
-	"github.com/growerlab/growerlab/src/backend/app/model/db"
 	permModel "github.com/growerlab/growerlab/src/backend/app/model/permission"
 	"github.com/growerlab/growerlab/src/backend/app/utils/timestamp"
+	"github.com/growerlab/growerlab/src/common/db"
 	"github.com/jmoiron/sqlx"
 )
 

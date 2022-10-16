@@ -1,12 +1,11 @@
 package repository
 
 import (
+	"fmt"
 	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"github.com/growerlab/growerlab/src/backend/app/common/errors"
-	"github.com/growerlab/growerlab/src/backend/app/model/db"
 	"github.com/growerlab/growerlab/src/backend/app/model/namespace"
 	"github.com/growerlab/growerlab/src/backend/app/model/repository"
 	"github.com/growerlab/growerlab/src/backend/app/model/server"
@@ -14,6 +13,8 @@ import (
 	"github.com/growerlab/growerlab/src/backend/app/service/common/session"
 	"github.com/growerlab/growerlab/src/backend/app/utils/regex"
 	"github.com/growerlab/growerlab/src/backend/app/utils/uuid"
+	"github.com/growerlab/growerlab/src/common/db"
+	"github.com/growerlab/growerlab/src/common/errors"
 	"github.com/jmoiron/sqlx"
 )
 
@@ -46,20 +47,22 @@ func DoCreateRepository(currentUser *user.User, req *NewRepositoryPayload) error
 		}
 
 		repo := buildRepository(currentUser, ns, req, srv)
-		err = repository.AddRepository(tx, repo)
 		if err != nil {
 			return err
 		}
+		fmt.Println(repo)
 
 		// TODO: 真正创建仓库
-		// api, err := NewApi(srv, repo)
-		// if err != nil {
-		// 	return err
-		// }
-		// err = api.Repository().Create()
-		// if err != nil {
-		// 	return errors.Wrap(err, errors.RepositoryError(errors.SvcServerNotReady))
-		// }
+		// utils.GoSafe(func() {
+		// 	api, err := NewApi(srv, repo)
+		// 	if err != nil {
+		// 		return err
+		// 	}
+		// 	err = api.Repository().Create()
+		// 	if err != nil {
+		// 		return errors.Wrap(err, errors.RepositoryError(errors.SvcServerNotReady))
+		// 	}
+		// })
 		return nil
 	})
 	return err
@@ -93,6 +96,7 @@ func buildRepository(
 }
 
 // validate
+//
 //	req.NamespacePath  TODO 这里暂时只验证namespace的owner_id 是否为用户，未来应该验证组织权限（比如是否可以选择这个组织创建仓库）
 //	req.Name 名称是否合法、是否重名
 func validateAndPrepare(src sqlx.Queryer, userID int64, req *NewRepositoryPayload) (ns *namespace.Namespace, err error) {

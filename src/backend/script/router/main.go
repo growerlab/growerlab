@@ -12,7 +12,7 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/growerlab/growerlab/src/router/app"
+	"github.com/growerlab/growerlab/src/backend/script/router/app"
 )
 
 func main() {

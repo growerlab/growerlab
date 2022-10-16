@@ -10,7 +10,7 @@ import (
 	"strings"
 
 	"github.com/gliderlabs/ssh"
-	"github.com/pkg/errors"
+	"github.com/growerlab/growerlab/src/common/errors"
 )
 
 // 协议类型

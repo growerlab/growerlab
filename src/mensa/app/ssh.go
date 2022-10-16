@@ -9,13 +9,14 @@ import (
 	"strings"
 	"time"
 
+	"github.com/growerlab/growerlab/src/common/configurator"
+
 	"github.com/gliderlabs/ssh"
+	"github.com/growerlab/growerlab/src/common/errors"
 	"github.com/growerlab/growerlab/src/mensa/app/common"
-	"github.com/growerlab/growerlab/src/mensa/app/conf"
-	"github.com/pkg/errors"
 )
 
-func NewGitSSHServer(cfg *conf.Config) *GitSSHServer {
+func NewGitSSHServer(cfg *configurator.Mensa) *GitSSHServer {
 	deadline := DefaultDeadline * time.Second
 	idleTimeout := DefaultIdleTimeout * time.Second
 
@@ -27,9 +28,8 @@ func NewGitSSHServer(cfg *conf.Config) *GitSSHServer {
 	}
 
 	gitServer := &GitSSHServer{
-		gitUser: cfg.User,
-		listen:  cfg.Listen,
-		// hostKeys:    cfg.HostKeys,
+		gitUser:     cfg.User,
+		listen:      cfg.SSHListen,
 		gitBinPath:  cfg.GitPath,
 		deadline:    deadline,
 		idleTimeout: idleTimeout,

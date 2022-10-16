@@ -5,8 +5,8 @@ import (
 	"log"
 	"os"
 
-	"github.com/pkg/errors"
-	"gopkg.in/yaml.v2"
+	"github.com/growerlab/growerlab/src/common/errors"
+	"gopkg.in/yaml.v3"
 )
 
 // 读取宿主的配置文件（例如go-git-grpc）

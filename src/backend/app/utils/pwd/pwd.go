@@ -2,7 +2,7 @@ package pwd
 
 import (
 	"github.com/growerlab/argon2"
-	"github.com/growerlab/growerlab/src/backend/app/common/errors"
+	"github.com/growerlab/growerlab/src/common/errors"
 )
 
 var argon2Cfg = argon2.DefaultConfig()

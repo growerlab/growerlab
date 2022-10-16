@@ -4,10 +4,10 @@ import (
 	"strconv"
 
 	userModel "github.com/growerlab/growerlab/src/backend/app/model/user"
-	"github.com/growerlab/growerlab/src/backend/app/service/user"
+	userService "github.com/growerlab/growerlab/src/backend/app/service/user"
+	"github.com/growerlab/growerlab/src/common/db"
+	"github.com/growerlab/growerlab/src/common/errors"
 	"github.com/growerlab/growerlab/src/mensa/app/common"
-	"github.com/growerlab/growerlab/src/mensa/app/db"
-	"github.com/pkg/errors"
 )
 
 func GetNamespaceByOperator(operator *common.Operator) (int64, error) {
@@ -17,11 +17,14 @@ func GetNamespaceByOperator(operator *common.Operator) (int64, error) {
 		if !pwdExists {
 			return 0, errors.New("password is required")
 		}
-		u, err := user.Validate(db.DB, username, password)
+		user, err := userService.NewLoginService("", db.DB).Verify(&userService.LoginBasicAuth{
+			Email:    username,
+			Password: password,
+		})
 		if err != nil {
-			return 0, err
+			return 0, errors.Trace(err)
 		}
-		return u.NamespaceID, nil
+		return user.NamespaceID, nil
 	} else { // ssh
 		// TODO SSH
 		return 0, errors.New("ssh ...")

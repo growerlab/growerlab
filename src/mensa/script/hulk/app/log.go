@@ -8,7 +8,7 @@ import (
 	"runtime"
 	"time"
 
-	"github.com/pkg/errors"
+	"github.com/growerlab/growerlab/src/common/errors"
 )
 
 var (

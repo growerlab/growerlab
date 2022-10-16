@@ -8,7 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/growerlab/growerlab/src/backend/app/common/notify"
 	"github.com/growerlab/growerlab/src/backend/app/controller"
-	"github.com/growerlab/growerlab/src/backend/app/utils/conf"
+	"github.com/growerlab/growerlab/src/common/configurator"
 )
 
 func Run(addr string) error {
@@ -51,7 +51,7 @@ func runServer(addr string, engine *gin.Engine) error {
 
 	// 是否debug
 	gin.SetMode(gin.ReleaseMode)
-	if conf.GetConf().Debug {
+	if configurator.GetConf().Debug {
 		gin.SetMode(gin.DebugMode)
 	}
 	return server.ListenAndServe()

@@ -1,7 +1,7 @@
 package session
 
 import (
-	"github.com/growerlab/growerlab/src/backend/app/common/errors"
+	"github.com/growerlab/growerlab/src/common/errors"
 )
 
 const TableName = "session"

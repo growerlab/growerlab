@@ -5,15 +5,14 @@ import (
 	"strings"
 	"time"
 
-	"github.com/jmoiron/sqlx"
-
-	"github.com/growerlab/growerlab/src/backend/app/common/errors"
 	"github.com/growerlab/growerlab/src/backend/app/model/activate"
-	"github.com/growerlab/growerlab/src/backend/app/model/db"
 	"github.com/growerlab/growerlab/src/backend/app/model/user"
-	"github.com/growerlab/growerlab/src/backend/app/utils/conf"
 	"github.com/growerlab/growerlab/src/backend/app/utils/logger"
 	"github.com/growerlab/growerlab/src/backend/app/utils/uuid"
+	"github.com/growerlab/growerlab/src/common/configurator"
+	"github.com/growerlab/growerlab/src/common/db"
+	"github.com/growerlab/growerlab/src/common/errors"
+	"github.com/jmoiron/sqlx"
 	"gopkg.in/asaskevich/govalidator.v9"
 )
 
@@ -37,7 +36,6 @@ func Activate(payload *ActivationCodePayload) (err error) {
 // 生成url
 // 生成模版
 // 发送邮件
-//
 func DoPreActivate(tx sqlx.Ext, userID int64) error {
 	code := buildActivateCode(userID)
 	err := activate.AddCode(tx, code)
@@ -55,7 +53,6 @@ func DoPreActivate(tx sqlx.Ext, userID int64) error {
 }
 
 // 验证用户邮箱激活码
-//
 func DoActivate(tx sqlx.Ext, code string) error {
 	acode, err := activate.GetCode(tx, code)
 	if err != nil {
@@ -84,7 +81,7 @@ func DoActivate(tx sqlx.Ext, code string) error {
 }
 
 func buildActivateURL(code string) string {
-	baseURL := conf.GetConf().WebsiteURL
+	baseURL := configurator.GetConf().WebsiteURL
 	partURL := fmt.Sprintf("activate_user/%s", code)
 	if !strings.HasSuffix(baseURL, "/") {
 		baseURL = baseURL + "/"

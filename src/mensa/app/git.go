@@ -8,10 +8,10 @@ import (
 	"path/filepath"
 	"time"
 
-	gggrpc "github.com/growerlab/go-git-grpc"
-	"github.com/growerlab/go-git-grpc/server/git"
-	"github.com/growerlab/growerlab/src/mensa/app/conf"
-	"github.com/pkg/errors"
+	"github.com/growerlab/growerlab/src/common/configurator"
+	"github.com/growerlab/growerlab/src/common/errors"
+	gggrpc "github.com/growerlab/growerlab/src/go-git-grpc"
+	"github.com/growerlab/growerlab/src/go-git-grpc/server/git"
 )
 
 type Option struct {
@@ -26,15 +26,17 @@ var GitReceivePackOptions = []*Option{
 }
 
 func gitCommand(in io.Reader, out io.Writer, repoDir string, args []string, envs []string) error {
-	gitBinPath := conf.GetConfig().GitPath
-	deadline := time.Duration(conf.GetConfig().Deadline) * time.Second
-	gogitgrpcAddr := conf.GetConfig().GoGitGrpcAddr
+	global := configurator.GetConf()
+	conf := global.Mensa
+	gitBinPath := conf.GitPath
+	deadline := time.Duration(conf.Deadline) * time.Second
+	goGitGrpcServerAddr := global.GoGitGrpcServerAddr
 
 	// deadline
 	cmdCtx, cancel := context.WithTimeout(context.Background(), deadline)
 	defer cancel()
 
-	gitDoor, doorWatcher, err := gggrpc.NewDoorClient(cmdCtx, gogitgrpcAddr)
+	gitDoor, doorWatcher, err := gggrpc.NewDoorClient(cmdCtx, goGitGrpcServerAddr)
 	if err != nil {
 		return errors.WithStack(err)
 	}

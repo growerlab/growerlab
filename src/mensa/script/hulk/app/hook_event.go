@@ -3,8 +3,8 @@ package app
 import (
 	"math"
 
-	"github.com/growerlab/growerlab/src/hulk/app/repo"
-	"github.com/pkg/errors"
+	"github.com/growerlab/growerlab/src/common/errors"
+	"github.com/growerlab/growerlab/src/mensa/script/hulk/app/repo"
 )
 
 var _ Hook = (*HookEvent)(nil)
@@ -49,7 +49,7 @@ func (h *HookEvent) Process(dispatcher EventDispatcher, sess *PushSession) error
 	}
 
 	if err != nil {
-		return errors.WithStack(err)
+		return errors.Trace(err)
 	}
 	return dispatcher.Dispatch(event)
 }
