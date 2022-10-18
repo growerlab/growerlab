@@ -1,0 +1,10 @@
+{
+    "WorkingDir": "{GOPATH}/src/github.com/growerlab/growerlab",
+    "SourceDir": [
+        "{GOPATH}/src/github.com/growerlab/growerlab"
+    ],
+    "SourceExt": [".go"],
+    "BuildCmd": "echo 'building'",
+    "RunCmd": ".dogo.sh",
+    "Decreasing": 1
+}
