@@ -6,7 +6,6 @@ import (
 	"os"
 
 	"github.com/growerlab/growerlab/src/common/errors"
-
 	"gopkg.in/yaml.v3"
 )
 

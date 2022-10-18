@@ -28,12 +28,12 @@ C --> Z[更新pr?]
 ##### 环境变量
 
 ```shell
-GIT_ALTERNATE_OBJECT_DIRECTORIES=/Users/moli/go-project/src/github.com/growerlab/mensa/test/repos/mo/te/moli/test/./objects
+GIT_ALTERNATE_OBJECT_DIRECTORIES=/Users/moli/go-project/src/github.com/growerlab/growerlab/.repositories/mo/te/moli/test/./objects
 GIT_DIR=.
 GIT_EXEC_PATH=/Applications/Xcode.app/Contents/Developer/usr/libexec/git-core
-GIT_OBJECT_DIRECTORY=/Users/moli/go-project/src/github.com/growerlab/mensa/test/repos/mo/te/moli/test/./objects/incoming-lRoOgD
+GIT_OBJECT_DIRECTORY=/Users/moli/go-project/src/github.com/growerlab/growerlab/.repositories/mo/te/moli/test/./objects/incoming-lRoOgD
 GIT_PUSH_OPTION_COUNT=0
-GIT_QUARANTINE_PATH=/Users/moli/go-project/src/github.com/growerlab/mensa/test/repos/mo/te/moli/test/./objects/incoming-lRoOgD
+GIT_QUARANTINE_PATH=/Users/moli/go-project/src/github.com/growerlab/growerlab/.repositories/mo/te/moli/test/./objects/incoming-lRoOgD
 ```
 
 ### 参数

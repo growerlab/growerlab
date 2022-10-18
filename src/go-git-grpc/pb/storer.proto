@@ -1,0 +1,276 @@
+syntax = "proto3";
+
+option go_package = "github.com/growerlab/growerlab/src/go-git-grpc/pb";
+
+package pb;
+
+service Storer {
+  // EncodedObjectStorer
+  rpc NewEncodedObject(None) returns (UUID) {}
+  rpc SetEncodedObject(UUID) returns (Hash) {}
+  rpc SetEncodedObjectType(Int) returns (None) {}
+  rpc SetEncodedObjectSetSize(Int64) returns (None) {}
+  rpc EncodedObjectEntity(GetEncodeObject) returns (EncodedObject) {}
+  rpc EncodedObjectType(None) returns (Int) {}
+  rpc EncodedObjectHash(None) returns (Hash) {}
+  rpc EncodedObjectSize(None) returns (Int64) {}
+  rpc EncodedObjectRWStream(stream RWStream) returns (stream RWStream) {}
+
+  // EncodedObjectIter
+  rpc NewEncodedObjectIter(ObjectType) returns (None) {}
+  rpc EncodedObjectNext(None) returns (EncodedObject) {}
+  rpc EncodedObjectForEach(None) returns (stream EncodedObject) {}
+  rpc EncodedObjectClose(None) returns (None) {}
+
+  // ReferenceStorer
+  rpc SetReference(Reference) returns (None) {}
+  rpc CheckAndSetReference(SetReferenceParams) returns (None) {}
+  rpc GetReference(ReferenceName) returns (Reference) {}
+  rpc GetReferences(None) returns (References) {}
+  rpc RemoveReference(ReferenceName) returns (None) {}
+  rpc CountLooseRefs(None) returns (Int64) {}
+  rpc PackRefs(None) returns (None) {}
+
+  // ShallowStorer
+  rpc SetShallow(Hashs) returns (None) {}
+  rpc Shallow(None) returns (Hashs) {}
+
+  // IndexStorer
+  rpc SetIndex(Index) returns (None) {}
+  rpc GetIndex(None) returns (Index) {}
+
+  // ConfigStorer
+  rpc GetConfig(None) returns (Config) {}
+  rpc SetConfig(Config) returns (None) {}
+
+  // ModuleStorer
+  rpc Modules(None) returns (ModuleNames) {}
+}
+
+message ObjectType {
+  string RepoPath = 1;
+  string Type = 2;
+}
+
+message EncodedObject {
+  string UUID = 1;
+  string RepoPath = 2;
+  string Hash = 3;
+  string Type = 4;
+  int64 Size = 5;
+}
+
+message GetEncodeObject {
+  string RepoPath = 1;
+  string Hash = 2;
+  string Type = 3;
+}
+
+message UUID {
+  string Value = 1;
+}
+
+message RWStream {
+  string UUID = 1; // uniq uuid
+  enum FlagEnum {
+    READ = 0;
+    WRITE = 1;
+  }
+  FlagEnum Flag = 2;
+  string RepoPath = 3; // repo path
+  bytes Value = 4; // buf
+}
+
+message None {
+  string RepoPath = 1;
+  string UUID = 2;
+}
+
+message Int {
+  string RepoPath = 1;
+  string UUID = 2;
+  int32 Value = 3;
+}
+
+message Int64 {
+  string RepoPath = 1;
+  string UUID = 2;
+  int64 Value = 3;
+}
+
+message Bytes {
+  string RepoPath = 1;
+  bytes Value = 2;
+}
+
+message Hash {
+  string Value = 1;
+}
+
+message ModuleNames {
+  repeated string Names = 1;
+}
+
+message ModuleName {
+  string Name = 1;
+}
+
+message Config {
+  message MsgCore {
+    bool IsBare = 1;
+    string Worktree = 2;
+    string CommentChar = 3;
+  }
+  message MsgUser {
+    string Name = 1;
+    string Email = 2;
+  }
+  message MsgAuthor {
+    string Name = 1;
+    string Email = 2;
+  }
+  message MsgCommitter {
+    string Name = 1;
+    string Email = 2;
+  }
+  message MsgPack {
+    uint64 Window = 1;
+  }
+
+  string RepoPath = 1;
+  repeated MapRemotes Remotes = 2;
+  repeated MapSubmodule Submodules = 3;
+  repeated MapBranch Branches = 4;
+  bytes Raw = 5;
+  MsgCore Core = 6;
+  MsgUser User  = 7;
+  MsgAuthor Author = 8;
+  MsgCommitter Committer = 9;
+  MsgPack Pack = 10;
+}
+
+message MapBranch {
+  string key = 1;
+  Branch branch = 2;
+}
+
+message Branch {
+  string Name = 1;
+  string Remote = 2;
+  string Merge = 3;
+  string Rebase = 4;
+//  Subsection raw = 5;
+}
+
+message MapSubmodule {
+  string key = 1;
+  Submodule sub = 2;
+}
+
+message Submodule {
+  string Name = 1;
+  string Path = 2;
+  string URL = 3;
+  string Branch = 4;
+//  Subsection raw = 5;
+}
+
+message MapRemotes {
+  string key = 1;
+  RemoteConfig config = 2;
+}
+
+message RemoteConfig {
+  string Name = 1;
+  repeated string URLs = 2;
+  repeated string Fetch = 3;
+  Subsection raw = 4;
+}
+
+message Subsection {
+  string Name = 1;
+  repeated MapFieldEntry Options = 2;
+}
+
+message ReferenceName {
+  string RepoPath = 1;
+  string Name = 2;
+}
+
+message Index {
+  string RepoPath = 1;
+  uint32 Version = 2;
+  repeated Entry Entries = 3;
+  Tree Cache = 4;
+  ResolveUndo ResolveUndo = 5;
+  EndOfIndexEntry EndOfIndexEntry = 6;
+}
+
+message EndOfIndexEntry {
+  uint32 Offset = 1;
+  string Hash = 2;
+}
+
+message ResolveUndo {
+  repeated ResolveUndoEntry Entries = 1;
+}
+
+message ResolveUndoEntry {
+  string Path = 1;
+  repeated MapFieldEntry Stages = 2;
+}
+
+message MapFieldEntry {
+  int64 key = 1;
+  string value = 2;
+}
+
+message Tree {
+   repeated TreeEntry Entries = 1;
+}
+
+message TreeEntry {
+  string Path = 1;
+  int64 Entries = 2;
+  int64 Trees = 3;
+  string Hash = 4;
+}
+
+message Entry {
+  string Hash = 1;
+  string Name = 2;
+  int64 CreatedAt = 3;
+  int64 ModifiedAt = 4;
+  uint32 Dev = 5;
+  uint32 Inode = 6;
+  uint32 Mode = 7;
+  uint32 UID = 8;
+  uint32 GID = 9;
+  uint32 Size = 10;
+  int64 Stage = 11;
+  bool SkipWorktree = 12;
+  bool IntentToAdd = 13;
+}
+
+message Hashs {
+  string RepoPath = 1;
+  repeated string Hash = 2;
+}
+
+message Reference {
+  string RepoPath = 1;
+  string T = 2;
+  string N = 3;
+  string H = 4;
+  string Target = 5;
+}
+
+message References {
+  repeated Reference refs = 1;
+}
+
+message SetReferenceParams {
+  string RepoPath = 1;
+  Reference new = 2;
+  Reference old = 3;
+}
