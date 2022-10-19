@@ -27,6 +27,8 @@ default: &base
 
 local:
   <<: *base
+  mensa:
+    ssh_listen: 0.0.0.0:8022
 
 dev:
   <<: *base

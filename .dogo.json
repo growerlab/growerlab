@@ -3,7 +3,7 @@
     "SourceDir": [
         "{GOPATH}/src/github.com/growerlab/growerlab"
     ],
-    "SourceExt": [".go"],
+    "SourceExt": [".go", ".yaml"],
     "BuildCmd": "echo 'building'",
     "RunCmd": ".dogo.sh",
     "Decreasing": 1
