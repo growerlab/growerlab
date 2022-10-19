@@ -23,7 +23,7 @@ interface IProps {
   ownerPath: string;
 }
 
-export function NewRepositoryFrom(props: IProps) {
+export function NewRepositoryForm(props: IProps) {
   const [privateChecked, setPrivateChecked] = useState(false);
 
   const {
@@ -76,6 +76,7 @@ export function NewRepositoryFrom(props: IProps) {
           onChange={(e) => {
             setValue("name", e.target.value, { shouldValidate: true });
           }}
+          placeholder={"hello"}
         />
       </EuiFormRow>
 
