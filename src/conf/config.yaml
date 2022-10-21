@@ -12,14 +12,14 @@ default: &base
     namespace: master
 
   # root dir for git repository
-  git_repo_dir: /Users/moli/go-project/src/github.com/growerlab/growerlab/.repositories
+  git_repo_dir: /workspaces/growerlab/.repositories
 
   # go git grpc server
   go_git_grpc_server_addr: "127.0.0.1:9001"
 
   mensa:
     user: git
-    ssh_listen: 0.0.0.0:22
+    ssh_listen: 0.0.0.0:8022
     http_listen: 0.0.0.0:8080
     deadline: 3600
     idle_timeout: 30
