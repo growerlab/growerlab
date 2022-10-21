@@ -18,7 +18,7 @@ func GetGitGRPCClient(ctx context.Context, repoPath string) (*client.Store, erro
 		return nil, errors.Trace(err)
 	}
 	notify.Subscribe(func() {
-		closeFn()
+		closeFn.Close()
 	})
 
 	return store, nil
