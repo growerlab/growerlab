@@ -16,4 +16,4 @@ data/services/*
 data/logs/*.log
 
 src/router/router
-src/conf/hooks/update
+src/**/update
