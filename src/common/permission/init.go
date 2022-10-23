@@ -1,9 +1,9 @@
 package permission
 
 import (
-	"github.com/growerlab/growerlab/src/backend/app/common/userdomain"
 	"github.com/growerlab/growerlab/src/common/context"
 	"github.com/growerlab/growerlab/src/common/db"
+	"github.com/growerlab/growerlab/src/common/userdomain"
 	"github.com/jmoiron/sqlx"
 )
 

@@ -5,8 +5,8 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/growerlab/growerlab/src/backend/app/common/permission"
 	"github.com/growerlab/growerlab/src/common/errors"
+	"github.com/growerlab/growerlab/src/common/permission"
 	"github.com/growerlab/growerlab/src/mensa/app/common"
 	"github.com/growerlab/growerlab/src/mensa/app/service"
 )

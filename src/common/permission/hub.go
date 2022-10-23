@@ -5,12 +5,12 @@ import (
 	"time"
 
 	"github.com/go-redis/redis/v7"
-	"github.com/growerlab/growerlab/src/backend/app/common/userdomain"
 	permModel "github.com/growerlab/growerlab/src/backend/app/model/permission"
 	"github.com/growerlab/growerlab/src/backend/app/utils/timestamp"
 	"github.com/growerlab/growerlab/src/common/context"
 	"github.com/growerlab/growerlab/src/common/db"
 	"github.com/growerlab/growerlab/src/common/errors"
+	"github.com/growerlab/growerlab/src/common/userdomain"
 	"github.com/jmoiron/sqlx"
 )
 

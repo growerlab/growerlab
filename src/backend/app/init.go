@@ -5,9 +5,9 @@ import (
 
 	"github.com/growerlab/growerlab/src/backend/app/common/events"
 	"github.com/growerlab/growerlab/src/backend/app/common/notify"
-	"github.com/growerlab/growerlab/src/backend/app/common/permission"
 	"github.com/growerlab/growerlab/src/common/configurator"
 	"github.com/growerlab/growerlab/src/common/db"
+	"github.com/growerlab/growerlab/src/common/permission"
 )
 
 // 需要初始化的全局数据放在这里
