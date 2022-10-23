@@ -1,7 +1,7 @@
 package permission
 
 import (
-	"github.com/growerlab/growerlab/src/backend/app/common/context"
+	"github.com/growerlab/growerlab/src/common/context"
 )
 
 func RepositoryContext(repositoryID int64) *context.Context {

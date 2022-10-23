@@ -2,7 +2,7 @@ package permission
 
 import (
 	sq "github.com/Masterminds/squirrel"
-	"github.com/growerlab/growerlab/src/backend/app/common/context"
+	"github.com/growerlab/growerlab/src/common/context"
 	"github.com/growerlab/growerlab/src/common/errors"
 	"github.com/jmoiron/sqlx"
 )

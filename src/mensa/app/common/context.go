@@ -2,15 +2,13 @@ package common
 
 import (
 	"fmt"
-	"log"
 	"net/http"
 	"net/url"
-	"path"
-	"path/filepath"
-	"strings"
+	ospath "path"
 
 	"github.com/gliderlabs/ssh"
 	"github.com/growerlab/growerlab/src/common/errors"
+	"github.com/growerlab/growerlab/src/common/path"
 )
 
 // 协议类型
@@ -129,15 +127,12 @@ func (c *Context) Desc() string {
 
 func BuildContextFromHTTP(w http.ResponseWriter, r *http.Request) (*Context, error) {
 	uri := r.URL
-	repoOwner, repoName, repoPath, err := BuildRepoInfoByPath(uri.Path)
-	if err != nil {
-		return nil, err
-	}
+	repoOwner, repoName, repoPath := path.ParseRepositryPath(uri.Path)
 
 	actionType := ActionTypePush
 	service := uri.Query().Get("service")
 	if service == "" {
-		_, service = path.Split(uri.Path)
+		_, service = ospath.Split(uri.Path)
 	}
 	if service == "" {
 		return nil, errors.New("invalid service")
@@ -175,10 +170,7 @@ func BuildContextFromSSH(session ssh.Session) (*Context, error) {
 	}
 
 	gitPath := commands[1]
-	repoOwner, repoName, repoPath, err := BuildRepoInfoByPath(gitPath)
-	if err != nil {
-		return nil, err
-	}
+	repoOwner, repoName, repoPath := path.ParseRepositryPath(gitPath)
 
 	actionType := ActionTypePush
 	if commands[0] == "git-upload-pack" {
@@ -196,25 +188,4 @@ func BuildContextFromSSH(session ssh.Session) (*Context, error) {
 			SSHPublicKey: session.PublicKey(),
 		},
 	}, nil
-}
-
-func BuildRepoInfoByPath(path string) (repoOwner, repoName, repoPath string, err error) {
-	defer func() {
-		if e := recover(); e != nil {
-			log.Println("build repo info was err: ", e)
-		}
-	}()
-
-	paths := strings.FieldsFunc(path, func(r rune) bool {
-		return r == rune('/') || r == rune('.')
-	})
-	if len(paths) < 2 {
-		err = errors.Errorf("invalid repo path: %s", path)
-		return
-	}
-
-	repoOwner = paths[0]
-	repoName = paths[1]
-	repoPath = filepath.Join(repoOwner[:2], repoName[:2], repoOwner, repoName)
-	return
 }

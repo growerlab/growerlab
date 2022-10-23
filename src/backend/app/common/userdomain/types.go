@@ -1,7 +1,7 @@
 package userdomain
 
 import (
-	"github.com/growerlab/growerlab/src/backend/app/common/context"
+	"github.com/growerlab/growerlab/src/common/context"
 )
 
 type Evaluable interface {

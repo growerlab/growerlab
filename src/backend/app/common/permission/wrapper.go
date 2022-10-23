@@ -1,8 +1,8 @@
 package permission
 
 import (
-	"github.com/growerlab/growerlab/src/backend/app/common/context"
 	"github.com/growerlab/growerlab/src/backend/app/common/userdomain"
+	"github.com/growerlab/growerlab/src/common/context"
 )
 
 func CheckViewRepository(namespaceID *int64, repositoryID int64) error {

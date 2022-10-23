@@ -10,7 +10,7 @@ import (
 	"google.golang.org/grpc"
 )
 
-func NewStoreClient(ctx context.Context, grpcServerAddr string, repoPath string) (*client.Store, io.Closer, error) {
+func NewStoreClient(ctx context.Context, grpcServerAddr string, repoRelativePath string) (*client.Store, io.Closer, error) {
 	conn, err := grpc.DialContext(ctx,
 		grpcServerAddr,
 		grpc.WithInsecure(),
@@ -22,7 +22,7 @@ func NewStoreClient(ctx context.Context, grpcServerAddr string, repoPath string)
 	}
 
 	c := pb.NewStorerClient(conn)
-	s := client.NewStore(ctx, repoPath, c)
+	s := client.NewStore(ctx, repoRelativePath, c)
 
 	return s, conn, nil
 }

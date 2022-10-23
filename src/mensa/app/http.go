@@ -13,6 +13,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/growerlab/growerlab/src/common/configurator"
 	"github.com/growerlab/growerlab/src/common/errors"
+	"github.com/growerlab/growerlab/src/common/path"
 	"github.com/growerlab/growerlab/src/mensa/app/common"
 )
 
@@ -94,12 +95,7 @@ func (g *GitHttpServer) handlerBuildRequestContext(c *gin.Context) {
 	r := c.Request
 	w := c.Writer
 	// file := r.URL.Path
-	_, _, repoPath, err := common.BuildRepoInfoByPath(r.URL.Path)
-	if err != nil {
-		log.Printf("build repo info was err: %+v\n", err)
-		c.AbortWithStatus(http.StatusInternalServerError)
-		return
-	}
+	_, _, repoPath := path.ParseRepositryPath(r.URL.Path)
 
 	rpc := g.getServiceType(c)
 

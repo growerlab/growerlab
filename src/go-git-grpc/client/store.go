@@ -16,9 +16,9 @@ import (
 
 var _ storage.Storer = (*Store)(nil)
 
-func NewStore(ctx context.Context, repPath string, pbClient pb.StorerClient) *Store {
+func NewStore(ctx context.Context, repoRelativePath string, pbClient pb.StorerClient) *Store {
 	return &Store{
-		repoPath: repPath,
+		repoPath: repoRelativePath,
 		lastErr:  nil,
 		ctx:      ctx,
 		client:   pbClient,
