@@ -1,7 +1,7 @@
 package app
 
 import (
-	"runtime/debug"
+	"log"
 	"sync"
 
 	"github.com/growerlab/growerlab/src/mensa/app/common"
@@ -16,10 +16,10 @@ type MiddlewareResult struct {
 type MiddlewareHandler func(ctx *common.Context) *MiddlewareResult
 
 type Server interface {
-	// 启动并监听服务
-	// 	当有新的链接时，将调用cb方法
+	// ListenAndServe 启动并监听服务
+	// 当有新的链接时，将调用cb方法
 	ListenAndServe(MiddlewareHandler) error
-	// 停止服务
+	// Shutdown 停止服务
 	Shutdown() error
 }
 
@@ -39,7 +39,7 @@ func (m *Manager) RegisterServer(srv Server) {
 	m.servers = append(m.servers, srv)
 }
 
-// run server and waiting for end
+// Run server and waiting for end
 func (m *Manager) Run() {
 	var wg sync.WaitGroup
 	for _, s := range m.servers {
@@ -48,7 +48,7 @@ func (m *Manager) Run() {
 			defer wg.Done()
 			defer func() {
 				if e := recover(); e != nil {
-					debug.PrintStack()
+					log.Printf("%+v", e)
 				}
 			}()
 			err := srv.ListenAndServe(m.ServerHandler)

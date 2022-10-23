@@ -7,16 +7,29 @@ fi
 
 cd src || exit 1
 
-go run backend/main.go &
+function clean() {
+    if [ -f /tmp/growerlab.pid ]; then
+        kill "$(cat /tmp/growerlab.pid)"
+    fi
+}
 
-if [ ! -f ./conf/hooks/update ]; then
-    echo "building go-git-grpc 'update' hook..."
-    cd go-git-grpc && go build -o ../conf/hooks/update ./script/hulk/main.go
-    cd - || exit 1
-fi
-go run go-git-grpc/cli/main.go &
+function run() {
+    go run backend/main.go &
 
-go run mensa/main.go &
+    if [ ! -f ./conf/hooks/update ]; then
+        echo "building go-git-grpc 'update' hook..."
+        cd go-git-grpc && go build -o ../conf/hooks/update ./script/hulk/main.go
+        cd - || exit 1
+    fi
+    go run go-git-grpc/cli/main.go &
 
+    go run mensa/main.go &
+
+    echo $$ >/tmp/growerlab.pid
+}
+
+
+clean
+run
 wait
 echo "done"

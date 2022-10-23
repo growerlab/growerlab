@@ -10,9 +10,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/growerlab/growerlab/src/common/configurator"
-
 	"github.com/gin-gonic/gin"
+	"github.com/growerlab/growerlab/src/common/configurator"
 	"github.com/growerlab/growerlab/src/common/errors"
 	"github.com/growerlab/growerlab/src/mensa/app/common"
 )
