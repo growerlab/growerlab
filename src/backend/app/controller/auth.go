@@ -2,7 +2,6 @@ package controller
 
 import (
 	"github.com/gin-gonic/gin"
-
 	"github.com/growerlab/growerlab/src/backend/app/service/user"
 )
 
