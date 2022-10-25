@@ -18,3 +18,12 @@ func GetGitGRPCClient(ctx context.Context, repoRelativePath string) (*client.Sto
 	}
 	return store, closeFn, nil
 }
+
+func GetGitGRPCDoorClient(ctx context.Context) (*client.Door, io.Closer, error) {
+	global := configurator.GetConf()
+	door, closeFn, err := gggrpc.NewDoorClient(ctx, global.GoGitGrpcServerAddr)
+	if err != nil {
+		return nil, nil, errors.Trace(err)
+	}
+	return door, closeFn, nil
+}

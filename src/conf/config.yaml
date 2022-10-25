@@ -17,13 +17,14 @@ default: &base
   # go git grpc server
   go_git_grpc_server_addr: "127.0.0.1:9001"
 
+  git_bin_path: "/usr/bin/git"
+
   mensa:
     user: git
     ssh_listen: 0.0.0.0:8022
     http_listen: 0.0.0.0:8080
     deadline: 3600
     idle_timeout: 30
-    git_path: /usr/bin/git
 
 local:
   <<: *base

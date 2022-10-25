@@ -127,7 +127,7 @@ func (c *Context) Desc() string {
 
 func BuildContextFromHTTP(w http.ResponseWriter, r *http.Request) (*Context, error) {
 	uri := r.URL
-	repoOwner, repoName, repoPath := path.ParseRepositryPath(uri.Path)
+	repoOwner, repoName, repoPath := path.ParseRepositoryPath(uri.Path)
 
 	actionType := ActionTypePush
 	service := uri.Query().Get("service")
@@ -170,7 +170,7 @@ func BuildContextFromSSH(session ssh.Session) (*Context, error) {
 	}
 
 	gitPath := commands[1]
-	repoOwner, repoName, repoPath := path.ParseRepositryPath(gitPath)
+	repoOwner, repoName, repoPath := path.ParseRepositoryPath(gitPath)
 
 	actionType := ActionTypePush
 	if commands[0] == "git-upload-pack" {

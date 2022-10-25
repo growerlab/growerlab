@@ -28,7 +28,7 @@ var GitReceivePackOptions = []*Option{
 func gitCommand(in io.Reader, out io.Writer, repoDir string, args []string, envs []string) error {
 	global := configurator.GetConf()
 	conf := global.Mensa
-	gitBinPath := conf.GitPath
+	gitBinPath := global.GitBinPath
 	deadline := time.Duration(conf.Deadline) * time.Second
 	goGitGrpcServerAddr := global.GoGitGrpcServerAddr
 

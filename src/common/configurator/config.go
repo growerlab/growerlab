@@ -25,7 +25,6 @@ type Mensa struct {
 	HTTPListen  string `yaml:"http_listen"`
 	Deadline    int    `yaml:"deadline"`
 	IdleTimeout int    `yaml:"idle_timeout"`
-	GitPath     string `yaml:"git_path"`
 }
 
 type Config struct {
@@ -39,6 +38,7 @@ type Config struct {
 	Redis *Redis `yaml:"redis"`
 	Mensa *Mensa `yaml:"mensa"`
 
+	GitBinPath          string `yaml:"git_bin_path"`
 	GitRepoDir          string `yaml:"git_repo_dir"`
 	GoGitGrpcServerAddr string `yaml:"go_git_grpc_server_addr"`
 }

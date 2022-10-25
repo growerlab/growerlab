@@ -16,21 +16,22 @@ import (
 	"github.com/growerlab/growerlab/src/mensa/app/common"
 )
 
-func NewGitSSHServer(cfg *configurator.Mensa) *GitSSHServer {
+func NewGitSSHServer(cfg *configurator.Config) *GitSSHServer {
 	deadline := DefaultDeadline * time.Second
 	idleTimeout := DefaultIdleTimeout * time.Second
+	mensaCfg := cfg.Mensa
 
-	if cfg.Deadline > 0 {
-		deadline = time.Duration(cfg.Deadline) * time.Second
+	if mensaCfg.Deadline > 0 {
+		deadline = time.Duration(mensaCfg.Deadline) * time.Second
 	}
-	if cfg.IdleTimeout > 0 {
-		idleTimeout = time.Duration(cfg.IdleTimeout) * time.Second
+	if mensaCfg.IdleTimeout > 0 {
+		idleTimeout = time.Duration(mensaCfg.IdleTimeout) * time.Second
 	}
 
 	gitServer := &GitSSHServer{
-		gitUser:     cfg.User,
-		listen:      cfg.SSHListen,
-		gitBinPath:  cfg.GitPath,
+		gitUser:     mensaCfg.User,
+		listen:      mensaCfg.SSHListen,
+		gitBinPath:  cfg.GitBinPath,
 		deadline:    deadline,
 		idleTimeout: idleTimeout,
 	}

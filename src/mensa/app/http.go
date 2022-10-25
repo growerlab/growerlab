@@ -19,20 +19,21 @@ import (
 
 const BannerMessage = "----- Power by GrowerLab.net -----"
 
-func NewGitHttpServer(cfg *configurator.Mensa) *GitHttpServer {
+func NewGitHttpServer(cfg *configurator.Config) *GitHttpServer {
 	deadline := DefaultDeadline * time.Second
 	idleTimeout := DefaultIdleTimeout * time.Second
+	mensaCfg := cfg.Mensa
 
-	if cfg.Deadline > 0 {
-		deadline = time.Duration(cfg.Deadline) * time.Second
+	if mensaCfg.Deadline > 0 {
+		deadline = time.Duration(mensaCfg.Deadline) * time.Second
 	}
-	if cfg.IdleTimeout > 0 {
-		idleTimeout = time.Duration(cfg.IdleTimeout) * time.Second
+	if mensaCfg.IdleTimeout > 0 {
+		idleTimeout = time.Duration(mensaCfg.IdleTimeout) * time.Second
 	}
 
 	server := &GitHttpServer{
-		listen:      cfg.HTTPListen,
-		gitBinPath:  cfg.GitPath,
+		listen:      mensaCfg.HTTPListen,
+		gitBinPath:  cfg.GitBinPath,
 		deadline:    deadline,
 		idleTimeout: idleTimeout,
 	}
@@ -44,7 +45,7 @@ func NewGitHttpServer(cfg *configurator.Mensa) *GitHttpServer {
 
 	server.server = &http.Server{
 		Handler:      engine,
-		Addr:         cfg.HTTPListen,
+		Addr:         mensaCfg.HTTPListen,
 		WriteTimeout: deadline,
 		ReadTimeout:  deadline,
 		IdleTimeout:  idleTimeout,
@@ -95,7 +96,7 @@ func (g *GitHttpServer) handlerBuildRequestContext(c *gin.Context) {
 	r := c.Request
 	w := c.Writer
 	// file := r.URL.Path
-	_, _, repoPath := path.ParseRepositryPath(r.URL.Path)
+	_, _, repoPath := path.ParseRepositoryPath(r.URL.Path)
 
 	rpc := g.getServiceType(c)
 
