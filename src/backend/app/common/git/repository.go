@@ -17,17 +17,17 @@ type grpcCallbackFunc func(client *client.Store) error
 type gitCallbackFunc func(repo *git.Repository) error
 
 func NewRepository(ctx context.Context, pathGroup string) *Repository {
-	return &Repository{ctx: ctx, pathGroup: pathGroup}
+	return &Repository{ctx: ctx, pathGroup: pathGroup, cfg: configurator.GetConf()}
 }
 
 type Repository struct {
 	ctx       context.Context
+	cfg       *configurator.Config
 	pathGroup string
 }
 
 func (r *Repository) CreateRepository() error {
 	repoPath := path.GetRealRepositoryPath(r.pathGroup)
-	cfg := configurator.GetConf()
 	door, closeFn, err := GetGitGRPCDoorClient(r.ctx)
 	if err != nil {
 		return errors.Trace(err)
@@ -36,7 +36,7 @@ func (r *Repository) CreateRepository() error {
 
 	var out bytes.Buffer
 	err = door.RunGit(&ggit.Context{
-		GitBin:   cfg.GitBinPath,
+		GitBin:   r.cfg.GitBinPath,
 		Args:     []string{"init", "--bare", repoPath},
 		In:       nil,
 		Out:      &out,
