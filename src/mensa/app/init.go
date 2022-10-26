@@ -37,7 +37,7 @@ func startInit(fn func() error) {
 func Run() {
 	initialize()
 
-	mensaConf := configurator.GetConf().Mensa
+	mensaConf := configurator.GetConf()
 
 	// 初始化中间件
 	entry := new(middleware.Middleware)
