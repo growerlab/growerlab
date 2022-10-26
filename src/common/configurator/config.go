@@ -3,6 +3,7 @@ package configurator
 import (
 	"net/url"
 	"os"
+	"path/filepath"
 
 	"github.com/growerlab/growerlab/src/common/errors"
 )
@@ -51,6 +52,12 @@ func (c *Config) validate() error {
 	if _, err := os.Stat(c.GitRepoDir); os.IsNotExist(err) {
 		return errors.Message(err, "git repo dir")
 	}
+
+	dir, err := filepath.Abs(c.GitRepoDir)
+	if err != nil {
+		return errors.Trace(err)
+	}
+	c.GitRepoDir = dir
 	return nil
 }
 

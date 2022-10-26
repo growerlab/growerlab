@@ -1,65 +1,47 @@
 package main
 
 import (
+	"errors"
 	"log"
 	"os"
-	"path/filepath"
 
+	"github.com/growerlab/growerlab/src/common/configurator"
 	gggrpc "github.com/growerlab/growerlab/src/go-git-grpc"
-	"gopkg.in/yaml.v3"
 )
 
 const (
-	defaultConfig = "conf/config.yaml"
-	hulkPath      = "conf/hooks/update"
+	hulkPath = "conf/hooks/update"
 )
 
-type Config struct {
-	Listen     string `yaml:"listen"`
-	GitRepoDir string `yaml:"git_repo_dir"`
-}
-
-var conf *Config
-
 func init() {
-	var envConfig = map[string]*Config{}
-	var ok bool
-	rawConfig, err := os.ReadFile(defaultConfig)
-	if err != nil {
-		panic(err)
-	}
-	err = yaml.Unmarshal(rawConfig, &envConfig)
-	if err != nil {
-		panic(err)
-	}
-
-	env := os.Getenv("ENV")
-	if env == "" {
-		env = "dev"
-	}
-	if conf, ok = envConfig[env]; !ok {
-		panic("env " + env + " not found")
-	}
-
-	// check git repo hooks
-	if _, err = os.Stat(hulkPath); os.IsNotExist(err) {
-		panic("git repo hooks not found")
-	}
+	onStart(configurator.InitConfig)
+	onStart(checkHook)
 }
 
 func main() {
 	var err error
-	root := conf.GitRepoDir
-	root, err = filepath.Abs(root)
+	cfg := configurator.GetConf()
+
+	log.Println("go-git-grpc running...", cfg.GoGitGrpcServerAddr)
+	log.Println("git root:", cfg.GitRepoDir)
+
+	err = gggrpc.NewServer(cfg.GitRepoDir, cfg.GoGitGrpcServerAddr)
 	if err != nil {
 		panic(err)
 	}
+}
 
-	log.Println("go-git-grpc running...", conf.Listen)
-	log.Println("git root:", root)
+func checkHook() error {
+	// check git repo hooks
+	if _, err := os.Stat(hulkPath); os.IsNotExist(err) {
+		return errors.New("git repo hooks not found")
+	}
+	return nil
+}
 
-	err = gggrpc.NewServer(root, conf.Listen)
-	if err != nil {
+func onStart(fn func() error) {
+	if err := fn(); err != nil {
+		log.Printf("%+v\n", err)
 		panic(err)
 	}
 }
