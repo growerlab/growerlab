@@ -11,8 +11,8 @@ default: &base
     idle_timeout: 120
     namespace: master
 
-  # root dir for git repository
-  git_repo_dir: .repositories
+  # root dir for git repositores. the growerlab root dir is the default repositores dir.
+  git_repo_dir: ../.repositories
 
   # go git grpc server
   go_git_grpc_server_addr: "127.0.0.1:9001"

@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/go-git/go-git/v5"
+	"github.com/growerlab/growerlab/src/backend/app/utils/logger"
 	"github.com/growerlab/growerlab/src/common/configurator"
 	"github.com/growerlab/growerlab/src/common/errors"
 	"github.com/growerlab/growerlab/src/common/path"
@@ -43,6 +44,7 @@ func (r *Repository) CreateRepository() error {
 		RepoPath: "",
 		Deadline: 10 * time.Second,
 	})
+	logger.Info("init repository: %s, err: %+v", repoPath, err)
 	return errors.Trace(err)
 }
 

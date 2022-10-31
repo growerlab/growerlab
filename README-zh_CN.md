@@ -13,6 +13,8 @@ ENV=production     # 生产环境
 ENV=local || null  # ENV是local或空值则默认为本地开发环境
 ```
 
+快速运行本地环境 `dogo -c ./.dogo.json`。
+
 ## 安装教程
 
 主要介绍 growerlab 在 ubuntu 的安装，你应拥有 sudo 权限

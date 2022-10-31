@@ -28,7 +28,6 @@ function run() {
     echo $$ >/tmp/growerlab.pid
 }
 
-
 clean
 run
 wait
