@@ -32,7 +32,7 @@ func (r *Repository) CreateRepository() error {
 	if err != nil {
 		return errors.Trace(err)
 	}
-	defer closeFn()
+	defer closeFn.Close()
 
 	var out bytes.Buffer
 	err = door.RunGit(&ggit.Context{
