@@ -1,6 +1,8 @@
 #!/bin/bash
 set +x
 
+echo "------------------------- start -------------------------"
+
 if [ ! -d ".repositories" ]; then
     mkdir .repositories
 fi
@@ -9,7 +11,9 @@ cd src || exit 1
 
 function clean() {
     if [ -f /tmp/growerlab.pid ]; then
-        kill "$(cat /tmp/growerlab.pid)"
+        pgrep -l main | grep -w main | awk '{print $1}' | xargs kill
+        rm /tmp/growerlab.pid
+        sleep 1
     fi
 }
 
@@ -31,4 +35,4 @@ function run() {
 clean
 run
 wait
-echo "done"
+echo "------------------------- end -------------------------"
