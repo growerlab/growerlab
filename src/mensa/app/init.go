@@ -6,7 +6,6 @@ import (
 	"os"
 
 	"github.com/growerlab/growerlab/src/common/configurator"
-
 	"github.com/growerlab/growerlab/src/common/db"
 	"github.com/growerlab/growerlab/src/mensa/app/common"
 	"github.com/growerlab/growerlab/src/mensa/app/middleware"
