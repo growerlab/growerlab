@@ -166,9 +166,7 @@ var (
 	Message  = pkgerr.WithMessage
 	Messagef = pkgerr.WithMessagef
 	Trace    = func(err error) error {
-		if _, ok := err.(causer); ok {
-			return err
-		}
+		err = pkgerr.Cause(err)
 		return pkgerr.WithStack(err)
 	}
 	WithStack = Trace
