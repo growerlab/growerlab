@@ -157,11 +157,23 @@ func mustCode(err error, parts ...string) error {
 
 // 封装（避免在项目中使用时，引用多个包）
 var (
-	Wrap     = pkgerr.Wrap
-	Wrapf    = pkgerr.Wrapf
-	Message  = pkgerr.WithMessage
-	Messagef = pkgerr.WithMessagef
-	Trace    = func(err error) error {
+	Wrap = func(err error, message string) error {
+		err = pkgerr.Cause(err)
+		return pkgerr.Wrap(err, message)
+	}
+	Wrapf = func(err error, format string, args ...interface{}) error {
+		err = pkgerr.Cause(err)
+		return pkgerr.Wrapf(err, format, args...)
+	}
+	Message = func(err error, message string) error {
+		err = pkgerr.Cause(err)
+		return pkgerr.WithMessage(err, message)
+	}
+	Messagef = func(err error, format string, args ...interface{}) error {
+		err = pkgerr.Cause(err)
+		return pkgerr.WithMessagef(err, format, args...)
+	}
+	Trace = func(err error) error {
 		err = pkgerr.Cause(err)
 		return pkgerr.WithStack(err)
 	}
