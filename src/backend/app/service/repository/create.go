@@ -5,9 +5,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/growerlab/growerlab/src/backend/app/common/git"
-
 	"github.com/gin-gonic/gin"
+	"github.com/growerlab/growerlab/src/backend/app/common/git"
 	"github.com/growerlab/growerlab/src/backend/app/model/namespace"
 	"github.com/growerlab/growerlab/src/backend/app/model/repository"
 	"github.com/growerlab/growerlab/src/backend/app/model/server"
@@ -61,7 +60,7 @@ func DoCreateRepository(currentUser *user.User, req *NewRepositoryPayload) error
 		}
 
 		// 真正创建仓库
-		err = git.NewRepository(ctx, repo.PathGroup()).CreateRepository()
+		err = git.New(ctx, repo.PathGroup()).CreateRepository()
 		if err != nil {
 			return errors.Trace(err)
 		}

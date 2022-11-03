@@ -17,7 +17,7 @@ import (
 type grpcCallbackFunc func(client *client.Store) error
 type gitCallbackFunc func(repo *git.Repository) error
 
-func NewRepository(ctx context.Context, pathGroup string) *Repository {
+func New(ctx context.Context, pathGroup string) *Repository {
 	return &Repository{ctx: ctx, pathGroup: pathGroup, cfg: configurator.GetConf()}
 }
 
