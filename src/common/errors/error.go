@@ -29,32 +29,34 @@ const (
 	permissionError = "PermissionError"
 	// 仓库
 	repositoryError = "RepositoryError"
+	//
+	timeoutError = "TimeoutError"
 )
 
 // 定义错误原因
 const (
-	// 非法的
+	// Invalid 非法的
 	Invalid = "Invalid"
-	// 无法找到属性（字段）
+	// NotFoundField 无法找到属性（字段）
 	NotFoundField = "NotFoundField"
-	// 非法长度
+	// InvalidLength 非法长度
 	InvalidLength = "InvalidLength"
-	// 失效，过期
+	// Expired 失效，过期
 	Expired = "Expired"
-	// 已被使用过
+	// Used 已被使用过
 	Used = "Used"
-	// 不匹配
+	// NotEqual 不匹配
 	NotEqual = "NotEqual"
-	// 空的
+	// Empty 空的
 	Empty = "Empty"
-	// 已存在
+	// AlreadyExists 已存在
 	AlreadyExists = "AlreadyExists"
-	// 未激活
+	// NotActivated 未激活
 	NotActivated = "NotActivated"
-	// 仓库服务异常
-	SvcServerNotReady = "SvcServerNotReady"
-	// 无权限
+	// NoPermission 无权限
 	NoPermission = "NoPermission"
+	// GitServerInvalid git服务器异常
+	GitServerInvalid = "GitServerInvalid"
 )
 
 var httpCodeSet = map[string]int{
@@ -67,6 +69,7 @@ var httpCodeSet = map[string]int{
 	unauthorized:      401,
 	permissionError:   403,
 	repositoryError:   500,
+	timeoutError:      408,
 }
 
 type Result struct {
@@ -122,6 +125,10 @@ func PermissionError(reason string) error {
 
 func RepositoryError(reason string) error {
 	return mustCode(nil, repositoryError, reason)
+}
+
+func TimeoutError(reason string) error {
+	return mustCode(nil, timeoutError, reason)
 }
 
 func mustErr(err error, parts ...string) error {

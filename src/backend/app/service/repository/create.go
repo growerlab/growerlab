@@ -1,9 +1,11 @@
 package repository
 
 import (
-	"fmt"
+	"context"
 	"strings"
 	"time"
+
+	"github.com/growerlab/growerlab/src/backend/app/common/git"
 
 	"github.com/gin-gonic/gin"
 	"github.com/growerlab/growerlab/src/backend/app/model/namespace"
@@ -34,35 +36,35 @@ func CreateRepository(c *gin.Context, req *NewRepositoryPayload) error {
 }
 
 func DoCreateRepository(currentUser *user.User, req *NewRepositoryPayload) error {
-	var err error
-	err = db.Transact(func(tx sqlx.Ext) error {
+	var ctx, cancel = context.WithTimeout(context.TODO(), 10*time.Second)
+	defer cancel()
+
+	err := db.Transact(func(tx sqlx.Ext) error {
 		ns, err := validateAndPrepare(tx, currentUser.ID, req)
 		if err != nil {
-			return err
+			return errors.Trace(err)
 		}
 
 		srv, err := server.RandNormalServer(tx)
 		if err != nil {
-			return err
+			return errors.Trace(err)
 		}
 
 		repo := buildRepository(currentUser, ns, req, srv)
 		if err != nil {
-			return err
+			return errors.Trace(err)
 		}
-		fmt.Println(repo)
 
-		// TODO: 真正创建仓库
-		// utils.GoSafe(func() {
-		// 	api, err := NewApi(srv, repo)
-		// 	if err != nil {
-		// 		return err
-		// 	}
-		// 	err = api.Repository().Create()
-		// 	if err != nil {
-		// 		return errors.Wrap(err, errors.RepositoryError(errors.SvcServerNotReady))
-		// 	}
-		// })
+		err = repository.AddRepository(tx, repo)
+		if err != nil {
+			return errors.Trace(err)
+		}
+
+		// 真正创建仓库
+		err = git.NewRepository(ctx, repo.PathGroup()).CreateRepository()
+		if err != nil {
+			return errors.Trace(err)
+		}
 		return nil
 	})
 	return err
@@ -74,12 +76,6 @@ func buildRepository(
 	req *NewRepositoryPayload,
 	srv *server.Server,
 ) (repo *repository.Repository) {
-
-	status := true
-	if !req.Public {
-		status = false
-	}
-
 	repo = &repository.Repository{
 		NamespaceID: ns.ID,
 		UUID:        uuid.UUIDv16(),
@@ -90,7 +86,7 @@ func buildRepository(
 		CreatedAt:   time.Now().Unix(),
 		ServerID:    srv.ID,
 		ServerPath:  UsernameToFilePath(ns.Path, req.Name),
-		Public:      status,
+		Public:      req.Public,
 	}
 	return repo
 }

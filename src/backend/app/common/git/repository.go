@@ -42,7 +42,7 @@ func (r *Repository) CreateRepository() error {
 		In:       nil,
 		Out:      &out,
 		RepoPath: "",
-		Deadline: 10 * time.Second,
+		Deadline: 10 * time.Second, // git 执行时间
 	})
 	logger.Info("init repository: %s, err: %+v", repoPath, err)
 	return errors.Trace(err)
