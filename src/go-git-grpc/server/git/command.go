@@ -74,7 +74,7 @@ func Run(root string, params *Context) error {
 		cmd.Stdout = params.Out
 	}
 
-	cmd.Stderr = os.Stdout
+	cmd.Stderr = io.MultiWriter(log.Writer(), os.Stderr)
 	err := cmd.Start()
 	if err != nil {
 		return errors.Wrap(err, "start git command failed")

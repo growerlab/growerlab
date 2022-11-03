@@ -29,9 +29,6 @@ yarn-error.log*
 
 /dist
 
-/node_modules
-/.pnp
-.pnp.js
 .pnp.cjs
 .yarn/sdks
 .yarn/cache
