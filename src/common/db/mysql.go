@@ -3,9 +3,10 @@ package db
 import (
 	"database/sql"
 	"fmt"
-	"github.com/growerlab/growerlab/src/common/errors"
 	"io"
 	"runtime/debug"
+
+	"github.com/growerlab/growerlab/src/common/errors"
 
 	"github.com/growerlab/growerlab/src/common/configurator"
 
@@ -63,7 +64,8 @@ func Transact(txFn func(tx sqlx.Ext) error) (err error) {
 		}
 		err = errors.Trace(txa.Commit())
 	}()
-	return txFn(txa)
+	err = txFn(txa)
+	return
 }
 
 type DBQuery struct {
