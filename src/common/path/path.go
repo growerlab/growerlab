@@ -12,16 +12,15 @@ import (
 // GetRealRepositoryPath 会根据 pathGroup 获取到真实的仓库地址
 func GetRealRepositoryPath(pathGroup string) string {
 	cfg := configurator.GetConf()
-	repoOwner, repoName, repoPath := ParseRepositoryPath(pathGroup)
-	realPath := filepath.Join(cfg.GitRepoDir, repoOwner, repoName, repoPath)
+	_, _, repoPath := ParseRepositoryPath(pathGroup)
+	realPath := filepath.Join(cfg.GitRepoDir, repoPath)
 	return realPath
 }
 
 // GetRelativeRepositoryPath 会根据 pathGroup 获取到相对仓库地址
 func GetRelativeRepositoryPath(pathGroup string) string {
-	repoOwner, repoName, repoPath := ParseRepositoryPath(pathGroup)
-	realPath := filepath.Join(repoOwner, repoName, repoPath)
-	return realPath
+	_, _, repoPath := ParseRepositoryPath(pathGroup)
+	return repoPath
 }
 
 // ParseRepositoryPath 根据 namespace/username 解析出原始的相对路径
