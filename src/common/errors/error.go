@@ -155,10 +155,6 @@ func mustCode(err error, parts ...string) error {
 	})
 }
 
-type causer interface {
-	Cause() error
-}
-
 // 封装（避免在项目中使用时，引用多个包）
 var (
 	Wrap     = pkgerr.Wrap
