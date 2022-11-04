@@ -48,6 +48,11 @@ func (r *Repository) CreateRepository() error {
 	return errors.Trace(err)
 }
 
+func (r *Repository) DeleteRepository() error {
+	// TODO 删除仓库
+	return nil
+}
+
 func (r *Repository) getRepo(ctx context.Context, pathGroup string, gitcb gitCallbackFunc) error {
 	err := r.getGrpcClient(ctx, pathGroup, func(client *client.Store) error {
 		repo, err := git.Open(client, nil)
