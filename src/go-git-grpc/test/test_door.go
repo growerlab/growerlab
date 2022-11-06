@@ -9,7 +9,7 @@ import (
 
 	gggrpc "github.com/growerlab/growerlab/src/go-git-grpc"
 	"github.com/growerlab/growerlab/src/go-git-grpc/client"
-	"github.com/growerlab/growerlab/src/go-git-grpc/server/git"
+	"github.com/growerlab/growerlab/src/go-git-grpc/server/command"
 )
 
 // 测试 git-upload-pack git-receive-pack 操作
@@ -48,9 +48,9 @@ func testUploadCommand(door *client.Door) error {
 	in := bytes.Buffer{}
 	out := bytes.Buffer{}
 
-	cmd := &git.Context{
+	cmd := &command.Context{
 		Env:      []string{""},
-		GitBin:   "git",
+		Bin:      "git",
 		Args:     []string{"upload-pack", "--advertise-refs", "."},
 		RepoPath: repoPath,
 		In:       &in,
@@ -58,7 +58,7 @@ func testUploadCommand(door *client.Door) error {
 		Deadline: 10 * time.Second,
 	}
 
-	if err := door.RunGit(cmd); err != nil {
+	if err := door.RunCommand(cmd); err != nil {
 		return err
 	}
 

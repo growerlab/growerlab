@@ -1,4 +1,4 @@
-package git
+package command
 
 import (
 	"context"
@@ -18,10 +18,10 @@ const DefaultTimeout = 60 * time.Minute // 推送和拉取的最大执行时间
 
 type Context struct {
 	Env      []string  // 环境变量 key=value
-	GitBin   string    // git binary
-	Args     []string  // git args
-	In       io.Reader // git input
-	Out      io.Writer // git output
+	Bin      string    // binary command path
+	Args     []string  // args
+	In       io.Reader // input
+	Out      io.Writer // output
 	RepoPath string    // repo dir
 
 	Deadline time.Duration // 命令执行时间，单位秒
@@ -29,16 +29,16 @@ type Context struct {
 
 func (p *Context) String() string {
 	var sb strings.Builder
-	sb.WriteString("git bin: ")
-	sb.WriteString(p.GitBin)
+	sb.WriteString("bin: ")
+	sb.WriteString(p.Bin)
 	sb.WriteString("\n")
-	sb.WriteString("git args: ")
+	sb.WriteString("args: ")
 	sb.WriteString(strings.Join(p.Args, " "))
 	sb.WriteString("\n")
-	sb.WriteString("git repo path: ")
+	sb.WriteString("repo path: ")
 	sb.WriteString(p.RepoPath)
 	sb.WriteString("\n")
-	sb.WriteString("git env: ")
+	sb.WriteString("env: ")
 	sb.WriteString(strings.Join(p.Env, " "))
 	sb.WriteString("\n")
 	sb.WriteString(fmt.Sprintf("deadline: %v", p.Deadline))
@@ -57,7 +57,7 @@ func Run(root string, params *Context) error {
 	cmdCtx, cancel := context.WithTimeout(context.Background(), params.Deadline)
 	defer cancel()
 
-	cmd := exec.CommandContext(cmdCtx, params.GitBin, params.Args...)
+	cmd := exec.CommandContext(cmdCtx, params.Bin, params.Args...)
 	if len(params.Env) > 0 {
 		systemEnvs := os.Environ()
 		cmd.Env = make([]string, 0, len(params.Env)+len(systemEnvs))
@@ -81,6 +81,6 @@ func Run(root string, params *Context) error {
 	}
 
 	err = cmd.Wait()
-	log.Println("git command done")
+	log.Printf("command was done: %d\n", cmd.ProcessState.ExitCode())
 	return errors.WithStack(err)
 }

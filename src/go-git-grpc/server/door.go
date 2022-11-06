@@ -7,16 +7,16 @@ import (
 	"time"
 
 	"github.com/growerlab/growerlab/src/go-git-grpc/pb"
-	"github.com/growerlab/growerlab/src/go-git-grpc/server/git"
+	"github.com/growerlab/growerlab/src/go-git-grpc/server/command"
 )
 
 // ServerCommand is used for a single server command execution.
 type ServerCommand struct {
 	repoPath     string
-	gitBinServer pb.Door_RunGitServer
+	gitBinServer pb.Door_RunCommandServer
 
 	readBuf *bytes.Buffer
-	ctx     *git.Context
+	ctx     *command.Context
 }
 
 // Start 协议：第一个请求仅传git相关的参数，不传数据
@@ -36,9 +36,9 @@ func (s *ServerCommand) Start() error {
 		out = s
 	}
 
-	s.ctx = &git.Context{
+	s.ctx = &command.Context{
 		Env:      firstReq.Env,
-		GitBin:   firstReq.GitBin,
+		Bin:      firstReq.Bin,
 		Args:     firstReq.Args,
 		In:       in,
 		Out:      out,
@@ -96,14 +96,14 @@ type Door struct {
 	root string
 }
 
-// RunGit 执行git命令
-func (d *Door) RunGit(pack pb.Door_RunGitServer) error {
+// RunCommand 执行git命令
+func (d *Door) RunCommand(pack pb.Door_RunCommandServer) error {
 	srvCmd := ServerCommand{gitBinServer: pack}
 	if err := srvCmd.Start(); err != nil {
 		return err
 	}
 
-	return git.Run(d.root, srvCmd.ctx)
+	return command.Run(d.root, srvCmd.ctx)
 }
 
 func (d *Door) mustEmbedUnimplementedDoorServer() {}

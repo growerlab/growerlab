@@ -20,7 +20,7 @@ require (
 	github.com/pkg/errors v0.9.1
 	github.com/stretchr/testify v1.7.0
 	google.golang.org/grpc v1.36.0
-	google.golang.org/protobuf v1.27.1
+	google.golang.org/protobuf v1.28.1
 	gopkg.in/asaskevich/govalidator.v9 v9.0.0-20180315120708-ccb8e960c48f
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b
 )
@@ -59,6 +59,7 @@ require (
 	golang.org/x/sys v0.0.0-20210502180810-71e4cd670f79 // indirect
 	golang.org/x/text v0.3.5 // indirect
 	google.golang.org/genproto v0.0.0-20210315173758-2651cd453018 // indirect
+	google.golang.org/grpc/cmd/protoc-gen-go-grpc v1.2.0 // indirect
 	gopkg.in/warnings.v0 v0.1.2 // indirect
 	gopkg.in/yaml.v2 v2.3.0 // indirect
 )

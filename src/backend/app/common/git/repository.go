@@ -11,7 +11,7 @@ import (
 	"github.com/growerlab/growerlab/src/common/errors"
 	"github.com/growerlab/growerlab/src/common/path"
 	"github.com/growerlab/growerlab/src/go-git-grpc/client"
-	ggit "github.com/growerlab/growerlab/src/go-git-grpc/server/git"
+	"github.com/growerlab/growerlab/src/go-git-grpc/server/command"
 )
 
 type grpcCallbackFunc func(client *client.Store) error
@@ -36,15 +36,15 @@ func (r *Repository) CreateRepository() error {
 	defer closeFn.Close()
 
 	var out bytes.Buffer
-	err = door.RunGit(&ggit.Context{
-		GitBin:   r.cfg.GitBinPath,
+	err = door.RunCommand(&command.Context{
+		Bin:      r.cfg.GitBinPath,
 		Args:     []string{"init", "--bare", repoPath},
 		In:       nil,
 		Out:      &out,
 		RepoPath: "",
 		Deadline: 10 * time.Second, // git 执行时间
 	})
-	logger.Info("init repository: %s, err: %+v", repoPath, err)
+	logger.Info("init repository: '%s', git result: '%s', err: %+v", repoPath, out.String(), err)
 	return errors.Trace(err)
 }
 

@@ -11,7 +11,7 @@ import (
 
 	"github.com/growerlab/growerlab/src/common/errors"
 	"github.com/growerlab/growerlab/src/go-git-grpc/pb"
-	"github.com/growerlab/growerlab/src/go-git-grpc/server/git"
+	"github.com/growerlab/growerlab/src/go-git-grpc/server/command"
 )
 
 type Door struct {
@@ -27,23 +27,23 @@ func NewDoor(ctx context.Context, pbClient pb.DoorClient) *Door {
 	return door
 }
 
-func (d *Door) RunGit(params *git.Context) error {
+func (d *Door) RunCommand(params *command.Context) error {
 	defer func() {
 		if e := recover(); e != nil {
 			log.Printf("ServeUploadPack panic: %+v", e)
 		}
 	}()
 
-	runGit, err := d.client.RunGit(d.ctx)
+	cmdResult, err := d.client.RunCommand(d.ctx)
 	if err != nil {
 		return errors.WithStack(err)
 	}
 
-	if err = d.sendContextPack(runGit, params); err != nil {
+	if err = d.sendContextPack(cmdResult, params); err != nil {
 		return err
 	}
 
-	return d.copy(runGit, params.In, params.Out)
+	return d.copy(cmdResult, params.In, params.Out)
 }
 
 func (d *Door) copy(pipe clientStream, in io.Reader, out io.Writer) (err error) {
@@ -135,11 +135,11 @@ type clientStream interface {
 	Recv() (*pb.Response, error)
 }
 
-func (d *Door) sendContextPack(pack clientStream, params *git.Context) error {
+func (d *Door) sendContextPack(pack clientStream, params *command.Context) error {
 	firstReq := &pb.Request{
 		Path:      params.RepoPath,
 		Env:       params.Env,
-		GitBin:    params.GitBin,
+		Bin:       params.Bin,
 		Args:      params.Args,
 		Deadline:  uint64(params.Deadline),
 		Raw:       nil,

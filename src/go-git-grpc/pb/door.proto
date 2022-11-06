@@ -5,13 +5,13 @@ option go_package = "github.com/growerlab/growerlab/src/go-git-grpc/pb";
 package pb;
 
 service Door {
-  rpc RunGit(stream Request) returns (stream Response) {}
+  rpc RunCommand(stream Request) returns (stream Response) {}
 }
 
 message Request {
   string Path = 1;
   repeated string Env = 2;
-  string GitBin = 3;
+  string Bin = 3;
   repeated string Args = 4;
   uint64 Deadline = 5;
   bytes Raw = 6;

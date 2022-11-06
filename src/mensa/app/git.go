@@ -11,7 +11,7 @@ import (
 	"github.com/growerlab/growerlab/src/common/configurator"
 	"github.com/growerlab/growerlab/src/common/errors"
 	gggrpc "github.com/growerlab/growerlab/src/go-git-grpc"
-	"github.com/growerlab/growerlab/src/go-git-grpc/server/git"
+	"github.com/growerlab/growerlab/src/go-git-grpc/server/command"
 )
 
 type Option struct {
@@ -47,9 +47,9 @@ func gitCommand(in io.Reader, out io.Writer, repoDir string, args []string, envs
 	// 	out = io.MultiWriter(os.Stdout, out)
 	// }
 
-	err = gitDoor.RunGit(&git.Context{
+	err = gitDoor.RunCommand(&command.Context{
 		Env:      envs,
-		GitBin:   gitBinPath,
+		Bin:      gitBinPath,
 		Args:     args,
 		In:       in,
 		Out:      out,

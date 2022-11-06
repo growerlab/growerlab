@@ -23,8 +23,8 @@
 将 bin/protoc 移动 $GOPATH/bin 目录下。
 
 ```
-$ go get google.golang.org/protobuf/cmd/protoc-gen-go \
-         google.golang.org/grpc/cmd/protoc-gen-go-grpc
+$ go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
+$ go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
 
 $ protoc --go_out=$GOPATH/src --go-grpc_out=$GOPATH/src pb/storer.proto --plugin=grpc
 ```
