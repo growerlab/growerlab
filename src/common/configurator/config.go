@@ -3,6 +3,7 @@ package configurator
 import (
 	"net/url"
 	"os"
+	"os/exec"
 	"path/filepath"
 
 	"github.com/growerlab/growerlab/src/common/errors"
@@ -45,19 +46,30 @@ type Config struct {
 }
 
 func (c *Config) validate() error {
+	var err error
+
 	if c.Mensa.User == "" {
 		return errors.New("git uesr is required")
 	}
 
-	if _, err := os.Stat(c.GitRepoDir); os.IsNotExist(err) {
+	if len(c.GitBinPath) == 0 {
+		c.GitBinPath, err = exec.LookPath("git")
+		if err != nil {
+			return errors.Trace(err)
+		}
+	}
+
+	if _, err = os.Stat(c.GitRepoDir); os.IsNotExist(err) {
 		return errors.Message(err, "git repo dir")
 	}
 
-	dir, err := filepath.Abs(c.GitRepoDir)
-	if err != nil {
-		return errors.Trace(err)
+	if !filepath.IsAbs(c.GitRepoDir) {
+		dir, err := filepath.Abs(c.GitRepoDir)
+		if err != nil {
+			return errors.Trace(err)
+		}
+		c.GitRepoDir = dir
 	}
-	c.GitRepoDir = dir
 	return nil
 }
 

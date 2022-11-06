@@ -3,6 +3,7 @@ package git
 import (
 	"bytes"
 	"context"
+	"io"
 	"time"
 
 	"github.com/go-git/go-git/v5"
@@ -17,40 +18,73 @@ import (
 type grpcCallbackFunc func(client *client.Store) error
 type gitCallbackFunc func(repo *git.Repository) error
 
+var (
+	ErrRepositoryExists = errors.New("ErrRepositoryExists")
+)
+
 func New(ctx context.Context, pathGroup string) *Repository {
-	return &Repository{ctx: ctx, pathGroup: pathGroup, cfg: configurator.GetConf()}
+	return &Repository{
+		ctx:         ctx,
+		cfg:         configurator.GetConf(),
+		pathGroup:   pathGroup,
+		repoAbsPath: path.GetRealRepositoryPath(pathGroup),
+	}
 }
 
 type Repository struct {
-	ctx       context.Context
-	cfg       *configurator.Config
-	pathGroup string
+	ctx         context.Context
+	cfg         *configurator.Config
+	pathGroup   string
+	repoAbsPath string
 }
 
-func (r *Repository) CreateRepository() error {
-	repoPath := path.GetRealRepositoryPath(r.pathGroup)
+func (r *Repository) Create() error {
+	if exists := r.Exists(); exists {
+		return ErrRepositoryExists
+	}
+
+	var out bytes.Buffer
+	err := r.runCommand(r.cfg.GitBinPath, []string{"init", "--bare", r.repoAbsPath}, nil, &out)
+	logger.Info("init repository: '%s', git result: '%s', err: %+v", r.pathGroup, out.String(), err)
+	return errors.Trace(err)
+}
+
+// Delete 删除仓库
+func (r *Repository) Delete() error {
+	if !path.CheckRepoAbsPathIsEffective(r.repoAbsPath) {
+		return errors.Errorf("invalid repo path: %s", r.pathGroup)
+	}
+
+	err := r.runCommand("rm", []string{"-rf", r.repoAbsPath}, nil, nil)
+	logger.Info("delete repository: '%s', err: %+v", r.pathGroup, err)
+	return errors.Trace(err)
+}
+
+func (r *Repository) Exists() bool {
+	var out bytes.Buffer
+	err := r.runCommand("stat", []string{r.repoAbsPath}, nil, &out)
+	if err == nil {
+		return true
+	}
+	return false
+}
+
+func (r *Repository) runCommand(cmd string, args []string, in io.Reader, out io.Writer) error {
 	door, closeFn, err := GetGitGRPCDoorClient(r.ctx)
 	if err != nil {
 		return errors.Trace(err)
 	}
 	defer closeFn.Close()
 
-	var out bytes.Buffer
 	err = door.RunCommand(&command.Context{
-		Bin:      r.cfg.GitBinPath,
-		Args:     []string{"init", "--bare", repoPath},
-		In:       nil,
-		Out:      &out,
+		Bin:      cmd,
+		Args:     args,
+		In:       in,
+		Out:      out,
 		RepoPath: "",
-		Deadline: 10 * time.Second, // git 执行时间
+		Deadline: 10 * time.Second,
 	})
-	logger.Info("init repository: '%s', git result: '%s', err: %+v", repoPath, out.String(), err)
 	return errors.Trace(err)
-}
-
-func (r *Repository) DeleteRepository() error {
-	// TODO 删除仓库
-	return nil
 }
 
 func (r *Repository) getRepo(ctx context.Context, pathGroup string, gitcb gitCallbackFunc) error {

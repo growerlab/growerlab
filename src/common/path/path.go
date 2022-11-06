@@ -44,3 +44,10 @@ func ParseRepositoryPath(pathGroup string) (repoOwner, repoName, repoPath string
 	repoPath = filepath.Join(repoOwner[:2], repoName[:2], repoOwner, repoName)
 	return
 }
+
+// CheckRepoAbsPathIsEffective 判断某个仓库的路径是否为 config.git_repo_dir 中的路径
+// 以此判断 repoPath 的有效性
+func CheckRepoAbsPathIsEffective(repoPath string) bool {
+	cfg := configurator.GetConf()
+	return strings.HasPrefix(repoPath, cfg.GitRepoDir)
+}

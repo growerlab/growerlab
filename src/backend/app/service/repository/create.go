@@ -60,7 +60,7 @@ func DoCreateRepository(currentUser *user.User, req *NewRepositoryPayload) error
 		}
 
 		// 真正创建仓库
-		err = git.New(ctx, repo.PathGroup()).CreateRepository()
+		err = git.New(ctx, repo.PathGroup()).Create()
 		if err != nil {
 			return errors.Trace(err)
 		}

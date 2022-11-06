@@ -181,4 +181,5 @@ var (
 	Cause     = pkgerr.Cause
 	Errorf    = pkgerr.Errorf
 	New       = pkgerr.New
+	Is        = pkgerr.Is
 )
