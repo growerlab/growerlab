@@ -5,6 +5,17 @@ import (
 	"github.com/jmoiron/sqlx"
 )
 
+const TableName = "session"
+
+var columns = []string{
+	"id",
+	"owner_id",
+	"token",
+	"client_ip",
+	"created_at",
+	"expired_at",
+}
+
 type Session struct {
 	ID        int64  `db:"id"`
 	OwnerID   int64  `db:"owner_id"`

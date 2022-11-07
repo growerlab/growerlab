@@ -18,6 +18,7 @@ import ActivateUser from "./pages/auth/ActivateUser";
 import RepositoryIndex from "./pages/user/repos/Index";
 import RepositoryShow from "./pages/user/repos/Show";
 import RepositoryNew from "./pages/user/repos/New";
+import Error404 from "./pages/common/404";
 
 export default function App() {
   setup();
@@ -42,6 +43,7 @@ export default function App() {
     {
       path: Router.User.Index,
       element: <User />,
+      errorElement: <Error404 />,
       children: [
         {
           path: Router.User.Repository.Index,

@@ -26,7 +26,7 @@ export default function UserLayout(props: any) {
       notice!.warning(i18n.t("user.tooltip.not_login"));
       navigate(Router.Home.Login);
     });
-  });
+  }, []);
 
   const [collapsed, setCollapsed] = useState(false);
   const plusMenu = (

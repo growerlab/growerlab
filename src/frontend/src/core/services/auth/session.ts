@@ -21,7 +21,7 @@ export class Session {
    */
   static async isLogin(): Promise<boolean> {
     const result = await Session.getCurrentUser();
-    if (result === null) {
+    if (result === undefined) {
       return Promise.reject(false);
     }
     return true;

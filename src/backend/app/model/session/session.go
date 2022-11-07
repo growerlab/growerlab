@@ -4,17 +4,6 @@ import (
 	"github.com/growerlab/growerlab/src/common/errors"
 )
 
-const TableName = "session"
-
-var columns = []string{
-	"id",
-	"owner_id",
-	"token",
-	"client_ip",
-	"created_at",
-	"expired_at",
-}
-
 func (m *model) Add(sess *Session) error {
 	values := []interface{}{
 		sess.OwnerID,

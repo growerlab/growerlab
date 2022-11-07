@@ -27,7 +27,6 @@ func Login(ctx *gin.Context, req *LoginBasicAuth) (
 	result *UserLoginResult,
 	err error,
 ) {
-
 	err = db.Transact(func(tx sqlx.Ext) error {
 		loginService := NewLoginService(ctx.ClientIP(), db.DB)
 		result, err = loginService.Do(req)
@@ -37,7 +36,7 @@ func Login(ctx *gin.Context, req *LoginBasicAuth) (
 		loginService.SetCookie(ctx)
 		return nil
 	})
-	return nil, errors.Trace(err)
+	return result, err
 }
 
 type LoginBasicAuth struct {
@@ -61,26 +60,26 @@ func NewLoginService(ip string, tx sqlx.Ext) *LoginService {
 }
 
 func (l *LoginService) SetCookie(ctx *gin.Context) {
-	ctx.SetCookie(tokenField, l.session.Token, 0, "/", ctx.Request.Host, false, false)
+	ctx.SetCookie(tokenField, l.session.Token, 0, "/", "*", false, false)
 }
 
-func (l *LoginService) Do(auth *LoginBasicAuth) (
+func (r *LoginService) Do(auth *LoginBasicAuth) (
 	result *UserLoginResult,
 	err error,
 ) {
-	user, err := l.Verify(auth)
+	user, err := r.Verify(auth)
 	if err != nil {
 		return nil, err
 	}
 
-	err = userModel.UpdateLogin(l.tx, user.ID, l.ip)
+	err = userModel.UpdateLogin(r.tx, user.ID, r.ip)
 	if err != nil {
 		return nil, errors.Trace(err)
 	}
 
 	// 生成TOKEN返回给客户端
-	l.session = l.buildAuthSession(user.ID, l.ip)
-	err = sessionModel.New(l.tx).Add(l.session)
+	r.session = r.buildAuthSession(user.ID, r.ip)
+	err = sessionModel.New(r.tx).Add(r.session)
 	if err != nil {
 		return nil, errors.Trace(err)
 	}
@@ -88,7 +87,7 @@ func (l *LoginService) Do(auth *LoginBasicAuth) (
 	// namespace
 	ns := user.Namespace()
 	result = &UserLoginResult{
-		Token:         l.session.Token,
+		Token:         r.session.Token,
 		NamespacePath: ns.Path,
 		Name:          user.Name,
 		Email:         user.Email,

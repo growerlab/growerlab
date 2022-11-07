@@ -5,6 +5,26 @@ import (
 	"github.com/growerlab/growerlab/src/common/db"
 )
 
+var tableName = "user"
+var tableNameMark = "`user`" // user 是 pgsql中的保留关键字，所以加上引号
+
+var columns = []string{
+	"id",
+	"email",
+	"encrypted_password",
+	"username",
+	"name",
+	"public_email",
+	"created_at",
+	"deleted_at",
+	"verified_at",
+	"last_login_at",
+	"last_login_ip",
+	"register_ip",
+	"is_admin",
+	"namespace_id",
+}
+
 type User struct {
 	ID                int64   `db:"id"`
 	Email             string  `db:"email"`
