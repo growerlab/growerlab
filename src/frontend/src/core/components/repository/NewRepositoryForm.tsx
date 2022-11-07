@@ -98,7 +98,7 @@ export function NewRepositoryForm(props: IProps) {
         <EuiSwitch
           name={"public"}
           label=""
-          checked={privateChecked}
+          checked={!privateChecked}
           onChange={(e) => {
             setPrivateChecked(!privateChecked);
             setValue("public", !privateChecked);
