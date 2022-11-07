@@ -3,7 +3,6 @@
 package db
 
 import (
-	"github.com/growerlab/growerlab/src/common/errors"
 	"net"
 	"strconv"
 	"strings"
@@ -11,6 +10,7 @@ import (
 
 	"github.com/go-redis/redis/v7"
 	"github.com/growerlab/growerlab/src/common/configurator"
+	"github.com/growerlab/growerlab/src/common/errors"
 )
 
 const KeySep = ":"

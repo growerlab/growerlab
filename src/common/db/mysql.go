@@ -6,12 +6,10 @@ import (
 	"io"
 	"runtime/debug"
 
-	"github.com/growerlab/growerlab/src/common/errors"
-
-	"github.com/growerlab/growerlab/src/common/configurator"
-
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/growerlab/growerlab/src/backend/app/utils/logger"
+	"github.com/growerlab/growerlab/src/common/configurator"
+	"github.com/growerlab/growerlab/src/common/errors"
 	"github.com/jmoiron/sqlx"
 )
 
