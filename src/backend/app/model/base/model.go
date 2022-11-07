@@ -2,9 +2,9 @@ package base
 
 import (
 	"fmt"
-	"github.com/growerlab/growerlab/src/common/errors"
 
 	sq "github.com/Masterminds/squirrel"
+	"github.com/growerlab/growerlab/src/common/errors"
 	"github.com/jmoiron/sqlx"
 )
 
