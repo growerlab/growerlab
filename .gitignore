@@ -17,3 +17,4 @@ data/logs/*.log
 
 src/router/router
 src/conf/**/update
+src/vendor

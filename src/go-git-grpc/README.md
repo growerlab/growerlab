@@ -8,6 +8,8 @@
 
 #### 测试
 
+test 目录
+
 - 执行 `test/init.sh` 初始化测试仓库
 - 执行 `test/test.go` 测试grpc的go-git
 - 执行 `test/test_door` 测试grpc的git推、拉

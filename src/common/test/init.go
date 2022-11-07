@@ -6,15 +6,20 @@ import (
 	"time"
 
 	"github.com/growerlab/growerlab/src/common"
-
 	"github.com/growerlab/growerlab/src/common/configurator"
+	"github.com/growerlab/growerlab/src/common/db"
+	"github.com/growerlab/growerlab/src/common/permission"
 	gggrpc "github.com/growerlab/growerlab/src/go-git-grpc"
 )
 
 func InitForTest() {
-	start(initChdir)
-	start(configurator.InitConfig)
-	start(runGitServer)
+	onStart(initChdir)
+	onStart(configurator.InitConfig)
+	onStart(db.InitMemDB)
+	onStart(db.InitDatabase)
+	onStart(permission.InitPermission)
+
+	onStart(runGitServer)
 }
 
 func initChdir() error {
@@ -34,7 +39,7 @@ func runGitServer() error {
 	return nil
 }
 
-func start(f func() error) {
+func onStart(f func() error) {
 	if err := f(); err != nil {
 		panic(err)
 	}
