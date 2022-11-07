@@ -17,9 +17,9 @@ export function Item(props: Args) {
   const [path, setPath] = useState(repoPath(repo.owner.namespace, repo.path));
 
   useEffect(() => {
-    const currentUser = global.getUserInfo();
+    const currentUser = global.currentUser;
     if (currentUser !== undefined) {
-      if (currentUser.namespace_path == repo.owner.namespace) {
+      if (currentUser.namespace_path === repo.owner.namespace) {
         setPath(builtInRepoPath(repo.path));
       }
     }

@@ -19,8 +19,8 @@ export default function RepositoryShow() {
     return <Error404 />;
   }
 
-  const user = global.getUserInfo();
-  if (user == null) {
+  const currentUser = global.currentUser;
+  if (currentUser == null) {
     return <EuiLoadingSpinner size="xl" />;
   }
 
@@ -29,8 +29,8 @@ export default function RepositoryShow() {
       <UserLayout title={i18n.t("repository.menu")}>
         <React.Suspense fallback={<EuiLoadingSpinner size="xl" />}>
           <RepositoryDetail
-            currentUser={user}
-            ownerPath={user?.namespace_path}
+            currentUser={currentUser}
+            ownerPath={currentUser?.namespace_path}
             repoPath={repoPath}
           />
         </React.Suspense>

@@ -3,21 +3,20 @@ import { Notice, useNotice } from "./recoil/notice";
 
 export type globalTypes = {
   notice?: Notice;
-  getUserInfo: () => UserInfo | undefined;
+  currentUser?: UserInfo;
 };
 
 export let global: globalTypes;
 
 export const setup = () => {
   global = {
-    getUserInfo: () => undefined,
+    currentUser: undefined
   };
   return;
 };
 
 export function useGlobal(): globalTypes {
   global.notice = useNotice();
-  global.getUserInfo = Session.getUserInfo;
-
+  global.currentUser = Session.getCurrentUser()
   return global;
 }

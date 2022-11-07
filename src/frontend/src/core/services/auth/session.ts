@@ -20,7 +20,7 @@ export class Session {
    * 用户是否登录
    */
   static async isLogin(): Promise<boolean> {
-    const result = await Session.getUserInfo();
+    const result = await Session.getCurrentUser();
     if (result === null) {
       return Promise.reject(false);
     }
@@ -50,19 +50,18 @@ export class Session {
   /**
    * 获取用户信息
    */
-  static getUserInfo(): UserInfo {
+  static getCurrentUser(): UserInfo | undefined {
     const info = localStorage.getItem(AuthUserToken);
-
     if (info === null) {
-      console.error("not found user info");
-      throw new Error();
+      console.error("Not found logined user");
+      return undefined;
     }
     try {
       return JSON.parse(info) as UserInfo;
     } catch (error) {
       Session.logout();
-      console.warn("Can't parse json for login info.");
-      throw new Error();
+      console.error("Can't parse json for login info.");
+      return undefined;
     }
   }
 }
