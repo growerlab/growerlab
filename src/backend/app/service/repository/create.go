@@ -118,6 +118,11 @@ func validateAndPrepare(src sqlx.Queryer, userID int64, req *NewRepositoryPayloa
 	}
 
 	// 验证仓库名是否合法
+	// 1. 不能允许以 .. 符号开始（安全问题）
+	// 2. 其余以 regex.RepositoryNameRegex 规则为准
+	if strings.Index(req.Name, "..") == 0 {
+		return nil, errors.InvalidParameterError(errors.Repository, errors.Name, errors.Invalid)
+	}
 	if !regex.Match(req.Name, regex.RepositoryNameRegex) {
 		return nil, errors.InvalidParameterError(errors.Repository, errors.Name, errors.Invalid)
 	}

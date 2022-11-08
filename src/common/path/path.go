@@ -32,9 +32,7 @@ func ParseRepositoryPath(pathGroup string) (repoOwner, repoName, repoPath string
 		}
 	}()
 
-	paths := strings.FieldsFunc(pathGroup, func(r rune) bool {
-		return r == rune('/') || r == rune('.')
-	})
+	paths := strings.SplitN(pathGroup, "/", 1)
 	if len(paths) < 2 {
 		panic(errors.Errorf("invalid repo path: %s", pathGroup))
 	}
