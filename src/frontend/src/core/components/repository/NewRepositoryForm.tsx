@@ -75,13 +75,12 @@ export function NewRepositoryForm(props: IProps) {
       >
         <EuiFieldText
           type={"text"}
-          icon={"editorCodeBlock"}
           isInvalid={false}
           onChange={(e) => {
             setValue("name", e.target.value, { shouldValidate: true });
             if (e.target.value.indexOf("..") === 0) {
               setError("name", {
-                type: "onChange",
+                type: "value",
                 message: i18n.t<string>("repository.tooltip.name"),
               });
             }
