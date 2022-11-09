@@ -12,6 +12,6 @@ type Context struct {
 }
 
 type DBContext struct {
-	Src   sqlx.Queryer
+	Src   sqlx.Ext
 	MemDB *db.MemDBClient
 }

@@ -25,7 +25,7 @@ func GetRepository(repoOwner, repoName string) (*repoModel.Repository, error) {
 		key,
 		field,
 		func() (value string, err error) {
-			repo, err := repoModel.GetRepositoryByNsWithPath(db.DB, repoOwnerNS, repoName)
+			repo, err := repoModel.New(db.DB).GetRepositoryByNsWithPath(repoOwnerNS, repoName)
 			if err != nil {
 				return "", err
 			}
@@ -43,5 +43,5 @@ func GetRepository(repoOwner, repoName string) (*repoModel.Repository, error) {
 		return nil, errors.Trace(err)
 	}
 
-	return repoModel.GetRepository(db.DB, repoID)
+	return repoModel.New(db.DB).GetRepository(repoID)
 }

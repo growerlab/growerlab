@@ -13,7 +13,7 @@ func InitPermission() error {
 	return InitPermissionHub(db.DB, db.MemDB)
 }
 
-func InitPermissionHub(dbSrc sqlx.Queryer, memDB *db.MemDBClient) error {
+func InitPermissionHub(dbSrc sqlx.Ext, memDB *db.MemDBClient) error {
 	permHub = NewPermissionHub(dbSrc, memDB)
 
 	if err := initRules(); err != nil {

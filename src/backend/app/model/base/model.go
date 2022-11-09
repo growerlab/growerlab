@@ -35,13 +35,10 @@ func (m *Model) IgnoreDefaultTerms() {
 	m.ignoreDefaultTerms = true
 }
 
-func (m *Model) Select(term sq.Sqlizer) *Selector {
+func (m *Model) Select() *Selector {
 	where := sq.And{}
 	if m.defaultTerms != nil && !m.ignoreDefaultTerms {
 		where = append(where, m.defaultTerms...)
-	}
-	if term != nil {
-		where = append(where, term)
 	}
 
 	table := m.getTable()

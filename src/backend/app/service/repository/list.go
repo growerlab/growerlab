@@ -21,7 +21,7 @@ func ListRepositories(c *gin.Context, namespace string) ([]*repositoryModel.Repo
 		return nil, errors.NotFoundError(errors.Namespace)
 	}
 
-	repositories, err := repositoryModel.ListRepositoriesByNamespace(db.DB, ns.ID)
+	repositories, err := repositoryModel.New(db.DB).ListRepositoriesByNamespace(ns.ID)
 	if err != nil {
 		return nil, err
 	}

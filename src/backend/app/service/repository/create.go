@@ -54,7 +54,7 @@ func DoCreateRepository(currentUser *user.User, req *NewRepositoryPayload) error
 			return errors.Trace(err)
 		}
 
-		err = repository.AddRepository(tx, repo)
+		err = repository.New(tx).AddRepository(repo)
 		if err != nil {
 			return errors.Trace(err)
 		}
@@ -94,7 +94,7 @@ func buildRepository(
 //
 //	req.NamespacePath  TODO 这里暂时只验证namespace的owner_id 是否为用户，未来应该验证组织权限（比如是否可以选择这个组织创建仓库）
 //	req.Name 名称是否合法、是否重名
-func validateAndPrepare(src sqlx.Queryer, userID int64, req *NewRepositoryPayload) (ns *namespace.Namespace, err error) {
+func validateAndPrepare(src sqlx.Ext, userID int64, req *NewRepositoryPayload) (ns *namespace.Namespace, err error) {
 	req.NamespacePath = strings.TrimSpace(req.NamespacePath)
 	req.Name = strings.TrimSpace(req.Name)
 	if len(req.NamespacePath) == 0 {
@@ -127,8 +127,8 @@ func validateAndPrepare(src sqlx.Queryer, userID int64, req *NewRepositoryPayloa
 		return nil, errors.InvalidParameterError(errors.Repository, errors.Name, errors.Invalid)
 	}
 
-	// 验证仓库名在当前namespace中是否已存在
-	exist, err := repository.NameExistInNamespace(src, ns.ID, req.Name)
+	// 验证仓库名在repository.namespace中是否已存在
+	exist, err := repository.New(src).NameExists(ns.ID, req.Name)
 	if err != nil {
 		return nil, err
 	}

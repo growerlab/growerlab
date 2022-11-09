@@ -28,7 +28,7 @@ func GetRepository(c *gin.Context, namespace, path string) (*repositoryModel.Rep
 		return nil, errors.NotFoundError(errors.Namespace)
 	}
 
-	repo, err := repositoryModel.GetRepositoryByNsWithPath(db.DB, ns.ID, path)
+	repo, err := repositoryModel.New(db.DB).GetRepositoryByNsWithPath(ns.ID, path)
 	if err != nil {
 		return nil, err
 	}

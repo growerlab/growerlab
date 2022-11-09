@@ -5,10 +5,30 @@ import (
 	"net"
 	"strings"
 
+	"github.com/growerlab/growerlab/src/backend/app/model/base"
+	"github.com/jmoiron/sqlx"
+
 	"github.com/growerlab/growerlab/src/backend/app/model/namespace"
 	"github.com/growerlab/growerlab/src/backend/app/model/user"
 	"github.com/growerlab/growerlab/src/common/configurator"
 	"github.com/growerlab/growerlab/src/common/db"
+)
+
+var (
+	tableName = "repository"
+	columns   = []string{
+		"id",
+		"uuid",
+		"path",
+		"name",
+		"namespace_id",
+		"owner_id",
+		"description",
+		"created_at",
+		"server_id",
+		"server_path",
+		"public",
+	}
 )
 
 type Repository struct {
@@ -84,4 +104,16 @@ func (r *Repository) GitSshURL() string {
 	sb.WriteString(r.PathGroup())
 	sb.WriteString(".git")
 	return sb.String()
+}
+
+type model struct {
+	*base.Model
+	src sqlx.Ext
+}
+
+func New(src sqlx.Ext) *model {
+	return &model{
+		src:   src,
+		Model: base.NewModel(src, tableName, nil),
+	}
 }

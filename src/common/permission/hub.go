@@ -46,7 +46,7 @@ type Hub struct {
 	DBCtx *context.DBContext
 }
 
-func NewPermissionHub(src sqlx.Queryer, memDB *db.MemDBClient) *Hub {
+func NewPermissionHub(src sqlx.Ext, memDB *db.MemDBClient) *Hub {
 	return &Hub{
 		DBCtx: &context.DBContext{
 			Src:   src,
