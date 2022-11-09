@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   EuiFieldText,
   EuiForm,
@@ -7,38 +7,36 @@ import {
   EuiSwitch,
   EuiButton,
 } from "@elastic/eui";
-import { useForm, useWatch } from "react-hook-form";
+import { useForm } from "react-hook-form";
 
 import i18n from "../../i18n/i18n";
 import { repositoryRules } from "../../api/rule";
-
-interface IFormNewRepository {
-  namespace_path: string;
-  name: string;
-  description: string;
-  public: boolean;
-}
+import {
+  Repository,
+  RepositoryRequest,
+} from "../../services/repository/repository";
+import { useGlobal } from "../../global/init";
 
 interface IProps {
   ownerPath: string;
 }
 
 export function NewRepositoryForm(props: IProps) {
+  const [isPublic, setPublic] = useState(true);
+  const { notice } = useGlobal();
   const {
     register,
     handleSubmit,
     setValue,
     setError,
-    control,
     formState: { errors, isValid },
-  } = useForm<IFormNewRepository>({
+  } = useForm<RepositoryRequest>({
     defaultValues: {
       namespace_path: props.ownerPath,
-      public: false,
+      public: true,
+      description: "",
     },
   });
-
-  const fields = useWatch({ control });
 
   register("name", {
     required: i18n.t<string>("notice.required"),
@@ -56,14 +54,14 @@ export function NewRepositoryForm(props: IProps) {
   });
   register("public");
 
-  useEffect(() => {
-    console.info(fields);
-  }, [fields]);
-
-  const onSubmit = (data: IFormNewRepository) => {
+  const onSubmit = (data: RepositoryRequest) => {
     console.log(data);
-    //       Message.Success(t("repository.tooltip.success"));
-    //       router.push(Router.User.Repository.List);
+
+    const service = new Repository(props.ownerPath);
+    service.create(data).then((res) => {
+      notice?.success(i18n.t("repository.tooltip.success"));
+      console.info(res);
+    });
   };
 
   return (
@@ -107,9 +105,10 @@ export function NewRepositoryForm(props: IProps) {
         <EuiSwitch
           name={"public"}
           label=""
-          checked={true}
+          checked={isPublic}
           onChange={(e) => {
-            setValue("public", !e.target.checked);
+            setPublic(e.target.checked);
+            setValue("public", e.target.checked);
             return;
           }}
         />

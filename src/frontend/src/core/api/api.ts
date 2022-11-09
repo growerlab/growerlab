@@ -13,6 +13,7 @@ export const API = {
   },
   Repositories: {
     Detail: dynamicRouter.new("/repositories/:ownerPath/detail/:repoPath"),
+    Create: dynamicRouter.new("/repositories/:ownerPath/create"),
   },
 };
 

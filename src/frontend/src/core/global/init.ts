@@ -10,13 +10,13 @@ export let global: globalTypes;
 
 export const setup = () => {
   global = {
-    currentUser: undefined
+    currentUser: undefined,
   };
   return;
 };
 
 export function useGlobal(): globalTypes {
   global.notice = useNotice();
-  global.currentUser = Session.getCurrentUser()
+  global.currentUser = Session.getCurrentUser();
   return global;
 }
