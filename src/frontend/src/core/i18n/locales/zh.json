@@ -73,7 +73,7 @@
       "NotFoundError": "未找到{model}",
       "AlreadyExists": "{model}{field}已存在",
       "AccessDeniedError": "禁止访问{model}, 因为{reason}",
-      "Unauthorized": "无权限，请登录后重试",
+      "UnauthorizedError": "无权限，请登录后重试",
       "PermissionError": "权限错误, 因为{reason}",
       "RepositoryError": "创建仓库失败, 因为{reason}"
     },

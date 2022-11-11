@@ -24,7 +24,7 @@ const (
 	// sql错误
 	sqlError = "SQLError"
 	// 未登录
-	unauthorized = "Unauthorized"
+	unauthorizedError = "UnauthorizedError"
 	// PermissionError
 	permissionError = "PermissionError"
 	// 仓库
@@ -66,7 +66,7 @@ var httpCodeSet = map[string]int{
 	alreadyExists:     409,
 	accessDeniedError: 403,
 	sqlError:          500,
-	unauthorized:      401,
+	unauthorizedError: 401,
 	permissionError:   403,
 	repositoryError:   500,
 	timeoutError:      408,
@@ -112,7 +112,7 @@ func GraphQLError() error {
 }
 
 func UnauthorizedError() error {
-	return mustCode(nil, unauthorized)
+	return mustCode(nil, unauthorizedError)
 }
 
 func AccessDenied(model, reason string) error {
