@@ -8,18 +8,20 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/growerlab/growerlab/src/backend/app/common/notify"
 	"github.com/growerlab/growerlab/src/backend/app/controller"
+	"github.com/growerlab/growerlab/src/backend/app/controller/middleware"
 	"github.com/growerlab/growerlab/src/common/configurator"
 )
 
 func Run(addr string) error {
 	engine := gin.Default()
 
-	engine.Use(controller.CORSForLocal)
+	engine.Use(middleware.CORSForLocal)
 
-	apiV1 := engine.Group("/api/v1", controller.LimitGETRequestBody)
+	apiV1 := engine.Group("/api/v1", middleware.LimitGETRequestBody)
+
 	repositories := apiV1.Group("/repositories")
 	{
-		repositories.POST("/:namespace/create", controller.CreateRepository)
+		repositories.POST("/:namespace/create", middleware.Authenticate, controller.CreateRepository)
 		repositories.GET("/:namespace/list", controller.Repositories)
 		repositories.GET("/:namespace/detail/:name", controller.Repository)
 	}

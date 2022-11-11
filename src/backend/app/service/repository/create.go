@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"path/filepath"
 	"strings"
 	"time"
 
@@ -16,6 +17,7 @@ import (
 	"github.com/growerlab/growerlab/src/backend/app/utils/uuid"
 	"github.com/growerlab/growerlab/src/common/db"
 	"github.com/growerlab/growerlab/src/common/errors"
+	"github.com/growerlab/growerlab/src/common/path"
 	"github.com/jmoiron/sqlx"
 )
 
@@ -75,16 +77,17 @@ func buildRepository(
 	req *NewRepositoryPayload,
 	srv *server.Server,
 ) (repo *repository.Repository) {
+	serverPath := path.GetRelativeRepositoryPath(filepath.Join(ns.Path, req.Name))
 	repo = &repository.Repository{
 		NamespaceID: ns.ID,
 		UUID:        uuid.UUIDv16(),
 		Path:        req.Name,
 		Name:        req.Name,
 		OwnerID:     currentUser.ID,
-		Description: "",
+		Description: req.Description,
 		CreatedAt:   time.Now().Unix(),
 		ServerID:    srv.ID,
-		ServerPath:  UsernameToFilePath(ns.Path, req.Name),
+		ServerPath:  serverPath,
 		Public:      req.Public,
 	}
 	return repo

@@ -7,6 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 	sessionModel "github.com/growerlab/growerlab/src/backend/app/model/session"
 	userModel "github.com/growerlab/growerlab/src/backend/app/model/user"
+	"github.com/growerlab/growerlab/src/backend/app/service/common/session"
 	"github.com/growerlab/growerlab/src/backend/app/utils/pwd"
 	"github.com/growerlab/growerlab/src/backend/app/utils/uuid"
 	"github.com/growerlab/growerlab/src/common/db"
@@ -16,7 +17,6 @@ import (
 )
 
 const TokenExpiredTime = 24 * time.Hour * 30 // 30天过期
-const tokenField = "auth-user-token"
 
 // Login 用户登录
 //
@@ -59,8 +59,8 @@ func NewLoginService(ip string, tx sqlx.Ext) *LoginService {
 	}
 }
 
-func (l *LoginService) SetCookie(ctx *gin.Context) {
-	ctx.SetCookie(tokenField, l.session.Token, 0, "/", "*", false, false)
+func (r *LoginService) SetCookie(ctx *gin.Context) {
+	ctx.SetCookie(session.AuthUserToken, r.session.Token, 0, "/", "*", false, false)
 }
 
 func (r *LoginService) Do(auth *LoginBasicAuth) (

@@ -2,6 +2,7 @@ import axios, { AxiosInstance, AxiosResponse } from "axios";
 import i18n from "../i18n/i18n";
 import { Notice } from "../global/recoil/notice";
 import { dynamicRouter } from "../../config/router";
+import { Session } from "../services/auth/session";
 
 const baseUrl = "http://localhost:8081/api/v1";
 
@@ -27,14 +28,16 @@ export interface Result {
  * @returns {AxiosInstance}
  */
 export const request = function (notice: Notice): AxiosInstance {
+  const user = Session.getCurrentUser();
   const instance = axios.create({
     baseURL: baseUrl,
     timeout: 2000,
     timeoutErrorMessage: i18n.t("api.timeout"),
     // responseType: "json",
-    // headers: {
-    //   'Content-Type': 'application/json',
-    // },
+    headers: {
+      // 'Content-Type': 'application/json',
+      "Auth-User-Token": user?.token || "",
+    },
     validateStatus: function (status: number): boolean {
       return status >= 200 && status <= 500;
     },

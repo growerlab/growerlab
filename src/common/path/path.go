@@ -1,7 +1,6 @@
 package path
 
 import (
-	"log"
 	"path/filepath"
 	"strings"
 
@@ -26,13 +25,7 @@ func GetRelativeRepositoryPath(pathGroup string) string {
 // ParseRepositoryPath 根据 namespace/username 解析出原始的相对路径
 // 加上 config.yaml 中的 git_repo_dir 配置值，即可拿到真实的仓库地址
 func ParseRepositoryPath(pathGroup string) (repoOwner, repoName, repoPath string) {
-	defer func() {
-		if e := recover(); e != nil {
-			log.Println("build repo info was err: ", e)
-		}
-	}()
-
-	paths := strings.SplitN(pathGroup, "/", 1)
+	paths := strings.SplitN(pathGroup, "/", 2)
 	if len(paths) < 2 {
 		panic(errors.Errorf("invalid repo path: %s", pathGroup))
 	}

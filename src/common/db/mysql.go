@@ -56,7 +56,7 @@ func Transact(txFn func(tx sqlx.Ext) error) (err error) {
 			}
 		}
 		if err != nil {
-			DB.Println("rollback")
+			logger.Warn("rollback")
 			_ = txa.Rollback()
 			return
 		}

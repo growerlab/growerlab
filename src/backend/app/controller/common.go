@@ -8,20 +8,6 @@ import (
 	"github.com/growerlab/growerlab/src/common/errors"
 )
 
-const (
-	MaxGraphQLRequestBody = int64(1 << 20) // 1MB
-)
-
-func LimitGETRequestBody(ctx *gin.Context) {
-	if ctx.Request.Method != http.MethodGet {
-		return
-	}
-	if ctx.Request.ContentLength > MaxGraphQLRequestBody {
-		ctx.AbortWithStatus(http.StatusRequestEntityTooLarge)
-		return
-	}
-}
-
 func Render(c *gin.Context, payload interface{}, err error) {
 	if err != nil {
 		cerr := errors.Cause(err)
@@ -46,20 +32,4 @@ func Render(c *gin.Context, payload interface{}, err error) {
 	c.AbortWithStatusJSON(http.StatusOK, &errors.Result{
 		Code: "ok",
 	})
-}
-
-// CORSForLocal 处理本地访问的CORS
-func CORSForLocal(c *gin.Context) {
-	// if !conf.GetConf().Debug {
-	// 	return
-	// }
-	reqAccessHeaders := c.Request.Header.Get("Access-Control-Request-Headers")
-
-	c.Header("Access-Control-Allow-Origin", "*")
-	c.Header("Access-Control-Allow-Methods", "GET,POST,PUT,PATCH,DELETE,OPTIONS")
-	c.Header("Access-Control-Allow-Headers", reqAccessHeaders)
-	if c.Request.Method == http.MethodOptions {
-		c.AbortWithStatus(http.StatusNoContent)
-	}
-	c.Next()
 }

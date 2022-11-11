@@ -1,5 +1,4 @@
 import { Router } from "../../../config/router";
-import { redirect } from "react-router-dom";
 
 const AuthUserToken = "auth-user-token";
 
@@ -41,7 +40,7 @@ export class Session {
     localStorage.removeItem(AuthUserToken);
     if (callback === undefined) {
       callback = () => {
-        redirect(Router.Home.Login);
+        location.href = Router.Home.Login;
       };
     }
     callback?.();

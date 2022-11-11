@@ -39,8 +39,12 @@ type Repository struct {
 }
 
 func (r *Repository) Create() error {
+	if !path.CheckRepoAbsPathIsEffective(r.repoAbsPath) {
+		return errors.Errorf("invalid repo path: %s, not in root dir", r.pathGroup)
+	}
+
 	if exists := r.Exists(); exists {
-		return ErrRepositoryExists
+		return errors.AlreadyExistsError(errors.Repository, errors.AlreadyExists)
 	}
 
 	var out bytes.Buffer
@@ -63,6 +67,7 @@ func (r *Repository) Delete() error {
 func (r *Repository) Exists() bool {
 	var out bytes.Buffer
 	err := r.runCommand("stat", []string{r.repoAbsPath}, nil, &out)
+	logger.Info("stat: '%s' %s", r.repoAbsPath, out.String())
 	if err == nil {
 		return true
 	}
