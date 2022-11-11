@@ -31,7 +31,7 @@ type NewRepositoryPayload struct {
 func CreateRepository(c *gin.Context, req *NewRepositoryPayload) error {
 	currentUser := session.New(c).User()
 	if currentUser == nil {
-		return errors.Unauthorize()
+		return errors.UnauthorizedError()
 	}
 	return DoCreateRepository(currentUser, req)
 }

@@ -111,7 +111,7 @@ func GraphQLError() error {
 	return mustCode(nil, graphQLError)
 }
 
-func Unauthorize() error {
+func UnauthorizedError() error {
 	return mustCode(nil, unauthorized)
 }
 
