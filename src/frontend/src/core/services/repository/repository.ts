@@ -1,35 +1,35 @@
 import { AxiosResponse } from "axios";
 
-import { TypeRepository } from "./types";
+import { TypeRepository } from "../../common/types";
 import { global } from "../../global/init";
 import { API, request } from "../../api/api";
 
 export interface RepositoryRequest {
-  namespace_path: string;
+  namespace: string;
   name: string;
   description: string;
   public: boolean;
 }
 
 export class Repository {
-  ownerPath: string;
+  namespace: string;
 
-  constructor(ownerPath: string) {
-    this.ownerPath = ownerPath;
+  constructor(namespace: string) {
+    this.namespace = namespace;
   }
 
   create(req: RepositoryRequest): Promise<AxiosResponse> {
-    const url = API.Repositories.Create.render({ ownerPath: this.ownerPath });
+    const url = API.Repositories.Create.render({ namespace: this.namespace });
     return request(global.notice!).post<RepositoryRequest, AxiosResponse>(
       url,
       req
     );
   }
 
-  get(repoPath: string): Promise<AxiosResponse<TypeRepository>> {
+  get(repo: string): Promise<AxiosResponse<TypeRepository>> {
     const url = API.Repositories.Detail.render({
-      ownerPath: this.ownerPath,
-      repoPath: repoPath,
+      namespace: this.namespace,
+      repo: repo,
     });
     return request(global.notice!).get<
       TypeRepository,
@@ -50,11 +50,17 @@ const mockRepositories: TypeRepository[] = [
       path: "repo1",
       description:
         "这是一个仓库描述这是一个仓库描述这是一个仓库描述这是一个仓库描述;这是一个仓库描述；这是一个仓库描述",
-      createdAt: 1222,
+      created_at: 1222,
       public: true,
-      // pathGroup: "123123/sdfsdf",
-      gitHttpURL: "",
-      gitSshURL: "",
+      namespace: {
+        path: 'admin',
+        owner: {
+          name: 'admin',
+          namespace: 'admin',
+        }
+      },
+      git_http_url: "",
+      git_ssh_url: "",
       owner: {
         name: "moli",
         namespace: "admin",

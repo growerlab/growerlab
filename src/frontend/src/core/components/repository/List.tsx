@@ -3,20 +3,17 @@ import { Link } from "react-router-dom";
 
 import { Router } from "../../../config/router";
 import { Item } from "./Item";
-import {
-  RepositoriesArgs,
-  TypeRepository,
-} from "../../services/repository/types";
+import { RepositoriesNamespace, TypeRepository } from "../../common/types";
 import { Repository } from "../../services/repository/repository";
 import { EuiButton, EuiIcon, EuiEmptyPrompt } from "@elastic/eui";
 import { useGlobal } from "../../global/init";
 
-export function RepositoryList(props: RepositoriesArgs) {
-  const { ownerPath } = props;
+export function RepositoryList(props: RepositoriesNamespace) {
+  const { namespace } = props;
   // const [initLoading, setInitLoading] = useState(false);
   const global = useGlobal();
 
-  const repo = new Repository(ownerPath);
+  const repo = new Repository(namespace);
   const repoData = repo.list();
 
   if (repoData === null) {

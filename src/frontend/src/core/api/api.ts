@@ -3,6 +3,7 @@ import i18n from "../i18n/i18n";
 import { Notice } from "../global/recoil/notice";
 import { dynamicRouter } from "../../config/router";
 import { Session } from "../services/auth/session";
+import { RepositoriesNamespace, RepositoryPathGroup } from "../common/types";
 
 const baseUrl = "http://localhost:8081/api/v1";
 
@@ -13,8 +14,8 @@ export const API = {
     Register: "/auth/register",
   },
   Repositories: {
-    Detail: dynamicRouter.new("/repositories/:ownerPath/detail/:repoPath"),
-    Create: dynamicRouter.new("/repositories/:ownerPath/create"),
+    Detail: dynamicRouter.new<RepositoryPathGroup>("/repositories/:namespace/detail/:repo"),
+    Create: dynamicRouter.new<RepositoriesNamespace>("/repositories/:namespace/create"),
   },
 };
 

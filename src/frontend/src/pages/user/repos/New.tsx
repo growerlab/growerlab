@@ -7,7 +7,7 @@ import { NewRepositoryForm } from "../../../core/components/repository/NewReposi
 import Title from "../../../core/components/common/Title";
 import { useGlobal } from "../../../core/global/init";
 
-export default function RepositoryNew(props: React.PropsWithChildren<any>) {
+export default function RepositoryNew() {
   useTitle(getTitle(i18n.t("repository.create_repository")));
   const { currentUser } = useGlobal();
   if (currentUser === undefined) return <></>;
@@ -15,7 +15,7 @@ export default function RepositoryNew(props: React.PropsWithChildren<any>) {
   return (
     <div>
       <Title title={i18n.t<string>("repository.create_repository")} />
-      <NewRepositoryForm ownerPath={currentUser.namespace_path} />
+      <NewRepositoryForm namespace={currentUser.namespace} />
     </div>
   );
 }

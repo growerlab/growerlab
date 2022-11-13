@@ -1,18 +1,24 @@
-export class dynamicRouter {
+import { RepositoryPath, RepositoryPathGroup } from "../core/common/types";
+
+type Params<T> = {
+  [key in keyof T]: string;
+};
+
+export class dynamicRouter<T> {
   private r: string;
 
   constructor(r: string) {
     this.r = r;
   }
 
-  static new(r: string): dynamicRouter {
+  static new<T>(r: string): dynamicRouter<T> {
     return new dynamicRouter(r);
   }
 
-  public render(params: any) {
+  public render(params: Params<T>) {
     return this.r.replace(
       /:([^/]+)/g,
-      (_: any, p: string | number) => params[p]
+      (_: unknown, p: keyof T) => params[p]
     );
   }
 
@@ -33,13 +39,13 @@ export const Router = {
     Repository: {
       Index: "/user/repos",
       New: "/user/repos/new",
-      Show: dynamicRouter.new("/user/repos/:repoPath"),
+      Show: dynamicRouter.new<RepositoryPath>("/user/repos/:repo"),
     },
     Project: {
       Index: "/user/projects",
     },
   },
   Namespace: {
-    Repository: dynamicRouter.new("/:namespacePath/:repoPath"),
+    Repository: dynamicRouter.new<RepositoryPathGroup>("/:namespace/:repo"),
   },
 };

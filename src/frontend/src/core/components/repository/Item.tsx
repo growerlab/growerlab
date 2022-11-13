@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { EuiHorizontalRule } from "@elastic/eui";
 
 import { repoIcon, repoPath, builtInRepoPath } from "./common";
-import { RepositoryEntity } from "../../services/repository/types";
+import { RepositoryEntity } from "../../common/types";
 import { globalTypes } from "../../global/init";
 
 interface Args {
@@ -19,7 +19,7 @@ export function Item(props: Args) {
   useEffect(() => {
     const currentUser = global.currentUser;
     if (currentUser !== undefined) {
-      if (currentUser.namespace_path === repo.owner.namespace) {
+      if (currentUser.namespace === repo.owner.namespace) {
         setPath(builtInRepoPath(repo.path));
       }
     }

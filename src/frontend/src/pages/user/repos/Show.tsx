@@ -1,40 +1,34 @@
 import React from "react";
 import { useTitle } from "react-use";
-import { EuiLoadingSpinner } from "@elastic/eui";
 import { useParams } from "react-router-dom";
 
-import UserLayout from "../../layouts/UserLayout";
 import { RepositoryDetail } from "../../../core/components/repository/RepositoryDetail";
 import { getTitle } from "../../../core/common/document";
-import i18n from "../../../core/i18n/i18n";
 import { useGlobal } from "../../../core/global/init";
+import i18n from "../../../core/i18n/i18n";
 import Error404 from "../../common/404";
 
 export default function RepositoryShow() {
+  useTitle(getTitle(i18n.t("repository.menu")));
   const global = useGlobal();
-  const { repoPath } = useParams();
+  const currentUser = global.currentUser;
+
+  let namespace = currentUser?.namespace;
+
+  const { repoPath, namespacePath } = useParams();
   useTitle(getTitle(repoPath));
 
-  if (repoPath === undefined) {
-    return <Error404 />;
+  if (namespacePath !== undefined) {
+    namespace = namespacePath;
   }
 
-  const currentUser = global.currentUser;
-  if (currentUser == null) {
-    return <EuiLoadingSpinner size="xl" />;
+  if (repoPath === undefined || namespace === undefined) {
+    return <Error404 />;
   }
 
   return (
     <div>
-      <UserLayout title={i18n.t("repository.menu")}>
-        <React.Suspense fallback={<EuiLoadingSpinner size="xl" />}>
-          <RepositoryDetail
-            currentUser={currentUser}
-            ownerPath={currentUser?.namespace_path}
-            repoPath={repoPath}
-          />
-        </React.Suspense>
-      </UserLayout>
+      <RepositoryDetail namespace={namespace} repo={repoPath} />
     </div>
   );
 }

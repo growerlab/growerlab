@@ -87,11 +87,11 @@ func (r *LoginService) Do(auth *LoginBasicAuth) (
 	// namespace
 	ns := user.Namespace()
 	result = &UserLoginResult{
-		Token:         r.session.Token,
-		NamespacePath: ns.Path,
-		Name:          user.Name,
-		Email:         user.Email,
-		PublicEmail:   user.PublicEmail,
+		Token:       r.session.Token,
+		Namespace:   ns.Path,
+		Name:        user.Name,
+		Email:       user.Email,
+		PublicEmail: user.PublicEmail,
 	}
 	return result, nil
 }

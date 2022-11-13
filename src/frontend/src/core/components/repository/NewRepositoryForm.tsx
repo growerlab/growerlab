@@ -8,6 +8,7 @@ import {
   EuiButton,
 } from "@elastic/eui";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 
 import i18n from "../../i18n/i18n";
 import { repositoryRules } from "../../api/rule";
@@ -16,13 +17,12 @@ import {
   RepositoryRequest,
 } from "../../services/repository/repository";
 import { useGlobal } from "../../global/init";
+import { Router } from "../../../config/router";
+import { Namespace } from "../../common/types";
 
-interface IProps {
-  ownerPath: string;
-}
-
-export function NewRepositoryForm(props: IProps) {
+export function NewRepositoryForm(props: Namespace) {
   const [isPublic, setPublic] = useState(true);
+  const navigate = useNavigate();
   const { notice } = useGlobal();
   const {
     register,
@@ -32,7 +32,7 @@ export function NewRepositoryForm(props: IProps) {
     formState: { errors, isValid },
   } = useForm<RepositoryRequest>({
     defaultValues: {
-      namespace_path: props.ownerPath,
+      namespace: props.namespace,
       public: true,
       description: "",
     },
@@ -57,10 +57,11 @@ export function NewRepositoryForm(props: IProps) {
   const onSubmit = (data: RepositoryRequest) => {
     console.log(data);
 
-    const service = new Repository(props.ownerPath);
+    const service = new Repository(props.namespace);
     service.create(data).then((res) => {
       notice?.success(i18n.t("repository.tooltip.success"));
       console.info(res);
+      navigate(Router.User.Repository.Show.render({ repo: data.name }));
     });
   };
 

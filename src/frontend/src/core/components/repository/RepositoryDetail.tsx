@@ -1,3 +1,4 @@
+import React, { Fragment, useState } from "react";
 import {
   EuiSpacer,
   EuiTab,
@@ -5,41 +6,18 @@ import {
   EuiTabs,
   EuiText,
 } from "@elastic/eui";
-import React, { Fragment, useEffect, useState } from "react";
-import useSWR, { Fetcher } from "swr";
 
-import { UserInfo } from "../../services/auth/session";
-import { Repository } from "../../services/repository/repository";
-import {
-  RepositoryArgs,
-  RepositoryEntity,
-} from "../../services/repository/types";
+import { RepositoryPathGroup, RepositoryEntity } from "../../common/types";
 import { repoIcon } from "./common";
+import { useGetRepository } from "../hook/repository";
 
-interface RepositoryDetailProps extends RepositoryArgs {
-  currentUser?: UserInfo; // 当前登录的用户，不一定是仓库的所有者
-}
-
-const fetcher: Fetcher<RepositoryEntity, RepositoryArgs> = (
-  args: RepositoryArgs
-) => {
-  const repo = new Repository(args.ownerPath);
-  return repo.get(args.repoPath).then((res) => {
-    return res.data.repository;
-  });
-};
-
-export function RepositoryDetail(props: RepositoryDetailProps) {
-  const { ownerPath, repoPath } = props;
+export function RepositoryDetail(props: RepositoryPathGroup) {
+  const { namespace, repo } = props;
   const [currentTab, setCurrentTab] = useState("code");
   const [repository, setRepository] = useState<RepositoryEntity>();
 
-  const { data } = useSWR<RepositoryEntity>(
-    { ownerPath: ownerPath, repoPath: repoPath },
-    fetcher,
-    { suspense: true }
-  );
-  setRepository(data);
+  const repoEntity = useGetRepository({ namespace: namespace, repo: repo });
+  repoEntity.then((data) => setRepository(data));
 
   // const repo = new Repository(ownerPath);
   // repo.get(repoPath).then((res) => {

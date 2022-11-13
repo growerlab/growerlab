@@ -13,7 +13,7 @@ export default function RepositoryIndex() {
 
   return (
     <>
-      <RepositoryList ownerPath={currentUser.namespace_path} />
+      <RepositoryList namespace={currentUser.namespace} />
     </>
   );
 }

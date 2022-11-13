@@ -22,10 +22,10 @@ import (
 )
 
 type NewRepositoryPayload struct {
-	NamespacePath string `json:"namespace_path"` // 命名空间的路径（这里要考虑某个人在组织下创建项目）
-	Name          string `json:"name"`
-	Public        bool   `json:"public"`
-	Description   string `json:"description"`
+	Namespace   string `json:"namespace"` // 命名空间的路径（这里要考虑某个人在组织下创建项目）
+	Name        string `json:"name"`
+	Public      bool   `json:"public"`
+	Description string `json:"description"`
 }
 
 func CreateRepository(c *gin.Context, req *NewRepositoryPayload) error {
@@ -98,9 +98,9 @@ func buildRepository(
 //	req.NamespacePath  TODO 这里暂时只验证namespace的owner_id 是否为用户，未来应该验证组织权限（比如是否可以选择这个组织创建仓库）
 //	req.Name 名称是否合法、是否重名
 func validateAndPrepare(src sqlx.Ext, userID int64, req *NewRepositoryPayload) (ns *namespace.Namespace, err error) {
-	req.NamespacePath = strings.TrimSpace(req.NamespacePath)
+	req.Namespace = strings.TrimSpace(req.Namespace)
 	req.Name = strings.TrimSpace(req.Name)
-	if len(req.NamespacePath) == 0 {
+	if len(req.Namespace) == 0 {
 		err = errors.InvalidParameterError(errors.Namespace, errors.Path, errors.Invalid)
 		return
 	}
@@ -110,7 +110,7 @@ func validateAndPrepare(src sqlx.Ext, userID int64, req *NewRepositoryPayload) (
 		return
 	}
 
-	ns, err = namespace.GetNamespaceByPath(src, req.NamespacePath)
+	ns, err = namespace.GetNamespaceByPath(src, req.Namespace)
 	if err != nil {
 		return nil, err
 	}

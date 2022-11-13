@@ -4,7 +4,7 @@ const AuthUserToken = "auth-user-token";
 
 export interface UserInfo {
   token: string;
-  namespace_path: string;
+  namespace: string;
   email: string;
   name: string;
   public_email: string;

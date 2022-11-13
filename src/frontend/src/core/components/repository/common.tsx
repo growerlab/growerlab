@@ -1,6 +1,5 @@
 import React from "react";
-import { EuiIcon, EuiAvatar } from "@elastic/eui";
-import { Owner } from "../../services/repository/types";
+import { EuiAvatar } from "@elastic/eui";
 import { Router } from "../../../config/router";
 
 const repoPrivateIcon = (
@@ -16,14 +15,14 @@ export function repoIcon(pub: boolean) {
 
 export function builtInRepoPath(repoPath: string): string {
   return Router.User.Repository.Show.render({
-    repoPath: repoPath,
+    repo: repoPath,
   });
 }
 
 // 公共路径
 export function repoPath(namespace: string, repoPath: string): string {
   return Router.Namespace.Repository.render({
-    namespacePath: namespace,
-    repoPath: repoPath,
+    namespace: namespace,
+    repo: repoPath,
   });
 }
