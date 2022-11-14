@@ -39,7 +39,7 @@ export function useGetRepository(pg: RepositoryPathGroup): Promise<RepositoryEnt
     });
   };
 
-  const { data, error } = useSWR<RepositoryEntity>(`/swr/key/repo/${pg.namespace}/${pg.repo}`, fetcher);
+  const { data, error } = useSWR<RepositoryEntity>(`/swr/key/repo/${pg.namespace}/${pg.repo}`, fetcher, { revalidateOnFocus: false });
   if (error !== null)
     return Promise.reject(error)
   if (!data)

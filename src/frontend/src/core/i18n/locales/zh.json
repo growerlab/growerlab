@@ -61,6 +61,9 @@
   "project": {
     "menu": "项目"
   },
+  "thought": {
+    "menu": "思考"
+  },
   "api": {
     "timeout": "接口请求超时"
   },

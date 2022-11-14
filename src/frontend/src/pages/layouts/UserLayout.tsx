@@ -159,6 +159,15 @@ export default function UserLayout(props: any) {
                       className="inline"
                     />,
                   ],
+                  [
+                    i18n.t<string>("thought.menu"),
+                    Router.User.Project.Index,
+                    <EuiIcon
+                      type={"sessionViewer"}
+                      key={"project"}
+                      className="inline"
+                    />,
+                  ],
                 ].map(([title, href, icon]) => (
                   <MenuItem
                     key={title.toString()}
