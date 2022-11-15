@@ -11,7 +11,6 @@ export default function RepositoryShow() {
   useTitle(getTitle(i18n.t("repository.menu")));
 
   const { namespace, repo, isInvalid } = useRepositoryPathGroup();
-
   if (isInvalid) {
     return <Error404 />;
   }

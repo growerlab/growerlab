@@ -17,7 +17,10 @@ export function RepositoryDetail(props: RepositoryPathGroup) {
   const [repository, setRepository] = useState<RepositoryEntity>();
 
   const repoEntity = useGetRepository({ namespace: namespace, repo: repo });
-  repoEntity.then((data) => setRepository(data));
+  repoEntity.then((data) => {
+    console.info(data);
+    setRepository(data);
+  });
 
   // const repo = new Repository(ownerPath);
   // repo.get(repoPath).then((res) => {

@@ -53,11 +53,11 @@ const mockRepositories: TypeRepository[] = [
       created_at: 1222,
       public: true,
       namespace: {
-        path: 'admin',
+        path: "admin",
         owner: {
-          name: 'admin',
-          namespace: 'admin',
-        }
+          name: "admin",
+          namespace: "admin",
+        },
       },
       git_http_url: "",
       git_ssh_url: "",

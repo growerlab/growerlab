@@ -16,10 +16,7 @@ export class dynamicRouter<T> {
   }
 
   public render(params: Params<T>) {
-    return this.r.replace(
-      /:([^/]+)/g,
-      (_: unknown, p: keyof T) => params[p]
-    );
+    return this.r.replace(/:([^/]+)/g, (_: unknown, p: keyof T) => params[p]);
   }
 
   public string() {

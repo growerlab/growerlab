@@ -32,7 +32,7 @@ export interface TypeRepository {
 export interface Namespace {
   namespace: string;
 }
-export type RepositoriesNamespace = Namespace
+export type RepositoriesNamespace = Namespace;
 
 export interface RepositoryPath {
   repo: string; // repo path
