@@ -93,34 +93,11 @@ CREATE TABLE `repository` (
   `owner_id` int NOT NULL COMMENT '仓库创建者,fork后不变',
   `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '仓库描述',
   `created_at` bigint NOT NULL,
-  `server_id` int NOT NULL COMMENT '所属服务器id',
-  `server_path` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '在服务器中的物理路径',
   `public` tinyint(1) NOT NULL DEFAULT '1' COMMENT '是否公开',
   PRIMARY KEY (`id`),
   UNIQUE KEY `unq_namespace_path` (`namespace_id`,`path`),
-  KEY `idx_server` (`server_id`),
   KEY `idx_uuid` (`uuid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='仓库表';
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `server`
---
-
-DROP TABLE IF EXISTS `server`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `server` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `summary` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '说明备注',
-  `host` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '服务器host',
-  `port` int NOT NULL DEFAULT '9000',
-  `state` tinyint(1) NOT NULL DEFAULT '1' COMMENT '服务器状态 0关闭 1正常 2暂停',
-  `created_at` bigint NOT NULL,
-  `deleted_at` bigint DEFAULT NULL COMMENT '是否被删除',
-  PRIMARY KEY (`id`),
-  KEY `idx_host` (`host`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --

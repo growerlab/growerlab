@@ -16,7 +16,6 @@ func Run(addr string) error {
 	engine := gin.Default()
 
 	engine.Use(middleware.CORSForLocal)
-
 	apiV1 := engine.Group("/api/v1", middleware.LimitGETRequestBody)
 
 	repositories := apiV1.Group("/repositories")

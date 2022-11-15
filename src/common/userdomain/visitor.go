@@ -16,5 +16,5 @@ func (s *Visitor) Validate(*UserDomain) error {
 }
 
 func (s *Visitor) Eval(args Evaluable) ([]int64, error) {
-	return []int64{NamespaceVisitor}, nil
+	return []int64{AnonymousVisitor}, nil
 }

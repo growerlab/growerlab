@@ -1,8 +1,7 @@
 package userdomain
 
-//
 const (
-	NamespaceVisitor = -1 // 特殊命名空间：访客
+	AnonymousVisitor = -1 // 特殊用户id：访客
 )
 
 // 用户域

@@ -30,6 +30,6 @@ func (s *RepositoryOwner) Eval(args Evaluable) ([]int64, error) {
 		return result, nil
 	}
 
-	ownerNamespaceID := repo.Owner().NamespaceID
-	return []int64{ownerNamespaceID}, nil
+	ownerID := repo.Owner().ID
+	return []int64{ownerID}, nil
 }

@@ -64,6 +64,26 @@ func ListNamespacesByOwner(src sqlx.Queryer, userType NamespaceType, ownerIDs ..
 	return listNamespaceByCond(src, where)
 }
 
+func ListNamespaceByIDs(src sqlx.Queryer, ids ...int64) ([]*Namespace, error) {
+	where := sq.Eq{"id": ids}
+	return listNamespaceByCond(src, where)
+}
+
+func MapNamespacesByIDs(src sqlx.Queryer, ids ...int64) (map[int64]*Namespace, error) {
+	if len(ids) == 0 {
+		return nil, nil
+	}
+	ns, err := ListNamespaceByIDs(src, ids...)
+	if err != nil {
+		return nil, errors.Trace(err)
+	}
+	result := make(map[int64]*Namespace)
+	for _, n := range ns {
+		result[n.ID] = n
+	}
+	return result, nil
+}
+
 func listNamespaceByCond(src sqlx.Queryer, cond sq.Sqlizer) ([]*Namespace, error) {
 	sql, args, _ := sq.Select(columns...).From(table).Where(cond).ToSql()
 

@@ -10,7 +10,7 @@ import (
 	"github.com/growerlab/growerlab/src/mensa/app/common"
 )
 
-func GetNamespaceByOperator(operator *common.Operator) (int64, error) {
+func GetUserIDByOperator(operator *common.Operator) (int64, error) {
 	if operator.IsHttp() {
 		username := operator.HttpUser.Username()
 		password, pwdExists := operator.HttpUser.Password()
@@ -24,7 +24,7 @@ func GetNamespaceByOperator(operator *common.Operator) (int64, error) {
 		if err != nil {
 			return 0, errors.Trace(err)
 		}
-		return user.NamespaceID, nil
+		return user.ID, nil
 	} else { // ssh
 		// TODO SSH
 		return 0, errors.New("ssh ...")

@@ -51,33 +51,33 @@ func checkPermission(ctx *common.Context) error {
 		if ctx.IsReadAction() {
 			return nil
 		} else {
-			var nsID int64
+			var userID int64
 			var err error
 			if ctx.Operator == nil {
 				return errors.WithStack(ErrUnauthorized)
 			}
 			if !ctx.Operator.IsEmptyUser() {
-				nsID, err = service.GetNamespaceByOperator(ctx.Operator)
+				userID, err = service.GetUserIDByOperator(ctx.Operator)
 				if err != nil {
 					return err
 				}
 			}
-			return permission.CheckPushRepository(nsID, repo.ID)
+			return permission.CheckPushRepository(userID, repo.ID)
 		}
 	} else {
 		if ctx.Operator == nil {
 			return errors.WithStack(ErrUnauthorized)
 		}
 
-		nsID, err := service.GetNamespaceByOperator(ctx.Operator)
+		userID, err := service.GetUserIDByOperator(ctx.Operator)
 		if err != nil {
 			return err
 		}
 
 		if ctx.IsReadAction() {
-			return permission.CheckCloneRepository(&nsID, repo.ID)
+			return permission.CheckCloneRepository(&userID, repo.ID)
 		} else {
-			return permission.CheckPushRepository(nsID, repo.ID)
+			return permission.CheckPushRepository(userID, repo.ID)
 		}
 	}
 }

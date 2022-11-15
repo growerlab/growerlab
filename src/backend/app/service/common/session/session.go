@@ -52,6 +52,13 @@ func (s *Session) User() *userModel.User {
 	return s.user
 }
 
+func (s *Session) UserID() *int64 {
+	if s.user == nil {
+		return nil
+	}
+	return &s.user.ID
+}
+
 func (s *Session) UserNamespace() *int64 {
 	if s.user == nil {
 		return nil

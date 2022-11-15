@@ -86,7 +86,7 @@ func (p *Hub) RegisterContexts(contexts []ContextDelegate) error {
 		if _, exist := p.contextHub[c.Type()]; !exist {
 			p.contextHub[c.Type()] = c
 		} else {
-			return fmt.Errorf("permission context: %s exist", c.TypeLabel())
+			return fmt.Errorf("permission context: '%s' exists", c.TypeLabel())
 		}
 	}
 	return nil
@@ -96,9 +96,9 @@ func (p *Hub) RegisterContexts(contexts []ContextDelegate) error {
 // - rebuild时尽量只构建小颗粒度缓存
 // - 缓存结构：用户 -> 拥有的权限（context:code)
 // - 当缓存（master:permission:stamp）中的stamp发生改变后，用户权限缓存应被刷新
-func (p *Hub) CheckCache(namespaceID int64, c *context.Context, code int, rebuild bool) error {
+func (p *Hub) CheckCache(userID int64, c *context.Context, code int, rebuild bool) error {
 	var (
-		keyUser                = p.keyUser(namespaceID)
+		keyUser                = p.keyUser(userID)
 		keyStamp               = p.keyStamp()
 		fieldContextPermission = p.keyFieldContextPermission(code, c)
 	)

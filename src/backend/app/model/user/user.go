@@ -2,13 +2,13 @@ package user
 
 import (
 	"fmt"
-	"github.com/growerlab/growerlab/src/common/errors"
 	"time"
 
 	sq "github.com/Masterminds/squirrel"
 	"github.com/growerlab/growerlab/src/backend/app/model/namespace"
 	"github.com/growerlab/growerlab/src/backend/app/model/session"
 	"github.com/growerlab/growerlab/src/backend/app/model/utils"
+	"github.com/growerlab/growerlab/src/common/errors"
 	"github.com/jmoiron/sqlx"
 )
 
@@ -78,7 +78,7 @@ func GetUser(src sqlx.Queryer, id int64) (*User, error) {
 }
 
 func getUser(src sqlx.Queryer, cond sq.Sqlizer) (*User, error) {
-	users, err := listUsersByCond(src, columns, cond)
+	users, err := listUsersByCond(src, columns, cond, false)
 	if err != nil {
 		return nil, err
 	}
@@ -88,10 +88,32 @@ func getUser(src sqlx.Queryer, cond sq.Sqlizer) (*User, error) {
 	return nil, nil
 }
 
-func listUsersByCond(src sqlx.Queryer, tableColumns []string, cond sq.Sqlizer) ([]*User, error) {
+// MapAllUsersByIDs get all users by ids, ignore user status
+func MapAllUsersByIDs(src sqlx.Queryer, ids ...int64) (map[int64]*User, error) {
+	if len(ids) == 0 {
+		return nil, nil
+	}
+	users, err := listUsersByCond(src, columns, sq.Eq{"id": ids}, true)
+	if err != nil {
+		return nil, errors.Trace(err)
+	}
+
+	result := make(map[int64]*User)
+	for _, u := range users {
+		result[u.ID] = u
+	}
+	return result, nil
+}
+
+func listUsersByCond(src sqlx.Queryer, tableColumns []string, cond sq.Sqlizer, ignoreStatus bool) ([]*User, error) {
+	where := cond
+	if !ignoreStatus {
+		where = sq.And{cond, NormalUser}
+	}
+
 	sql, args, _ := sq.Select(tableColumns...).
 		From(tableNameMark).
-		Where(sq.And{cond, NormalUser}).
+		Where(where).
 		ToSql()
 
 	result := make([]*User, 0)
@@ -186,7 +208,7 @@ func ListAdminUsers(src sqlx.Queryer) ([]*User, error) {
 	where := sq.And{
 		sq.Eq{"is_admin": true},
 	}
-	users, err := listUsersByCond(src, columns, where)
+	users, err := listUsersByCond(src, columns, where, false)
 	if err != nil {
 		return nil, err
 	}

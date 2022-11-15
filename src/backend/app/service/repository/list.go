@@ -10,8 +10,8 @@ import (
 	"github.com/growerlab/growerlab/src/common/permission"
 )
 
-func ListRepositories(c *gin.Context, namespace string) ([]*repositoryModel.Repository, error) {
-	currentUserNSID := session.New(c).UserNamespace()
+func ListRepositories(c *gin.Context, namespace string) ([]*RepositoryEntity, error) {
+	currentUserID := session.New(c).UserID()
 
 	ns, err := namespaceModel.GetNamespaceByPath(db.DB, namespace)
 	if err != nil {
@@ -26,13 +26,26 @@ func ListRepositories(c *gin.Context, namespace string) ([]*repositoryModel.Repo
 		return nil, err
 	}
 
-	var result []*repositoryModel.Repository
+	var repos []*repositoryModel.Repository
 	for _, repo := range repositories {
-		err := permission.CheckViewRepository(currentUserNSID, repo.ID)
+		err := permission.CheckViewRepository(currentUserID, repo.ID)
 		if err == nil {
-			result = append(result, repo)
+			repos = append(repos, repo)
 		}
 	}
 
+	err = repositoryModel.FillNamespaces(db.DB, repos...)
+	if err != nil {
+		return nil, err
+	}
+	err = repositoryModel.FillUsers(db.DB, repos...)
+	if err != nil {
+		return nil, err
+	}
+
+	var result = make([]*RepositoryEntity, 0, len(repos))
+	for _, repo := range repos {
+		result = append(result, BuildRepositryEntity(repo))
+	}
 	return result, nil
 }

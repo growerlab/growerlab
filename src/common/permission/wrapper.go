@@ -5,25 +5,25 @@ import (
 	"github.com/growerlab/growerlab/src/common/userdomain"
 )
 
-func CheckViewRepository(namespaceID *int64, repositoryID int64) error {
+func CheckViewRepository(userID *int64, repositoryID int64) error {
 	c := RepositoryContext(repositoryID)
-	return checkPermission(namespaceID, c, ViewRepository)
+	return checkPermission(userID, c, ViewRepository)
 }
 
-func CheckPushRepository(namespaceID int64, repositoryID int64) error {
+func CheckPushRepository(userID int64, repositoryID int64) error {
 	c := RepositoryContext(repositoryID)
-	return checkPermission(&namespaceID, c, PushRepository)
+	return checkPermission(&userID, c, PushRepository)
 }
 
-func CheckCloneRepository(namespaceID *int64, repositoryID int64) error {
+func CheckCloneRepository(userID *int64, repositoryID int64) error {
 	c := RepositoryContext(repositoryID)
-	return checkPermission(namespaceID, c, CloneRepository)
+	return checkPermission(userID, c, CloneRepository)
 }
 
-func checkPermission(namespaceID *int64, ctx *context.Context, code int) error {
-	if namespaceID == nil || *namespaceID == 0 {
-		namespaceID = new(int64)
-		*namespaceID = userdomain.NamespaceVisitor
+func checkPermission(userID *int64, ctx *context.Context, code int) error {
+	if userID == nil || *userID == 0 {
+		userID = new(int64)
+		*userID = userdomain.AnonymousVisitor
 	}
-	return permHub.CheckCache(*namespaceID, ctx, code, true)
+	return permHub.CheckCache(*userID, ctx, code, true)
 }

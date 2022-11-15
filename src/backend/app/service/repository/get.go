@@ -10,17 +10,27 @@ import (
 	"github.com/growerlab/growerlab/src/common/permission"
 )
 
-func GetRepository(c *gin.Context, namespace, path string) (*repositoryModel.Repository, error) {
-	if namespace == "" {
-		return nil, errors.InvalidParameterError(errors.Namespace, errors.Path, errors.Empty)
+type Take struct {
+	currentUserID *int64
+	namespace     string
+	// 当取list时，path可以为空
+	path *string
+}
+
+func NewTaker(c *gin.Context, namespace string, path *string) *Take {
+	currentUserID := session.New(c).UserID()
+	return &Take{currentUserID, namespace, path}
+}
+
+func (g *Take) Get() (*RepositoryEntity, error) {
+	if g.namespace == "" {
+		return nil, errors.InvalidParameterError(errors.Repository, errors.Namespace, errors.Empty)
 	}
-	if path == "" {
+	if g.path == nil {
 		return nil, errors.InvalidParameterError(errors.Repository, errors.Path, errors.Empty)
 	}
 
-	currentUserNSID := session.New(c).UserNamespace()
-
-	ns, err := namespaceModel.GetNamespaceByPath(db.DB, namespace)
+	ns, err := namespaceModel.GetNamespaceByPath(db.DB, g.namespace)
 	if err != nil {
 		return nil, err
 	}
@@ -28,17 +38,26 @@ func GetRepository(c *gin.Context, namespace, path string) (*repositoryModel.Rep
 		return nil, errors.NotFoundError(errors.Namespace)
 	}
 
-	repo, err := repositoryModel.New(db.DB).GetRepositoryByNsWithPath(ns.ID, path)
+	repo, err := repositoryModel.New(db.DB).GetRepositoryByNsWithPath(ns.ID, *g.path)
 	if err != nil {
 		return nil, err
 	}
 	if repo == nil {
 		return nil, errors.NotFoundError(errors.Repository)
 	}
-
-	err = permission.CheckViewRepository(currentUserNSID, repo.ID)
+	err = permission.CheckViewRepository(g.currentUserID, repo.ID)
 	if err != nil {
 		return nil, err
 	}
-	return repo, err
+
+	err = repositoryModel.FillNamespaces(db.DB, repo)
+	if err != nil {
+		return nil, err
+	}
+	err = repositoryModel.FillUsers(db.DB, repo)
+	if err != nil {
+		return nil, err
+	}
+
+	return BuildRepositryEntity(repo), nil
 }

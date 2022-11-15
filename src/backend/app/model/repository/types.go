@@ -6,12 +6,12 @@ import (
 	"strings"
 
 	"github.com/growerlab/growerlab/src/backend/app/model/base"
-	"github.com/jmoiron/sqlx"
-
 	"github.com/growerlab/growerlab/src/backend/app/model/namespace"
 	"github.com/growerlab/growerlab/src/backend/app/model/user"
 	"github.com/growerlab/growerlab/src/common/configurator"
 	"github.com/growerlab/growerlab/src/common/db"
+	"github.com/growerlab/growerlab/src/common/errors"
+	"github.com/jmoiron/sqlx"
 )
 
 var (
@@ -25,8 +25,6 @@ var (
 		"owner_id",
 		"description",
 		"created_at",
-		"server_id",
-		"server_path",
 		"public",
 	}
 )
@@ -36,13 +34,11 @@ type Repository struct {
 	UUID        string `db:"uuid"`         // 全站唯一ID（fork时用到）
 	Path        string `db:"path"`         // 在namespace中是唯一的name
 	Name        string `db:"name"`         // 目前与path字段相同
-	NamespaceID int64  `db:"namespace_id"` // 仓库属于个人，还是组织
+	NamespaceID int64  `db:"namespace_id"` // 仓库所属的命名空间（个人，组织）
 	OwnerID     int64  `db:"owner_id"`     // 仓库创建者
 	Description string `db:"description"`
 	CreatedAt   int64  `db:"created_at"`
-	ServerID    int64  `db:"server_id"`   // 服务器id
-	ServerPath  string `db:"server_path"` // 服务器中的绝对路径
-	Public      bool   `db:"public"`      // 公有
+	Public      bool   `db:"public"` // 公有
 
 	ns    *namespace.Namespace
 	owner *user.User
@@ -104,6 +100,40 @@ func (r *Repository) GitSshURL() string {
 	sb.WriteString(r.PathGroup())
 	sb.WriteString(".git")
 	return sb.String()
+}
+
+func FillNamespaces(tx sqlx.Ext, repos ...*Repository) error {
+	if len(repos) == 0 {
+		return nil
+	}
+
+	nsIDs := make([]int64, 0, len(repos))
+	for _, repo := range repos {
+		nsIDs = append(nsIDs, repo.NamespaceID)
+	}
+	namespaceSet, err := namespace.MapNamespacesByIDs(tx, nsIDs...)
+	if err != nil {
+		return errors.Trace(err)
+	}
+	for _, repo := range repos {
+		repo.ns = namespaceSet[repo.NamespaceID]
+	}
+	return nil
+}
+
+func FillUsers(tx sqlx.Ext, repos ...*Repository) error {
+	ownerIDs := make([]int64, 0, len(repos))
+	for _, repo := range repos {
+		ownerIDs = append(ownerIDs, repo.OwnerID)
+	}
+	userSet, err := user.MapAllUsersByIDs(tx, ownerIDs...)
+	if err != nil {
+		return errors.Trace(err)
+	}
+	for _, repo := range repos {
+		repo.owner = userSet[repo.OwnerID]
+	}
+	return nil
 }
 
 type model struct {

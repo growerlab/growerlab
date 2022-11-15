@@ -24,9 +24,9 @@ func (s *SuperAdmin) Eval(args Evaluable) ([]int64, error) {
 	if err != nil {
 		return nil, err
 	}
-	namespaceIds := make([]int64, len(admins))
+	userIDs := make([]int64, len(admins))
 	for i := range admins {
-		namespaceIds[i] = admins[i].NamespaceID
+		userIDs[i] = admins[i].ID
 	}
-	return namespaceIds, nil
+	return userIDs, nil
 }

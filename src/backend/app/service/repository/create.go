@@ -2,7 +2,6 @@ package repository
 
 import (
 	"context"
-	"path/filepath"
 	"strings"
 	"time"
 
@@ -10,48 +9,49 @@ import (
 	"github.com/growerlab/growerlab/src/backend/app/common/git"
 	"github.com/growerlab/growerlab/src/backend/app/model/namespace"
 	"github.com/growerlab/growerlab/src/backend/app/model/repository"
-	"github.com/growerlab/growerlab/src/backend/app/model/server"
 	"github.com/growerlab/growerlab/src/backend/app/model/user"
 	"github.com/growerlab/growerlab/src/backend/app/service/common/session"
 	"github.com/growerlab/growerlab/src/backend/app/utils/regex"
-	"github.com/growerlab/growerlab/src/backend/app/utils/uuid"
 	"github.com/growerlab/growerlab/src/common/db"
 	"github.com/growerlab/growerlab/src/common/errors"
-	"github.com/growerlab/growerlab/src/common/path"
 	"github.com/jmoiron/sqlx"
 )
 
-type NewRepositoryPayload struct {
+type CreateParams struct {
 	Namespace   string `json:"namespace"` // 命名空间的路径（这里要考虑某个人在组织下创建项目）
 	Name        string `json:"name"`
 	Public      bool   `json:"public"`
 	Description string `json:"description"`
 }
 
-func CreateRepository(c *gin.Context, req *NewRepositoryPayload) error {
-	currentUser := session.New(c).User()
-	if currentUser == nil {
-		return errors.UnauthorizedError()
-	}
-	return DoCreateRepository(currentUser, req)
+func NewCreator(ctx *gin.Context, req *CreateParams) *CreateRepository {
+	currentUser := session.New(ctx).User()
+	return &CreateRepository{req, currentUser}
 }
 
-func DoCreateRepository(currentUser *user.User, req *NewRepositoryPayload) error {
+type CreateRepository struct {
+	req         *CreateParams
+	currentUser *user.User
+}
+
+func (c *CreateRepository) Do() error {
+	if c.currentUser == nil {
+		return errors.UnauthorizedError()
+	}
+	return c.Create()
+}
+
+func (c *CreateRepository) Create() error {
 	var ctx, cancel = context.WithTimeout(context.TODO(), 10*time.Second)
 	defer cancel()
 
 	err := db.Transact(func(tx sqlx.Ext) error {
-		ns, err := validateAndPrepare(tx, currentUser.ID, req)
+		ns, err := c.validateAndPrepare(tx, c.currentUser.ID, c.req)
 		if err != nil {
 			return errors.Trace(err)
 		}
 
-		srv, err := server.RandNormalServer(tx)
-		if err != nil {
-			return errors.Trace(err)
-		}
-
-		repo := buildRepository(currentUser, ns, req, srv)
+		repo := BuildNewRepository(c.currentUser.ID, ns.ID, c.req)
 		if err != nil {
 			return errors.Trace(err)
 		}
@@ -71,33 +71,11 @@ func DoCreateRepository(currentUser *user.User, req *NewRepositoryPayload) error
 	return err
 }
 
-func buildRepository(
-	currentUser *user.User,
-	ns *namespace.Namespace,
-	req *NewRepositoryPayload,
-	srv *server.Server,
-) (repo *repository.Repository) {
-	serverPath := path.GetRelativeRepositoryPath(filepath.Join(ns.Path, req.Name))
-	repo = &repository.Repository{
-		NamespaceID: ns.ID,
-		UUID:        uuid.UUIDv16(),
-		Path:        req.Name,
-		Name:        req.Name,
-		OwnerID:     currentUser.ID,
-		Description: req.Description,
-		CreatedAt:   time.Now().Unix(),
-		ServerID:    srv.ID,
-		ServerPath:  serverPath,
-		Public:      req.Public,
-	}
-	return repo
-}
-
 // validate
 //
 //	req.NamespacePath  TODO 这里暂时只验证namespace的owner_id 是否为用户，未来应该验证组织权限（比如是否可以选择这个组织创建仓库）
 //	req.Name 名称是否合法、是否重名
-func validateAndPrepare(src sqlx.Ext, userID int64, req *NewRepositoryPayload) (ns *namespace.Namespace, err error) {
+func (c *CreateRepository) validateAndPrepare(src sqlx.Ext, userID int64, req *CreateParams) (ns *namespace.Namespace, err error) {
 	req.Namespace = strings.TrimSpace(req.Namespace)
 	req.Name = strings.TrimSpace(req.Name)
 	if len(req.Namespace) == 0 {
