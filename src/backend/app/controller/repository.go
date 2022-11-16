@@ -7,7 +7,7 @@ import (
 
 func Repositories(c *gin.Context) {
 	namespace := c.Param("namespace")
-	repos, err := repository.ListRepositories(c, namespace)
+	repos, err := repository.NewTaker(c, namespace, nil).List()
 	Render(c, repos, err)
 }
 
