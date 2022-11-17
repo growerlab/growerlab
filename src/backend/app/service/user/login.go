@@ -4,6 +4,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/asaskevich/govalidator"
 	"github.com/gin-gonic/gin"
 	sessionModel "github.com/growerlab/growerlab/src/backend/app/model/session"
 	userModel "github.com/growerlab/growerlab/src/backend/app/model/user"
@@ -13,7 +14,6 @@ import (
 	"github.com/growerlab/growerlab/src/common/db"
 	"github.com/growerlab/growerlab/src/common/errors"
 	"github.com/jmoiron/sqlx"
-	"gopkg.in/asaskevich/govalidator.v9"
 )
 
 const TokenExpiredTime = 24 * time.Hour * 30 // 30天过期

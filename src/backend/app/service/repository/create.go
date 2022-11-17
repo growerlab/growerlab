@@ -5,6 +5,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/asaskevich/govalidator"
 	"github.com/gin-gonic/gin"
 	"github.com/growerlab/growerlab/src/backend/app/common/git"
 	"github.com/growerlab/growerlab/src/backend/app/model/namespace"
@@ -78,12 +79,13 @@ func (c *CreateRepository) Create() error {
 func (c *CreateRepository) validateAndPrepare(src sqlx.Ext, userID int64, req *CreateParams) (ns *namespace.Namespace, err error) {
 	req.Namespace = strings.TrimSpace(req.Namespace)
 	req.Name = strings.TrimSpace(req.Name)
-	if len(req.Namespace) == 0 {
+
+	if govalidator.IsNull(req.Namespace) {
 		err = errors.InvalidParameterError(errors.Namespace, errors.Path, errors.Invalid)
 		return
 	}
 
-	if len(req.Name) == 0 {
+	if govalidator.IsNull(req.Name) {
 		err = errors.InvalidParameterError(errors.Repository, errors.Name, errors.Invalid)
 		return
 	}

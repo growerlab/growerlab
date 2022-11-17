@@ -3,6 +3,7 @@ package user
 import (
 	"time"
 
+	"github.com/asaskevich/govalidator"
 	nsModel "github.com/growerlab/growerlab/src/backend/app/model/namespace"
 	userModel "github.com/growerlab/growerlab/src/backend/app/model/user"
 	"github.com/growerlab/growerlab/src/backend/app/utils/pwd"
@@ -10,7 +11,6 @@ import (
 	"github.com/growerlab/growerlab/src/common/db"
 	"github.com/growerlab/growerlab/src/common/errors"
 	"github.com/jmoiron/sqlx"
-	"gopkg.in/asaskevich/govalidator.v9"
 )
 
 const (
