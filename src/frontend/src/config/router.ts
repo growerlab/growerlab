@@ -37,6 +37,7 @@ export const Router = {
       Index: "/user/repos",
       New: "/user/repos/new",
       Show: dynamicRouter.new<RepositoryPath>("/user/repos/:repo"),
+      Branchs: dynamicRouter.new<RepositoryPath>("/user/repos/:repo/branchs"),
     },
     Project: {
       Index: "/user/projects",

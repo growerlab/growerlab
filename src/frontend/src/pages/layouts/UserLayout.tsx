@@ -15,10 +15,18 @@ import { Router } from "../../config/router";
 import { Session } from "../../core/services/auth/session";
 import { useGlobal } from "../../core/global/init";
 import i18n from "../../core/i18n/i18n";
+import { useTitle } from "react-use";
 
-export default function UserLayout(props: any) {
+interface Props extends React.PropsWithChildren {
+  title: string;
+}
+
+export default function UserLayout(props: Props) {
+  const { title } = props;
   const { notice } = useGlobal();
   const navigate = useNavigate();
+
+  useTitle(title);
 
   useEffect((): void => {
     // 验证用户是否登录

@@ -1,14 +1,19 @@
 import React from "react";
-import { Outlet } from "react-router-dom";
+import { useOutlet } from "react-router-dom";
 
 import UserLayout from "../layouts/UserLayout";
 
-export default function User() {
+interface Props extends React.PropsWithChildren {
+  defaultChild?: React.ReactElement;
+}
+
+export default function User(props: Props) {
+  const outlet = useOutlet();
+  const defaultOutlet = outlet === null ? props.defaultChild : outlet;
+
   return (
     <div>
-      <UserLayout title="Dashboard">
-        <Outlet />
-      </UserLayout>
+      <UserLayout title="Dashboard">{defaultOutlet}</UserLayout>
     </div>
   );
 }

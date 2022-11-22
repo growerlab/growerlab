@@ -19,6 +19,8 @@ import RepositoryIndex from "./pages/user/repos/Index";
 import RepositoryShow from "./pages/user/repos/Show";
 import RepositoryNew from "./pages/user/repos/New";
 import Error404 from "./pages/common/404";
+import Branchs from "./pages/user/repos/detail/Branchs";
+import Detail from "./pages/user/repos/detail/Detail";
 
 export default function App() {
   setup();
@@ -50,12 +52,18 @@ export default function App() {
           element: <RepositoryIndex />,
         },
         {
-          path: Router.User.Repository.Show.string(),
-          element: <RepositoryShow />,
-        },
-        {
           path: Router.User.Repository.New,
           element: <RepositoryNew />,
+        },
+        {
+          path: Router.User.Repository.Show.string(),
+          element: <RepositoryShow defaultChild={<Detail />} />,
+          children: [
+            {
+              path: Router.User.Repository.Branchs.string(),
+              element: <Branchs />,
+            },
+          ],
         },
       ],
     },
