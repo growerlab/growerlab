@@ -56,13 +56,21 @@
     "tooltip": {
       "success": "仓库创建成功",
       "name": "请填写2-50位字符的仓库名(字母，数字，下划线，不能以'..'开头)"
+    },
+    "menus": {
+      "code": "代码",
+      "branchs": "分支",
+      "tags": "标签",
+      "pull_requests": "合并",
+      "webhooks": "Webhooks",
+      "settings": "设置"
     }
   },
   "project": {
     "menu": "项目"
   },
-  "thought": {
-    "menu": "思考"
+  "note": {
+    "menu": "Note"
   },
   "api": {
     "timeout": "接口请求超时"

@@ -168,7 +168,7 @@ export default function UserLayout(props: Props) {
                     />,
                   ],
                   [
-                    i18n.t<string>("thought.menu"),
+                    i18n.t<string>("note.menu"),
                     Router.User.Project.Index,
                     <EuiIcon
                       type={"sessionViewer"}
@@ -192,7 +192,7 @@ export default function UserLayout(props: Props) {
 
         <div className="grow">
           <div className="flex flex-col h-full">
-            <header className="bg-white shadow">
+            <header className="bg-white shadow z-10">
               <div className="max-w-full  mx-auto py-3 px-4 sm:px-2 lg:px-6">
                 <div className="flex">
                   <div className="flex-none"></div>
@@ -224,8 +224,8 @@ export default function UserLayout(props: Props) {
               </div>
             </header>
             <main>
-              <div className="max-w-full mx-auto py-4 sm:px-4 lg:px-8">
-                <div className="px-4 py-6 sm:px-0">
+              <div className="max-w-full mx-auto">
+                <div className="px-4 sm:px-0">
                   <div className="border-0 border-dashed border-gray-200 rounded-lg max-h-full">
                     {props.children}
                   </div>
