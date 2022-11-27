@@ -12,8 +12,8 @@ export default function RepositoryIndex() {
   if (currentUser === undefined) return <></>;
 
   return (
-    <>
+    <div>
       <RepositoryList namespace={currentUser.namespace} />
-    </>
+    </div>
   );
 }

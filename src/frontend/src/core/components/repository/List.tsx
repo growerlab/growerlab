@@ -50,7 +50,7 @@ export function RepositoryList(props: RepositoriesNamespace) {
   // ) : null;
 
   return (
-    <div>
+    <div className="p-5">
       {repositories?.map((repo: TypeRepository) => (
         <Item
           global={global}
