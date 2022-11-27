@@ -16,6 +16,7 @@ import { Session } from "../../core/services/auth/session";
 import { useGlobal } from "../../core/global/init";
 import i18n from "../../core/i18n/i18n";
 import { useTitle } from "react-use";
+import { useUserMenu } from "../../core/global/recoil/userMenu";
 
 interface Props extends React.PropsWithChildren {
   title: string;
@@ -25,6 +26,8 @@ export default function UserLayout(props: Props) {
   const { title } = props;
   const { notice } = useGlobal();
   const navigate = useNavigate();
+  const { setUserMenu, userMenuSelected } = useUserMenu();
+  // const userMenuSelected = useUserMenuSelected();
 
   useTitle(title);
 
@@ -107,22 +110,24 @@ export default function UserLayout(props: Props) {
   );
 
   const MenuItem = (props: {
+    selected: string;
     icon: React.ReactNode;
     title: string;
     href: string;
-    selected?: boolean;
   }) => {
+    const selectedClassName =
+      props.selected == userMenuSelected ? "opacity-100 bg-blue-900" : "";
+
     return (
       <div>
-        <div className="opacity-70 hover:opacity-100">
-          <Link
-            to={props.href}
-            className="text-white block px-4 py-3 rounded-md text-sm hover:bg-blue-900 text-center"
-          >
-            <div className=" mb-2">{props.icon}</div>
-            {props.title}
-          </Link>
-        </div>
+        <Link
+          to={props.href}
+          onClick={() => setUserMenu(props.selected)}
+          className={`text-white block px-4 py-3 rounded-md text-sm opacity-70 hover:opacity-100 hover:bg-blue-900 text-center ${selectedClassName}`}
+        >
+          <div className=" mb-2">{props.icon}</div>
+          {props.title}
+        </Link>
       </div>
     );
   };
@@ -135,7 +140,7 @@ export default function UserLayout(props: Props) {
             <div className="flex-none">
               <div>
                 <a
-                  href="#"
+                  href={Router.User.Index}
                   className="text-white block px-3 py-5  text-base font-medium text-center"
                   aria-current="page"
                 >
@@ -145,11 +150,13 @@ export default function UserLayout(props: Props) {
               <div className="px-2 pt-2 pb-3 space-y-1 ">
                 {[
                   [
+                    "user",
                     "Home",
                     Router.User.Index,
                     <EuiIcon type="grid" key={"home"} />,
                   ],
                   [
+                    "repository",
                     i18n.t<string>("repository.menu"),
                     Router.User.Repository.Index,
                     <EuiIcon
@@ -159,6 +166,7 @@ export default function UserLayout(props: Props) {
                     />,
                   ],
                   [
+                    "project",
                     i18n.t<string>("project.menu"),
                     Router.User.Project.Index,
                     <EuiIcon
@@ -168,6 +176,7 @@ export default function UserLayout(props: Props) {
                     />,
                   ],
                   [
+                    "note",
                     i18n.t<string>("note.menu"),
                     Router.User.Project.Index,
                     <EuiIcon
@@ -176,9 +185,10 @@ export default function UserLayout(props: Props) {
                       className="inline"
                     />,
                   ],
-                ].map(([title, href, icon]) => (
+                ].map(([key, title, href, icon]) => (
                   <MenuItem
-                    key={title.toString()}
+                    key={key as string}
+                    selected={key as string}
                     icon={icon}
                     href={href.toString()}
                     title={title.toString()}

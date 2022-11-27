@@ -1,5 +1,6 @@
 import React from "react";
 import { useOutlet } from "react-router-dom";
+import { useUserMenu } from "../../../core/global/recoil/userMenu";
 
 interface Props extends React.PropsWithChildren {
   defaultChild?: React.ReactElement;
@@ -8,6 +9,10 @@ interface Props extends React.PropsWithChildren {
 export default function RepositoryLayout(props: Props) {
   const outlet = useOutlet();
   const defaultOutlet = outlet === null ? props.defaultChild : outlet;
+
+  // 设置user下的menu后台选项
+  const { setUserMenu } = useUserMenu();
+  setUserMenu("repository");
 
   return <div>{defaultOutlet}</div>;
 }

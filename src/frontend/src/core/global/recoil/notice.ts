@@ -12,7 +12,7 @@ type noticeValue = {
   text: string;
 };
 
-export const noticeState = atom<noticeValue>({
+const noticeState = atom<noticeValue>({
   key: "notice",
   default: undefined,
 });
