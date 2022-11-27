@@ -7,7 +7,6 @@ interface Props extends React.PropsWithChildren {
 
 export default function RepositoryLayout(props: Props) {
   const outlet = useOutlet();
-
   const defaultOutlet = outlet === null ? props.defaultChild : outlet;
 
   return <div>{defaultOutlet}</div>;

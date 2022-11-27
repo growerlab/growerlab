@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { EuiGlobalToastList } from "@elastic/eui";
-import { useRecoilValue } from "recoil";
 
-import { noticeState } from "../../global/recoil/notice";
+import { useNoticeValues } from "../../global/recoil/notice";
 
 interface Toast {
   id: string;
@@ -14,17 +13,14 @@ interface Toast {
 export default function Notice(props: any) {
   const [toasts, setToasts] = useState<Toast[]>([]);
 
-  const value = useRecoilValue(noticeState);
+  const value = useNoticeValues();
 
-  useEffect(
-    function () {
-      if (value === undefined) {
-        return;
-      }
-      setToasts(toasts.concat(value));
-    },
-    [value]
-  );
+  useEffect(() => {
+    if (value === undefined) {
+      return;
+    }
+    setToasts(toasts.concat(value));
+  }, [value]);
 
   return (
     <EuiGlobalToastList

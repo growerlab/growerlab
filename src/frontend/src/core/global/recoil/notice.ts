@@ -1,4 +1,4 @@
-import { atom, SetterOrUpdater, useSetRecoilState } from "recoil";
+import { atom, SetterOrUpdater, useRecoilValue, useSetRecoilState } from "recoil";
 import i18n from "../../i18n/i18n";
 
 type typeNotice = "model";
@@ -20,6 +20,11 @@ export const noticeState = atom<noticeValue>({
 export const useNotice = () => {
   const set = useSetRecoilState(noticeState);
   return new Notice(set);
+};
+
+export const useNoticeValues = () => {
+  const value = useRecoilValue(noticeState);
+  return value
 };
 
 export class Notice {
