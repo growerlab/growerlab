@@ -12,7 +12,7 @@ import {
 
 import { useAuth } from "../../api/auth/auth";
 import { Router } from "../../../config/router";
-import { useGlobal } from "../../global/init";
+import { useGlobal } from "../../global/global";
 import { userRules } from "../../api/rule";
 import i18n from "../../i18n/i18n";
 

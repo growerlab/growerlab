@@ -2,7 +2,7 @@ import useSWR, { Fetcher } from "swr";
 import { useParams } from "react-router-dom";
 
 import { useRepositoryAPI } from "../../api/repository/repository";
-import { useGlobal } from "../../global/init";
+import { useGlobal } from "../../global/global";
 import {
   RepositoryEntity,
   RepositoryPath,

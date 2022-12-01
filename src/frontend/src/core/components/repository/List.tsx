@@ -6,7 +6,7 @@ import { Item } from "./Item";
 import { RepositoriesNamespace, TypeRepository } from "../../common/types";
 import { useRepositoryAPI } from "../../api/repository/repository";
 import { EuiButton, EuiIcon, EuiEmptyPrompt } from "@elastic/eui";
-import { useGlobal } from "../../global/init";
+import { useGlobal } from "../../global/global";
 
 export function RepositoryList(props: RepositoriesNamespace) {
   const { namespace } = props;
