@@ -2,7 +2,7 @@ import { AxiosResponse } from "axios";
 
 import { UserInfo } from "./session";
 import { API, request, Result } from "../api";
-import { GlobalTypes, useGlobal } from "../../global/init";
+import { GlobalObject, useGlobal } from "../../global/global";
 
 interface RegisterArgs {
   username: string;
@@ -16,7 +16,7 @@ export function useAuth() {
 }
 
 class Auth {
-  constructor(private global: GlobalTypes) {
+  constructor(private global: GlobalObject) {
 
   }
 

@@ -2,7 +2,7 @@ import { AxiosResponse } from "axios";
 
 import { TypeRepository } from "../../common/types";
 import { API, request } from "../api";
-import { GlobalTypes, useGlobal } from "../../global/init";
+import { GlobalObject, useGlobal } from "../../global/global";
 
 export interface RepositoryRequest {
   namespace: string;
@@ -19,9 +19,9 @@ export function useRepositoryAPI(namespace: string) {
 
 class Repository {
   private namespace: string;
-  private global: GlobalTypes;
+  private global: GlobalObject;
 
-  constructor(namespace: string, global: GlobalTypes) {
+  constructor(namespace: string, global: GlobalObject) {
     this.namespace = namespace;
     this.global = global;
   }

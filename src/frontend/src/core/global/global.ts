@@ -1,14 +1,14 @@
 import { UserInfo, useSession } from "../api/auth/session";
 import { Notice, useNotice } from "./recoil/notice";
 
-export type GlobalTypes = {
+export type GlobalObject = {
   notice: Notice;
   currentUser?: UserInfo;
 };
 
-export function useGlobal(): GlobalTypes {
+export function useGlobal(): GlobalObject {
   const session = useSession()
-  const global: GlobalTypes = {
+  const global: GlobalObject = {
     notice: useNotice(),
     currentUser: session.getCurrentUser()
   };

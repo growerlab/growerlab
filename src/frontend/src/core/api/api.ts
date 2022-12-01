@@ -2,7 +2,7 @@ import axios, { AxiosInstance, AxiosResponse } from "axios";
 import i18n from "../i18n/i18n";
 import { dynamicRouter } from "../../config/router";
 import { RepositoriesNamespace, RepositoryPathGroup } from "../common/types";
-import { GlobalTypes } from "../global/init";
+import { GlobalObject } from "../global/global";
 
 const baseUrl = "http://localhost:8081/api/v1";
 
@@ -31,7 +31,7 @@ export interface Result {
  * 封装axios的请求
  * @returns {AxiosInstance}
  */
-export const request = function (global: GlobalTypes): AxiosInstance {
+export const request = function (global: GlobalObject): AxiosInstance {
   const { currentUser, notice } = global;
   const instance = axios.create({
     baseURL: baseUrl,

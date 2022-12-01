@@ -16,7 +16,7 @@ import {
   RepositoryRequest,
   useRepositoryAPI,
 } from "../../api/repository/repository";
-import { useGlobal } from "../../global/init";
+import { useGlobal } from "../../global/global";
 import { Router } from "../../../config/router";
 import { Namespace } from "../../common/types";
 
