@@ -10,13 +10,14 @@ import {
   EuiFormRow,
 } from "@elastic/eui";
 
-import { Auth } from "../../services/auth/auth";
+import { useAuth } from "../../api/auth/auth";
 import { Router } from "../../../config/router";
 import { useGlobal } from "../../global/init";
 import { userRules } from "../../api/rule";
 import i18n from "../../i18n/i18n";
 
 export default function RegisterForm(props: any) {
+  const auth = useAuth();
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -28,7 +29,6 @@ export default function RegisterForm(props: any) {
   const navigate = useNavigate();
 
   const onSubmit = (e: React.MouseEvent) => {
-    const auth = new Auth();
     auth
       .registerUser({
         username: username,

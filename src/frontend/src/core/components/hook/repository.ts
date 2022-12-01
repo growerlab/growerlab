@@ -1,7 +1,7 @@
 import useSWR, { Fetcher } from "swr";
 import { useParams } from "react-router-dom";
 
-import { Repository } from "../../services/repository/repository";
+import { useRepositoryAPI } from "../../api/repository/repository";
 import { useGlobal } from "../../global/init";
 import {
   RepositoryEntity,
@@ -37,9 +37,10 @@ export function useRepositoryPathGroup(): PathGroupMaybe {
 export function useGetRepository(
   pg: RepositoryPathGroup
 ): Promise<RepositoryEntity> {
+  const repositoryAPI = useRepositoryAPI(pg.namespace);
+
   const fetcher: Fetcher<RepositoryEntity, RepositoryPath> = () => {
-    const repo = new Repository(pg.namespace);
-    return repo.get(pg.repo).then((res) => {
+    return repositoryAPI.get(pg.repo).then((res) => {
       return res.data.repository;
     });
   };

@@ -1,9 +1,8 @@
 import axios, { AxiosInstance, AxiosResponse } from "axios";
 import i18n from "../i18n/i18n";
-import { Notice } from "../global/recoil/notice";
 import { dynamicRouter } from "../../config/router";
-import { Session } from "../services/auth/session";
 import { RepositoriesNamespace, RepositoryPathGroup } from "../common/types";
+import { GlobalTypes } from "../global/init";
 
 const baseUrl = "http://localhost:8081/api/v1";
 
@@ -32,8 +31,8 @@ export interface Result {
  * 封装axios的请求
  * @returns {AxiosInstance}
  */
-export const request = function (notice: Notice): AxiosInstance {
-  const user = Session.getCurrentUser();
+export const request = function (global: GlobalTypes): AxiosInstance {
+  const { currentUser, notice } = global;
   const instance = axios.create({
     baseURL: baseUrl,
     timeout: 2000,
@@ -41,7 +40,7 @@ export const request = function (notice: Notice): AxiosInstance {
     // responseType: "json",
     headers: {
       // 'Content-Type': 'application/json',
-      "Auth-User-Token": user?.token || "",
+      "Auth-User-Token": currentUser?.token || "",
     },
     validateStatus: function (status: number): boolean {
       return status >= 200 && status <= 500;

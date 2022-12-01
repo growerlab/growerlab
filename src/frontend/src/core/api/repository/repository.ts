@@ -1,8 +1,8 @@
 import { AxiosResponse } from "axios";
 
 import { TypeRepository } from "../../common/types";
-import { global } from "../../global/init";
-import { API, request } from "../../api/api";
+import { API, request } from "../api";
+import { GlobalTypes, useGlobal } from "../../global/init";
 
 export interface RepositoryRequest {
   namespace: string;
@@ -11,16 +11,24 @@ export interface RepositoryRequest {
   public: boolean;
 }
 
-export class Repository {
-  namespace: string;
+export function useRepositoryAPI(namespace: string) {
+  const global = useGlobal();
+  const repo = new Repository(namespace, global);
+  return repo;
+}
 
-  constructor(namespace: string) {
+class Repository {
+  private namespace: string;
+  private global: GlobalTypes;
+
+  constructor(namespace: string, global: GlobalTypes) {
     this.namespace = namespace;
+    this.global = global;
   }
 
   create(req: RepositoryRequest): Promise<AxiosResponse> {
     const url = API.Repositories.Create.render({ namespace: this.namespace });
-    return request(global.notice!).post<RepositoryRequest, AxiosResponse>(
+    return request(this.global).post<RepositoryRequest, AxiosResponse>(
       url,
       req
     );
@@ -31,7 +39,7 @@ export class Repository {
       namespace: this.namespace,
       repo: repo,
     });
-    return request(global.notice!).get<
+    return request(this.global).get<
       TypeRepository,
       AxiosResponse<TypeRepository>
     >(url);

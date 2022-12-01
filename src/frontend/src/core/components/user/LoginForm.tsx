@@ -9,33 +9,33 @@ import {
 } from "@elastic/eui";
 
 import i18n from "../../i18n/i18n";
-import { useGlobal } from "../../global/init";
-import { Session } from "../../services/auth/session";
-import { Auth } from "../../services/auth/auth";
+import { useSession } from "../../api/auth/session";
+import { useAuth } from "../../api/auth/auth";
+import { useNotice } from "../../global/recoil/notice";
 
 interface Options {
   onSuccess: () => any;
 }
 
 export default function LoginForm(props: Options) {
-  const global = useGlobal();
-  const notice = global.notice!;
+  const notice = useNotice();
   const { onSuccess } = props;
+  const auth = useAuth();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [emailValidateMsg, setEmailValidateMsg] = useState(null);
   const [pwdValidateMsg, setPwdValidateMsg] = useState(null);
+  const session = useSession();
 
   const onSubmit = (e: React.MouseEvent) => {
-    const service = new Auth();
-    service.login(email, password).then((res) => {
+    auth.login(email, password).then((res) => {
       if (res === undefined) {
         notice.error(i18n.t("user.tooltip.login_fail"));
         return;
       }
 
-      Session.storeLogin(res.data);
+      session.storeLogin(res.data);
       notice.success(i18n.t("user.tooltip.login_success"));
       onSuccess();
     });

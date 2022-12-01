@@ -4,17 +4,16 @@ import { Link } from "react-router-dom";
 import { Router } from "../../../config/router";
 import { Item } from "./Item";
 import { RepositoriesNamespace, TypeRepository } from "../../common/types";
-import { Repository } from "../../services/repository/repository";
+import { useRepositoryAPI } from "../../api/repository/repository";
 import { EuiButton, EuiIcon, EuiEmptyPrompt } from "@elastic/eui";
 import { useGlobal } from "../../global/init";
 
 export function RepositoryList(props: RepositoriesNamespace) {
   const { namespace } = props;
-  // const [initLoading, setInitLoading] = useState(false);
+  const repositoryAPI = useRepositoryAPI(namespace);
   const global = useGlobal();
 
-  const repo = new Repository(namespace);
-  const repoData = repo.list();
+  const repoData = repositoryAPI.list();
 
   if (repoData === null) {
     return (

@@ -1,22 +1,16 @@
-import { UserInfo, Session } from "../services/auth/session";
+import { UserInfo, useSession } from "../api/auth/session";
 import { Notice, useNotice } from "./recoil/notice";
 
-export type globalTypes = {
-  notice?: Notice;
+export type GlobalTypes = {
+  notice: Notice;
   currentUser?: UserInfo;
 };
 
-export let global: globalTypes;
-
-export const setup = () => {
-  global = {
-    currentUser: undefined,
+export function useGlobal(): GlobalTypes {
+  const session = useSession()
+  const global: GlobalTypes = {
+    notice: useNotice(),
+    currentUser: session.getCurrentUser()
   };
-  return;
-};
-
-export function useGlobal(): globalTypes {
-  global.notice = useNotice();
-  global.currentUser = Session.getCurrentUser();
   return global;
 }

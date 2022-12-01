@@ -7,7 +7,7 @@ import { EuiProvider } from "@elastic/eui";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import Notice from "./core/components/notice/Notice";
-import { setup } from "./core/global/init";
+// import { setup } from "./core/global/init";
 import { Router } from "./config/router";
 
 import Home from "./Home";
@@ -24,7 +24,7 @@ import Detail from "./pages/user/repos/detail/Detail";
 import RepositoryLayout from "./pages/user/repos/Layout";
 
 export default function App() {
-  setup();
+  // setup();
 
   const router = createBrowserRouter([
     {

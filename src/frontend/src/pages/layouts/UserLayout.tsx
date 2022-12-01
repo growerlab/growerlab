@@ -12,11 +12,11 @@ import {
 } from "@elastic/eui";
 
 import { Router } from "../../config/router";
-import { Session } from "../../core/services/auth/session";
-import { useGlobal } from "../../core/global/init";
+import { useSession } from "../../core/api/auth/session";
 import i18n from "../../core/i18n/i18n";
 import { useTitle } from "react-use";
 import { useUserMenu } from "../../core/global/recoil/userMenu";
+import { useNotice } from "../../core/global/recoil/notice";
 
 interface Props extends React.PropsWithChildren {
   title: string;
@@ -24,22 +24,23 @@ interface Props extends React.PropsWithChildren {
 
 export default function UserLayout(props: Props) {
   const { title } = props;
-  const { notice } = useGlobal();
-  const navigate = useNavigate();
-  const { setUserMenu, userMenuSelected } = useUserMenu();
-  // const userMenuSelected = useUserMenuSelected();
-
   useTitle(title);
 
-  useEffect((): void => {
-    // 验证用户是否登录
-    Session.isLogin().catch(() => {
-      notice!.warning(i18n.t("user.tooltip.not_login"));
-      navigate(Router.Home.Login);
-    });
-  }, []);
+  const notice = useNotice();
+  const session = useSession();
+  const navigate = useNavigate();
+  const { setUserMenu, userMenuSelected } = useUserMenu();
+  const [isPopoverOpen, setIsPopoverOpen] = useState(false);
+  const contextMenuPopoverId = useGeneratedHtmlId({
+    prefix: "contextMenuPopover",
+  });
 
-  const [collapsed, setCollapsed] = useState(false);
+  if (!session.isLogin()) {
+    notice.warning(i18n.t("user.tooltip.not_login"));
+    navigate(Router.Home.Login);
+    return <></>;
+  }
+
   const plusMenu = (
     <EuiButtonIcon
       display="base"
@@ -51,7 +52,6 @@ export default function UserLayout(props: Props) {
     />
   );
 
-  const [isPopoverOpen, setIsPopoverOpen] = useState(false);
   const onOpenUserMenu = () => setIsPopoverOpen(!isPopoverOpen);
   const onCloseUserMenu = () => setIsPopoverOpen(false);
   const userMenuButton = (
@@ -62,10 +62,6 @@ export default function UserLayout(props: Props) {
       onClick={onOpenUserMenu}
     />
   );
-
-  const contextMenuPopoverId = useGeneratedHtmlId({
-    prefix: "contextMenuPopover",
-  });
 
   const panels: EuiContextMenuPanelDescriptor[] = [
     {
@@ -88,7 +84,7 @@ export default function UserLayout(props: Props) {
         },
         {
           name: i18n.t<string>("user.logout"),
-          onClick: () => Session.logout(),
+          onClick: () => session.logout(),
         },
       ],
     },

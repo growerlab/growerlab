@@ -1,13 +1,8 @@
 import { AxiosResponse } from "axios";
 
 import { UserInfo } from "./session";
-import { API, request, Result } from "../../api/api";
-import { global } from "../../global/init";
-
-interface Login {
-  email: string;
-  password: string;
-}
+import { API, request, Result } from "../api";
+import { GlobalTypes, useGlobal } from "../../global/init";
 
 interface RegisterArgs {
   username: string;
@@ -15,12 +10,21 @@ interface RegisterArgs {
   password: string;
 }
 
-export class Auth {
+export function useAuth() {
+  const global = useGlobal();
+  return new Auth(global);
+}
+
+class Auth {
+  constructor(private global: GlobalTypes) {
+
+  }
+
   public login(
     email: string,
     password: string
   ): Promise<AxiosResponse<UserInfo>> {
-    return request(global.notice!).post<Auth, AxiosResponse<UserInfo>>(
+    return request(this.global).post<Auth, AxiosResponse<UserInfo>>(
       API.Auth.Login,
       {
         email: email,
@@ -30,12 +34,12 @@ export class Auth {
   }
 
   public activate(code: string): Promise<AxiosResponse<Result>> {
-    return request(global.notice!).post<Result>(API.Auth.Activate, {
+    return request(this.global).post<Result>(API.Auth.Activate, {
       code: code,
     });
   }
 
   public registerUser(args: RegisterArgs): Promise<AxiosResponse<Result>> {
-    return request(global.notice!).post<Result>(API.Auth.Register, args);
+    return request(this.global).post<Result>(API.Auth.Register, args);
   }
 }

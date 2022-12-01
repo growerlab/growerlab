@@ -4,10 +4,10 @@ import { EuiHorizontalRule } from "@elastic/eui";
 
 import { repoIcon, repoPath, builtInRepoPath } from "./common";
 import { RepositoryEntity } from "../../common/types";
-import { globalTypes } from "../../global/init";
+import { GlobalTypes } from "../../global/init";
 
 interface Args {
-  global: globalTypes;
+  global: GlobalTypes;
   repo: RepositoryEntity;
 }
 

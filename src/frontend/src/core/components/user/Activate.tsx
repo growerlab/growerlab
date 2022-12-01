@@ -3,7 +3,7 @@ import { EuiButton, EuiIcon, EuiEmptyPrompt } from "@elastic/eui";
 
 import { useParams, useNavigate } from "react-router-dom";
 import { Router } from "../../../config/router";
-import { Auth } from "../../services/auth/auth";
+import { useAuth } from "../../api/auth/auth";
 import Error404 from "../../../pages/common/404";
 import i18n from "../../i18n/i18n";
 
@@ -20,6 +20,7 @@ interface Status {
 //
 export default function Activate(props: any) {
   const navigate = useNavigate();
+  const auth = useAuth();
 
   const loginBtn = (
     <EuiButton
@@ -62,7 +63,6 @@ export default function Activate(props: any) {
     return <Error404 />;
   }
 
-  const auth = new Auth();
   auth
     .activate(code)
     .then(() => {

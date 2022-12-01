@@ -13,9 +13,9 @@ import { useNavigate } from "react-router-dom";
 import i18n from "../../i18n/i18n";
 import { repositoryRules } from "../../api/rule";
 import {
-  Repository,
   RepositoryRequest,
-} from "../../services/repository/repository";
+  useRepositoryAPI,
+} from "../../api/repository/repository";
 import { useGlobal } from "../../global/init";
 import { Router } from "../../../config/router";
 import { Namespace } from "../../common/types";
@@ -24,6 +24,8 @@ export function NewRepositoryForm(props: Namespace) {
   const [isPublic, setPublic] = useState(true);
   const navigate = useNavigate();
   const { notice } = useGlobal();
+  const repositoryAPI = useRepositoryAPI(props.namespace);
+
   const {
     register,
     handleSubmit,
@@ -57,8 +59,7 @@ export function NewRepositoryForm(props: Namespace) {
   const onSubmit = (data: RepositoryRequest) => {
     console.log(data);
 
-    const service = new Repository(props.namespace);
-    service.create(data).then((res) => {
+    repositoryAPI.create(data).then((res) => {
       notice?.success(i18n.t("repository.tooltip.success"));
       console.info(res);
       navigate(Router.User.Repository.Show.render({ repo: data.name }));
