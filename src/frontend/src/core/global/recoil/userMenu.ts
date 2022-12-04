@@ -12,5 +12,5 @@ const userMenuSelectedState = atom<string>({
 export const useUserMenu = () => {
   const setUserMenu = useSetRecoilState(userMenuSelectedState);
   const userMenuSelected = useRecoilValue(userMenuSelectedState);
-  return { setUserMenu, userMenuSelected }
+  return { setUserMenu, userMenuSelected };
 };

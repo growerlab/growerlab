@@ -22,7 +22,7 @@ func NewTaker(c *gin.Context, namespace string, path *string) *Take {
 	return &Take{currentUserID, namespace, path}
 }
 
-func (g *Take) Get() (*RepositoryEntity, error) {
+func (g *Take) Get() (*Entity, error) {
 	if g.namespace == "" {
 		return nil, errors.InvalidParameterError(errors.Repository, errors.Namespace, errors.Empty)
 	}

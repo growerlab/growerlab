@@ -21,7 +21,7 @@ func Run(addr string) error {
 	repositories := apiV1.Group("/repositories")
 	{
 		repositories.POST("/:namespace/create", middleware.Authorized, controller.CreateRepository)
-		repositories.GET("/:namespace/list", controller.Repositories)
+		repositories.GET("/:namespace/list", controller.Repositories) // TODO 分页
 		repositories.GET("/:namespace/detail/:name", controller.Repository)
 	}
 

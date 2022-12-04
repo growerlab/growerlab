@@ -1,11 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import useSWR, { Fetcher } from "swr";
+import { EuiButton, EuiIcon, EuiEmptyPrompt } from "@elastic/eui";
 
 import { Router } from "../../../config/router";
 import { Item } from "./Item";
-import { RepositoriesNamespace, TypeRepository } from "../../common/types";
+import {
+  RepositoriesNamespace,
+  RepositoryEntity,
+  TypeRepositories,
+} from "../../common/types";
 import { useRepositoryAPI } from "../../api/repository/repository";
-import { EuiButton, EuiIcon, EuiEmptyPrompt } from "@elastic/eui";
 import { useGlobal } from "../../global/global";
 
 export function RepositoryList(props: RepositoriesNamespace) {
@@ -13,9 +18,17 @@ export function RepositoryList(props: RepositoriesNamespace) {
   const repositoryAPI = useRepositoryAPI(namespace);
   const global = useGlobal();
 
-  const repoData = repositoryAPI.list();
+  const fetcher: Fetcher<TypeRepositories> = () => {
+    return repositoryAPI.list().then((res) => {
+      return res.data;
+    });
+  };
+  const { data, error } = useSWR<TypeRepositories>(
+    `/swr/key/repos/${namespace}`,
+    fetcher
+  );
 
-  if (repoData === null) {
+  if (data === null || data?.repositories.length == 0) {
     return (
       <div>
         <EuiEmptyPrompt
@@ -34,28 +47,10 @@ export function RepositoryList(props: RepositoriesNamespace) {
     );
   }
 
-  const repositories = repoData;
-  // const loadMoreBtn = !initLoading ? (
-  //   <div
-  //     style={{
-  //       textAlign: "center",
-  //       marginTop: 12,
-  //       height: 32,
-  //       lineHeight: "32px",
-  //     }}
-  //   >
-  //     {/* <Button onClick={onLoadMore}>更多</Button> */}
-  //   </div>
-  // ) : null;
-
   return (
     <div className="p-5">
-      {repositories?.map((repo: TypeRepository) => (
-        <Item
-          global={global}
-          repo={repo.repository}
-          key={repo.repository.uuid}
-        />
+      {data?.repositories.map((repo: RepositoryEntity) => (
+        <Item global={global} repo={repo} key={repo.uuid} />
       ))}
     </div>
   );

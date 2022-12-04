@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { EuiHorizontalRule } from "@elastic/eui";
 
-import { repoIcon, repoPath, builtInRepoPath } from "./common";
+import { repoIcon, publicRepoPath, builtInRepoPath } from "./common";
 import { RepositoryEntity } from "../../common/types";
 import { GlobalObject } from "../../global/global";
 
@@ -14,26 +14,27 @@ interface Args {
 export function Item(props: Args) {
   const { global, repo } = props;
 
-  const [path, setPath] = useState(repoPath(repo.owner.namespace, repo.path));
+  let path = publicRepoPath(repo.owner.username, repo.path);
 
-  useEffect(() => {
-    const currentUser = global.currentUser;
-    if (currentUser !== undefined) {
-      if (currentUser.namespace === repo.owner.namespace) {
-        setPath(builtInRepoPath(repo.path));
-      }
-    }
-  }, []);
+  const currentUser = global.currentUser;
+  if (
+    currentUser !== undefined &&
+    currentUser.namespace === repo.owner.username
+  ) {
+    path = builtInRepoPath(repo.path);
+  }
 
   return (
     <div>
       <Link to={path}>
         <a className={"text-xl font-bold"}>
           {repoIcon(repo.public)}
-          <span className={"ml-3"}>{repo.name}</span>
+          <span className={"ml-3"}>
+            {repo.namespace.path + "/" + repo.name}
+          </span>
         </a>
       </Link>
-      <div className={"text-slate-500 mt-5"}>{repo.description}</div>
+      <div className={"text-slate-500 mt-5 ml-12"}>{repo.description}</div>
       <EuiHorizontalRule />
     </div>
   );

@@ -16,9 +16,7 @@ export function useAuth() {
 }
 
 class Auth {
-  constructor(private global: GlobalObject) {
-
-  }
+  constructor(private global: GlobalObject) {}
 
   public login(
     email: string,

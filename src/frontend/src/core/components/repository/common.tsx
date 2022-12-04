@@ -20,7 +20,7 @@ export function builtInRepoPath(repoPath: string): string {
 }
 
 // 公共路径
-export function repoPath(namespace: string, repoPath: string): string {
+export function publicRepoPath(namespace: string, repoPath: string): string {
   return Router.Namespace.Repository.render({
     namespace: namespace,
     repo: repoPath,

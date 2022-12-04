@@ -25,7 +25,7 @@ class Session {
   isLogin(): boolean {
     const result = this.getCurrentUser();
     if (result === undefined) {
-      return false
+      return false;
     }
     return true;
   }

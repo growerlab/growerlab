@@ -1,6 +1,10 @@
 package repository
 
-type RepositoryEntity struct {
+type ListResponse struct {
+	Repositories []*Entity `json:"repositories"`
+}
+
+type Entity struct {
 	UUID        string `json:"uuid"` // 全站唯一ID（fork时用到）
 	Name        string `json:"name"` // 目前与path字段相同
 	Path        string `json:"path"` // 在namespace中唯一

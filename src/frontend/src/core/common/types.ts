@@ -1,6 +1,7 @@
 export interface Owner {
   name: string;
-  namespace: string;
+  public_email: string;
+  username: string;
 }
 
 export interface RepositoryEntity {
@@ -18,7 +19,8 @@ export interface RepositoryEntity {
 
 export interface NamespaceEntity {
   path: string; // namespace path
-  owner: Owner;
+  type: "user" | "org";
+  // owner: Owner;
 }
 
 export interface TypeRepositories {

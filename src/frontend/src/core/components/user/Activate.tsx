@@ -15,12 +15,17 @@ interface Status {
   Extra?: React.ReactNode;
 }
 
+interface Props {
+  code: string;
+}
+
 // 状态
 //  1. 请求参数中未包含code 2. 请求接口中 3|4. 接口返回正常|错误  5. 激活码已被使用过(服务器端返回)
 //
-export default function Activate(props: any) {
+export default function Activate(props: Props) {
   const navigate = useNavigate();
   const auth = useAuth();
+  const { code } = props;
 
   const loginBtn = (
     <EuiButton
@@ -58,10 +63,6 @@ export default function Activate(props: any) {
   };
 
   const [curStatus, setStatus] = useState(status["Pending"]);
-  const { code } = useParams();
-  if (code === undefined) {
-    return <Error404 />;
-  }
 
   auth
     .activate(code)

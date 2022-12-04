@@ -22,11 +22,6 @@ export function RepositoryDetail(props: RepositoryPathGroup) {
     setRepository(data);
   });
 
-  // const repo = new Repository(ownerPath);
-  // repo.get(repoPath).then((res) => {
-  //   setRepository(res.data.repository);
-  // });
-
   const tabs: EuiTabbedContentProps["tabs"] = [
     {
       id: "code",

@@ -8,7 +8,7 @@ import (
 	"github.com/growerlab/growerlab/src/common/permission"
 )
 
-func (g *Take) List() ([]*RepositoryEntity, error) {
+func (g *Take) List() (*ListResponse, error) {
 	ns, err := namespaceModel.GetNamespaceByPath(db.DB, g.namespace)
 	if err != nil {
 		return nil, err
@@ -39,9 +39,10 @@ func (g *Take) List() ([]*RepositoryEntity, error) {
 		return nil, err
 	}
 
-	var result = make([]*RepositoryEntity, 0, len(repos))
+	var result = make([]*Entity, 0, len(repos))
 	for _, repo := range repos {
 		result = append(result, BuildRepositryEntity(repo))
 	}
-	return result, nil
+
+	return &ListResponse{Repositories: result}, nil
 }

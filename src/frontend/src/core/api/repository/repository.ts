@@ -1,6 +1,6 @@
 import { AxiosResponse } from "axios";
 
-import { TypeRepository } from "../../common/types";
+import { TypeRepositories, TypeRepository } from "../../common/types";
 import { API, request } from "../api";
 import { GlobalObject, useGlobal } from "../../global/global";
 
@@ -18,8 +18,8 @@ export function useRepositoryAPI(namespace: string) {
 }
 
 class Repository {
-  private namespace: string;
-  private global: GlobalObject;
+  private readonly namespace: string;
+  private readonly global: GlobalObject;
 
   constructor(namespace: string, global: GlobalObject) {
     this.namespace = namespace;
@@ -45,34 +45,14 @@ class Repository {
     >(url);
   }
 
-  list(page = 0): TypeRepository[] | undefined {
-    return mockRepositories;
+  // TODO 分页
+  list(page = 0): Promise<AxiosResponse<TypeRepositories>> {
+    const url = API.Repositories.List.render({
+      namespace: this.namespace,
+    });
+    return request(this.global).get<
+      TypeRepositories,
+      AxiosResponse<TypeRepositories>
+    >(url);
   }
 }
-
-const mockRepositories: TypeRepository[] = [
-  {
-    repository: {
-      uuid: "1",
-      name: "hello",
-      path: "repo1",
-      description:
-        "这是一个仓库描述这是一个仓库描述这是一个仓库描述这是一个仓库描述;这是一个仓库描述；这是一个仓库描述",
-      created_at: 1222,
-      public: true,
-      namespace: {
-        path: "admin",
-        owner: {
-          name: "admin",
-          namespace: "admin",
-        },
-      },
-      git_http_url: "",
-      git_ssh_url: "",
-      owner: {
-        name: "moli",
-        namespace: "admin",
-      },
-    },
-  },
-];

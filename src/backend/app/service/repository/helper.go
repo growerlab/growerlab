@@ -26,9 +26,9 @@ func BuildNewRepository(
 }
 
 func BuildRepositryEntity(
-	repo *repository.Repository) *RepositoryEntity {
+	repo *repository.Repository) *Entity {
 
-	return &RepositoryEntity{
+	return &Entity{
 		UUID:        repo.UUID,
 		Name:        repo.Name,
 		Path:        repo.Path,

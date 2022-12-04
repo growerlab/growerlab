@@ -13,6 +13,9 @@ export const API = {
     Register: "/auth/register",
   },
   Repositories: {
+    List: dynamicRouter.new<RepositoriesNamespace>(
+      "/repositories/:namespace/list"
+    ),
     Detail: dynamicRouter.new<RepositoryPathGroup>(
       "/repositories/:namespace/detail/:repo"
     ),
