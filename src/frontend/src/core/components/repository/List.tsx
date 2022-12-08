@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import useSWR, { Fetcher } from "swr";
 import { EuiButton, EuiIcon, EuiEmptyPrompt } from "@elastic/eui";
@@ -28,7 +28,14 @@ export function RepositoryList(props: RepositoriesNamespace) {
     fetcher
   );
 
-  if (data === null || data?.repositories.length == 0) {
+  if (
+    error === undefined ||
+    data === undefined ||
+    data?.repositories.length == 0
+  ) {
+    if (error === null) {
+      console.error(error);
+    }
     return (
       <div>
         <EuiEmptyPrompt
