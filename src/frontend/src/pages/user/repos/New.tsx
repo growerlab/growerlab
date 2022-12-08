@@ -13,7 +13,7 @@ export default function RepositoryNew() {
   if (currentUser === undefined) return <></>;
 
   return (
-    <div>
+    <div className="p-5">
       <Title title={i18n.t<string>("repository.create_repository")} />
       <NewRepositoryForm namespace={currentUser.namespace} />
     </div>
