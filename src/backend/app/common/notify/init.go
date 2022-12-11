@@ -16,9 +16,7 @@ func InitNotify() error {
 		c := make(chan os.Signal, 1)
 		signal.Notify(c,
 			syscall.SIGINT,
-			syscall.SIGKILL,
 			syscall.SIGQUIT,
-			syscall.SIGSTOP,
 			syscall.SIGUSR1,
 			syscall.SIGUSR2,
 		)

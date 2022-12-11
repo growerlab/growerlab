@@ -6,6 +6,7 @@ import (
 	"github.com/growerlab/growerlab/src/common/db"
 	"github.com/growerlab/growerlab/src/common/errors"
 	"github.com/growerlab/growerlab/src/common/permission"
+	"github.com/samber/lo"
 )
 
 func (g *Take) List() (*ListResponse, error) {
@@ -22,13 +23,10 @@ func (g *Take) List() (*ListResponse, error) {
 		return nil, err
 	}
 
-	var repos []*repositoryModel.Repository
-	for _, repo := range repositories {
-		err := permission.CheckViewRepository(g.currentUserID, repo.ID)
-		if err == nil {
-			repos = append(repos, repo)
-		}
-	}
+	repos := lo.Filter(repositories, func(item *repositoryModel.Repository, _ int) bool {
+		err = permission.CheckViewRepository(g.currentUserID, item.ID)
+		return err == nil
+	})
 
 	err = repositoryModel.FillNamespaces(db.DB, repos...)
 	if err != nil {

@@ -18,11 +18,13 @@ require (
 	github.com/jmoiron/sqlx v1.2.0
 	github.com/patrickmn/go-cache v2.1.0+incompatible
 	github.com/pkg/errors v0.9.1
-	github.com/stretchr/testify v1.7.1
+	github.com/stretchr/testify v1.8.0
 	google.golang.org/grpc v1.36.0
 	google.golang.org/protobuf v1.28.1
-	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b
+	gopkg.in/yaml.v3 v3.0.1
 )
+
+require github.com/samber/lo v1.36.0
 
 require (
 	github.com/Microsoft/go-winio v0.4.16 // indirect
@@ -56,8 +58,9 @@ require (
 	github.com/ugorji/go/codec v1.2.7 // indirect
 	github.com/xanzy/ssh-agent v0.3.0 // indirect
 	golang.org/x/crypto v0.0.0-20210711020723-a769d52b0f97 // indirect
+	golang.org/x/exp v0.0.0-20220303212507-bbda1eaf7a17 // indirect
 	golang.org/x/net v0.0.0-20210326060303-6b1517762897 // indirect
-	golang.org/x/sys v0.0.0-20210806184541-e5e7981a1069 // indirect
+	golang.org/x/sys v0.0.0-20211019181941-9d821ace8654 // indirect
 	golang.org/x/text v0.3.6 // indirect
 	google.golang.org/genproto v0.0.0-20210315173758-2651cd453018 // indirect
 	gopkg.in/warnings.v0 v0.1.2 // indirect

@@ -145,10 +145,7 @@ func (g *GitSSHServer) run() error {
 	})
 
 	publicKeyOption := ssh.PublicKeyAuth(func(ctx ssh.Context, key ssh.PublicKey) bool {
-		if g.gitUser != ctx.User() {
-			return false
-		}
-		return true
+		return g.gitUser == ctx.User()
 	})
 
 	defaultOption := func(server *ssh.Server) error {

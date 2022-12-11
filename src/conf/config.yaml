@@ -19,9 +19,9 @@ default: &base
 
   git_bin_path: "/usr/bin/git"
 
-  mensa:
+  mensa: &mensa
     user: git
-    ssh_listen: 0.0.0.0:8022
+    ssh_listen: 0.0.0.0:22
     http_listen: 0.0.0.0:8080
     deadline: 3600
     idle_timeout: 30
@@ -29,11 +29,12 @@ default: &base
 local:
   <<: *base
   mensa:
+    <<: *mensa
     ssh_listen: 0.0.0.0:8022
 
 dev:
   <<: *base
 
 production:
-  debug: false
   <<: *base
+  debug: false
