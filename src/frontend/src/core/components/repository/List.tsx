@@ -29,11 +29,11 @@ export function RepositoryList(props: RepositoriesNamespace) {
   );
 
   if (
-    error === undefined ||
+    error !== undefined ||
     data === undefined ||
     data?.repositories.length == 0
   ) {
-    if (error === null) {
+    if (error !== undefined) {
       console.error(error);
     }
     return (
