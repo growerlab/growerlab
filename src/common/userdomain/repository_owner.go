@@ -20,14 +20,13 @@ func (s *RepositoryOwner) Validate(ud *UserDomain) error {
 }
 
 func (s *RepositoryOwner) Eval(args Evaluable) ([]int64, error) {
-	result := make([]int64, 0)
 	repoID := args.Context().Param1
 	repo, err := repository.New(args.DB().Src).GetRepository(repoID)
 	if err != nil {
 		return nil, err
 	}
 	if repo == nil {
-		return result, nil
+		return []int64{}, nil
 	}
 
 	ownerID := repo.Owner().ID

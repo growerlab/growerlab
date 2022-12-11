@@ -1,6 +1,8 @@
 package repository
 
 import (
+	"log"
+
 	namespaceModel "github.com/growerlab/growerlab/src/backend/app/model/namespace"
 	repositoryModel "github.com/growerlab/growerlab/src/backend/app/model/repository"
 	"github.com/growerlab/growerlab/src/common/db"
@@ -25,6 +27,9 @@ func (g *Take) List() (*ListResponse, error) {
 
 	repos := lo.Filter(repositories, func(item *repositoryModel.Repository, _ int) bool {
 		err = permission.CheckViewRepository(g.currentUserID, item.ID)
+		if err != nil {
+			log.Printf("can't view the repo '%s'", item.PathGroup())
+		}
 		return err == nil
 	})
 
