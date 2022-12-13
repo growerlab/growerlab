@@ -14,5 +14,5 @@ export default function RepositoryLayout(props: Props) {
   const { setUserMenu } = useUserMenu();
   setUserMenu("repository");
 
-  return <div>{defaultOutlet}</div>;
+  return <>{defaultOutlet}</>;
 }

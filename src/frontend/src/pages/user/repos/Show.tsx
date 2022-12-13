@@ -23,7 +23,7 @@ export default function RepositoryShow(props: Props) {
     return <Error404 />;
   }
 
-  const myContent = [
+  const leftMenus = [
     {
       label: i18n.t("repository.menus.code"),
       href: "#/display/list-group",
@@ -58,12 +58,12 @@ export default function RepositoryShow(props: Props) {
   ];
 
   return (
-    <div className="flex fixed top-18 h-full w-full">
-      <div className="flex flex-row w-full ">
-        <div className="flex-none bg-gray-100 border-y-0 border-l-0 border-solid border-r border-gray-200">
+    <div className="flex h-full w-full">
+      <div className="flex flex-row w-full h-full">
+        <div className="flex-none h-auto bg-gray-100 border-y-0 border-l-0 border-solid border-r border-gray-200">
           <div className="w-52 mt-3">
             <EuiListGroup
-              listItems={myContent}
+              listItems={leftMenus}
               color="primary"
               size="s"
               gutterSize="s"
@@ -72,14 +72,9 @@ export default function RepositoryShow(props: Props) {
             />
           </div>
         </div>
-        <div className="flex-auto overflow-auto ">
-          <div className="space-y-1 p-5">
-            {defaultOutlet}
-            <div className=" h-96"></div>sdf
-            <div className=" h-96"></div>sdf
-            <div className=" h-96"></div>sdf
-            <div className=" h-96"></div>sdf
-            <div className=" h-96"></div>sdf
+        <div className="flex-auto mx-auto">
+          <div className="overflow-y-auto">
+            <div className="space-y-1 p-5 ">{defaultOutlet}</div>
           </div>
         </div>
       </div>

@@ -72,6 +72,7 @@ export function RepositoryDetail(props: RepositoryPathGroup) {
       </EuiTab>
     ));
   };
+
   return (
     <div>
       <h3 className={"text-xl"}>
@@ -81,7 +82,9 @@ export function RepositoryDetail(props: RepositoryPathGroup) {
       </h3>
       <div className={"mt-6 mb-4 text-gray-400"}>{repository?.description}</div>
 
-      <EuiTabs>{renderTabs()}</EuiTabs>
+      <EuiTabs size="s" className="flex justify-between">
+        {renderTabs()}
+      </EuiTabs>
     </div>
   );
 }

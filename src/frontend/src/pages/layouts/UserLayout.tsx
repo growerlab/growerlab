@@ -229,14 +229,8 @@ export default function UserLayout(props: Props) {
                 </div>
               </div>
             </header>
-            <main>
-              <div className="max-w-full mx-auto">
-                <div className="px-4 sm:px-0">
-                  <div className="border-0 border-dashed border-gray-200 rounded-lg max-h-full">
-                    {props.children}
-                  </div>
-                </div>
-              </div>
+            <main className="w-full h-full">
+              <div className="max-w-full h-full mx-auto">{props.children}</div>
             </main>
           </div>
         </div>
