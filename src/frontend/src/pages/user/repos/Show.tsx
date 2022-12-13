@@ -4,7 +4,7 @@ import { useOutlet } from "react-router-dom";
 
 import { getTitle } from "../../../core/common/document";
 import i18n from "../../../core/i18n/i18n";
-import Error404 from "../../common/404";
+import Notfound404 from "../../../core/components/common/404";
 import { useRepositoryPathGroup } from "../../../core/components/hook/repository";
 import { EuiListGroup } from "@elastic/eui";
 
@@ -20,7 +20,7 @@ export default function RepositoryShow(props: Props) {
 
   const { isInvalid } = useRepositoryPathGroup();
   if (isInvalid) {
-    return <Error404 />;
+    return <Notfound404 />;
   }
 
   const leftMenus = [

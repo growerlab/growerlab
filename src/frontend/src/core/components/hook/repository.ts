@@ -1,11 +1,7 @@
-import useSWR, { Fetcher } from "swr";
 import { useParams } from "react-router-dom";
 
-import { useRepositoryAPI } from "../../api/repository/repository";
 import { useGlobal } from "../../global/global";
 import {
-  RepositoryEntity,
-  RepositoryPath,
   RepositoryPathGroup,
 } from "../../common/types";
 
@@ -32,26 +28,4 @@ export function useRepositoryPathGroup(): PathGroupMaybe {
     return { namespace: "", repo: "", isInvalid: true };
 
   return { namespace: currentUser.namespace, repo: repo, isInvalid: false };
-}
-
-export function useGetRepository(
-  pg: RepositoryPathGroup
-): Promise<RepositoryEntity> {
-  const repositoryAPI = useRepositoryAPI(pg.namespace);
-
-  const fetcher: Fetcher<RepositoryEntity, RepositoryPath> = () => {
-    return repositoryAPI.get(pg.repo).then((res) => {
-      return res.data.repository;
-    });
-  };
-
-  const { data, error } = useSWR<RepositoryEntity>(
-    `/swr/key/repo/${pg.namespace}/${pg.repo}`,
-    fetcher,
-    { revalidateOnFocus: false }
-  );
-  if (error) return Promise.reject(error);
-  if (!data)
-    return Promise.reject(`pull repo data for ${pg.namespace}/${pg.repo}`);
-  return Promise.resolve(data);
 }

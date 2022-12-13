@@ -1,6 +1,6 @@
 import { AxiosResponse } from "axios";
 
-import { TypeRepositories, TypeRepository } from "../../common/types";
+import { RepositoryEntity, TypeRepositories } from "../../common/types";
 import { API, request } from "../api";
 import { GlobalObject, useGlobal } from "../../global/global";
 
@@ -34,14 +34,14 @@ class Repository {
     );
   }
 
-  get(repo: string): Promise<AxiosResponse<TypeRepository>> {
+  get(repo: string): Promise<AxiosResponse<RepositoryEntity>> {
     const url = API.Repositories.Detail.render({
       namespace: this.namespace,
       repo: repo,
     });
     return request(this.global).get<
-      TypeRepository,
-      AxiosResponse<TypeRepository>
+      RepositoryEntity,
+      AxiosResponse<RepositoryEntity>
     >(url);
   }
 

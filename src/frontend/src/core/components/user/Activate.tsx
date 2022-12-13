@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import { EuiButton, EuiIcon, EuiEmptyPrompt } from "@elastic/eui";
 
-import { useParams, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Router } from "../../../config/router";
 import { useAuth } from "../../api/auth/auth";
-import Error404 from "../../../pages/common/404";
 import i18n from "../../i18n/i18n";
 
 interface Status {

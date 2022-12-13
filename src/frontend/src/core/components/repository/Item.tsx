@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
-import { EuiHorizontalRule } from "@elastic/eui";
 
 import { repoIcon, publicRepoPath, builtInRepoPath } from "./common";
 import { RepositoryEntity } from "../../common/types";
@@ -34,8 +33,9 @@ export function Item(props: Args) {
           </span>
         </a>
       </Link>
-      <div className={"text-slate-500 mt-5 ml-12"}>{repo.description}</div>
-      <EuiHorizontalRule />
+      <div className={"text-slate-500 mt-2 ml-12 text-sm"}>
+        {repo.description}
+      </div>
     </div>
   );
 }

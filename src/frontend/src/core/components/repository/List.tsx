@@ -1,7 +1,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import useSWR, { Fetcher } from "swr";
-import { EuiButton, EuiIcon, EuiEmptyPrompt } from "@elastic/eui";
+import {
+  EuiButton,
+  EuiIcon,
+  EuiEmptyPrompt,
+  EuiHorizontalRule,
+} from "@elastic/eui";
 
 import { Router } from "../../../config/router";
 import { Item } from "./Item";
@@ -23,19 +28,12 @@ export function RepositoryList(props: RepositoriesNamespace) {
       return res.data;
     });
   };
-  const { data, error } = useSWR<TypeRepositories>(
+  const { data } = useSWR<TypeRepositories>(
     `/swr/key/repos/${namespace}`,
     fetcher
   );
 
-  if (
-    error !== undefined ||
-    data === undefined ||
-    data?.repositories.length == 0
-  ) {
-    if (error !== undefined) {
-      console.error(error);
-    }
+  if (data === undefined || data?.repositories.length == 0) {
     return (
       <div>
         <EuiEmptyPrompt
@@ -57,7 +55,10 @@ export function RepositoryList(props: RepositoriesNamespace) {
   return (
     <div className="p-5">
       {data?.repositories.map((repo: RepositoryEntity) => (
-        <Item global={global} repo={repo} key={repo.uuid} />
+        <>
+          <Item global={global} repo={repo} key={repo.uuid} />
+          <EuiHorizontalRule />
+        </>
       ))}
     </div>
   );

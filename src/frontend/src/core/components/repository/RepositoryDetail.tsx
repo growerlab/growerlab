@@ -9,18 +9,30 @@ import {
 
 import { RepositoryPathGroup, RepositoryEntity } from "../../common/types";
 import { repoIcon } from "./common";
-import { useGetRepository } from "../hook/repository";
+import { Item } from "./Item";
+import { useGlobal } from "../../global/global";
+import { useRepositoryAPI } from "../../api/repository/repository";
+import useSWR, { Fetcher } from "swr";
+import Notfound404 from "../common/404";
 
 export function RepositoryDetail(props: RepositoryPathGroup) {
   const { namespace, repo } = props;
+  const global = useGlobal();
   const [currentTab, setCurrentTab] = useState("code");
   const [repository, setRepository] = useState<RepositoryEntity>();
 
-  const repoEntity = useGetRepository({ namespace: namespace, repo: repo });
-  repoEntity.then((data) => {
-    console.info(data);
-    setRepository(data);
-  });
+  const repositoryAPI = useRepositoryAPI(namespace);
+
+  const fetcher: Fetcher = () => {
+    return repositoryAPI.get(repo).then((res) => {
+      setRepository(res.data);
+      return res.data;
+    });
+  };
+  useSWR(`/swr/key/repo/${namespace}/${repo}`, fetcher);
+  if (!repository) {
+    return <Notfound404 />;
+  }
 
   const tabs: EuiTabbedContentProps["tabs"] = [
     {
@@ -75,13 +87,8 @@ export function RepositoryDetail(props: RepositoryPathGroup) {
 
   return (
     <div>
-      <h3 className={"text-xl"}>
-        {repoIcon(repository?.public ? true : false)}
-        <span className="ml-4"></span>
-        {repository?.path}
-      </h3>
-      <div className={"mt-6 mb-4 text-gray-400"}>{repository?.description}</div>
-
+      <Item global={global} repo={repository} />
+      <div className=" mb-3"></div>
       <EuiTabs size="s" className="flex justify-between">
         {renderTabs()}
       </EuiTabs>

@@ -18,7 +18,7 @@ import ActivateUser from "./pages/auth/ActivateUser";
 import RepositoryIndex from "./pages/user/repos/Index";
 import RepositoryShow from "./pages/user/repos/Show";
 import RepositoryNew from "./pages/user/repos/New";
-import Error404 from "./pages/common/404";
+import Notfound404 from "./core/components/common/404";
 import Branchs from "./pages/user/repos/detail/Branchs";
 import Detail from "./pages/user/repos/detail/Detail";
 import RepositoryLayout from "./pages/user/repos/Layout";
@@ -46,7 +46,7 @@ export default function App() {
     {
       path: Router.User.Index,
       element: <User />,
-      errorElement: <Error404 />,
+      errorElement: <Notfound404 />,
       children: [
         {
           path: Router.User.Repository.Index,
