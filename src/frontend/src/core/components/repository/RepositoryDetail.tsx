@@ -8,12 +8,11 @@ import {
 } from "@elastic/eui";
 
 import { RepositoryPathGroup, RepositoryEntity } from "../../common/types";
-import { repoIcon } from "./common";
 import { Item } from "./Item";
 import { useGlobal } from "../../global/global";
 import { useRepositoryAPI } from "../../api/repository/repository";
 import useSWR, { Fetcher } from "swr";
-import Notfound404 from "../common/404";
+import Loading from "../common/Loading";
 
 export function RepositoryDetail(props: RepositoryPathGroup) {
   const { namespace, repo } = props;
@@ -31,7 +30,7 @@ export function RepositoryDetail(props: RepositoryPathGroup) {
   };
   useSWR(`/swr/key/repo/${namespace}/${repo}`, fetcher);
   if (!repository) {
-    return <Notfound404 />;
+    return <Loading />;
   }
 
   const tabs: EuiTabbedContentProps["tabs"] = [
