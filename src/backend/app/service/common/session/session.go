@@ -9,7 +9,7 @@ import (
 )
 
 const (
-	AuthUserToken = "auth-user-token"
+	GrowerlabToken = "growerlab-token"
 )
 
 type Session struct {
@@ -77,7 +77,7 @@ func (s *Session) IsGuest() bool {
 }
 
 func GetUserToken(ctx *gin.Context) string {
-	token := getValueFromHeaderOrCookie(AuthUserToken, ctx)
+	token := getValueFromHeaderOrCookie(GrowerlabToken, ctx)
 	return token
 }
 

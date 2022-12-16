@@ -43,7 +43,7 @@ export const request = function (global: GlobalObject): AxiosInstance {
     // responseType: "json",
     headers: {
       // 'Content-Type': 'application/json',
-      "Auth-User-Token": currentUser?.token || "",
+      "Growerlab-Token": currentUser?.token || "",
     },
     validateStatus: function (status: number): boolean {
       return status >= 200 && status <= 500;

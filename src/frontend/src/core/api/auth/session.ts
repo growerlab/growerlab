@@ -1,6 +1,6 @@
 import { Router } from "../../../config/router";
 
-const AuthUserToken = "auth-user-token";
+const AuthUserToken = "growerlab-token";
 
 export interface UserInfo {
   token: string;

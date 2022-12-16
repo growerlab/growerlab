@@ -28,7 +28,7 @@ func Login(ctx *gin.Context, req *LoginBasicAuth) (
 	err error,
 ) {
 	err = db.Transact(func(tx sqlx.Ext) error {
-		loginService := NewLoginService(ctx.ClientIP(), db.DB)
+		loginService := NewLoginService(ctx.ClientIP(), tx)
 		result, err = loginService.Do(req)
 		if err != nil {
 			return errors.Trace(err)
@@ -60,7 +60,7 @@ func NewLoginService(ip string, tx sqlx.Ext) *LoginService {
 }
 
 func (r *LoginService) SetCookie(ctx *gin.Context) {
-	ctx.SetCookie(session.AuthUserToken, r.session.Token, 0, "/", "*", false, false)
+	ctx.SetCookie(session.GrowerlabToken, r.session.Token, 0, "/", "*", false, true)
 }
 
 func (r *LoginService) Do(auth *LoginBasicAuth) (
