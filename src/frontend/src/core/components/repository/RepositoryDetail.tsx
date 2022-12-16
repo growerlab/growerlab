@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useMemo, useState } from "react";
 import {
   EuiSpacer,
   EuiTab,
@@ -13,48 +13,26 @@ import { useGlobal } from "../../global/global";
 import { useRepositoryAPI } from "../../api/repository/repository";
 import useSWR, { Fetcher } from "swr";
 import Loading from "../common/Loading";
+import { Files } from "./detail/Files";
+import i18n from "../../i18n/i18n";
 
 export function RepositoryDetail(props: RepositoryPathGroup) {
   const { namespace, repo } = props;
   const global = useGlobal();
-  const [currentTab, setCurrentTab] = useState("code");
+  const [currentTab, setCurrentTab] = useState("files");
   const [repository, setRepository] = useState<RepositoryEntity>();
 
   const repositoryAPI = useRepositoryAPI(namespace);
 
-  const fetcher: Fetcher = () => {
-    return repositoryAPI.get(repo).then((res) => {
-      setRepository(res.data);
-      return res.data;
-    });
-  };
-  useSWR(`/swr/key/repo/${namespace}/${repo}`, fetcher);
-  if (!repository) {
-    return <Loading />;
-  }
-
   const tabs: EuiTabbedContentProps["tabs"] = [
     {
-      id: "code",
-      name: "Code",
-      content: (
-        <Fragment>
-          <EuiSpacer />
-          <EuiText>
-            <p>
-              Cobalt is a chemical element with symbol Co and atomic number 27.
-              Like nickel, cobalt is found in the Earth&rsquo;s crust only in
-              chemically combined form, save for small deposits found in alloys
-              of natural meteoric iron. The free element, produced by reductive
-              smelting, is a hard, lustrous, silver-gray metal.
-            </p>
-          </EuiText>
-        </Fragment>
-      ),
+      id: "files",
+      name: i18n.t<string>("repository.files"),
+      content: <Files branch="master" namespace={namespace} repo={repo} />,
     },
     {
       id: "clone",
-      name: "Clone or download",
+      name: i18n.t<string>("repository.clond_and_download"),
       content: (
         <Fragment>
           <EuiSpacer />
@@ -69,6 +47,21 @@ export function RepositoryDetail(props: RepositoryPathGroup) {
       ),
     },
   ];
+  const selectedTabContent = useMemo(() => {
+    return tabs.find((obj) => obj.id === currentTab)?.content;
+  }, [currentTab]);
+
+  const fetcher: Fetcher = () => {
+    return repositoryAPI.get(repo).then((res) => {
+      setRepository(res.data);
+      return res.data;
+    });
+  };
+  useSWR(`/swr/key/repo/${namespace}/${repo}`, fetcher);
+  if (!repository) {
+    return <Loading />;
+  }
+
   const renderTabs = () => {
     return tabs.map((tab, index) => (
       <EuiTab
@@ -91,6 +84,7 @@ export function RepositoryDetail(props: RepositoryPathGroup) {
       <EuiTabs size="s" className="flex justify-between">
         {renderTabs()}
       </EuiTabs>
+      <div className="pt-4 p-1">{selectedTabContent}</div>
     </div>
   );
 }

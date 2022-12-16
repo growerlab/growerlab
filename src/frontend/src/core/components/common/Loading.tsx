@@ -1,15 +1,20 @@
 import React from "react";
-import { EuiLoadingContent } from "@elastic/eui";
 import { useTitle } from "react-use";
+import { EuiLoadingContent } from "@elastic/eui";
+import { LineRange } from "@elastic/eui/src/components/loading/loading_content";
 
 import { getTitle } from "../../common/document";
 
-export default function Loading() {
+interface Props {
+  lines?: 2 | LineRange;
+}
+
+export default function Loading(props: Props) {
   useTitle(getTitle("Loading..."));
 
   return (
     <div>
-      <EuiLoadingContent lines={2} />
+      <EuiLoadingContent lines={props.lines} />
     </div>
   );
 }
