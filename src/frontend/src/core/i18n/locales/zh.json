@@ -83,6 +83,7 @@
       "GraphQLError": "服务器接口错误,请于管理员联系",
       "SQLError": "服务器接口错误,请于管理员联系",
       "InvalidParameter": "参数错误,{model}{field}{reason}",
+      "MissingParameter": "缺少参数,{model}{field}",
       "NotFoundError": "未找到{model}",
       "AlreadyExists": "{model}{field}已存在",
       "AccessDeniedError": "禁止访问{model}, 因为{reason}",
@@ -101,7 +102,8 @@
       "Email": "邮箱",
       "Password": "密码",
       "ConfirmPassword": "确认密码",
-      "Code": "Code"
+      "Code": "Code",
+      "Repo": "仓库"
     },
     "reason": {
       "Invalid": "无效",

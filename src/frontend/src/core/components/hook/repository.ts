@@ -1,9 +1,7 @@
 import { useParams } from "react-router-dom";
 
 import { useGlobal } from "../../global/global";
-import {
-  RepositoryPathGroup,
-} from "../../common/types";
+import { RepositoryPathGroup } from "../../common/types";
 
 interface PathGroupMaybe extends RepositoryPathGroup {
   isInvalid: boolean;
