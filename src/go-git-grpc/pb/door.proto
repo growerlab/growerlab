@@ -6,10 +6,27 @@ package pb;
 
 service Door {
   rpc RunCommand(stream Request) returns (stream Response) {}
+  rpc AddOrUpdateFile(AddFileRequest) returns (AddFileResponse) {}
+}
+
+message AddFileRequest {
+  string Path = 1;     // repo path
+  string Bin = 2;      // git bin path
+
+  string Ref = 3;        // commit to the branch
+  string AuthorName = 4; // commit author name
+  string AuthorEmail = 5; // commit author email
+  string Message = 6;    // commit message
+  string FilePath = 7;   // commit new file path
+  bytes FileContent = 8; // commit new file content
+}
+
+message AddFileResponse {
+  string CommitHash = 1;    // commit hash
 }
 
 message Request {
-  string Path = 1;
+  string Path = 1;      // repo path
   repeated string Env = 2;
   string Bin = 3;
   repeated string Args = 4;

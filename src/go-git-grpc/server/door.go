@@ -2,10 +2,13 @@ package server
 
 import (
 	"bytes"
+	"context"
 	"io"
 	"log"
 	"time"
 
+	"github.com/go-git/go-git/v5/plumbing/object"
+	"github.com/growerlab/growerlab/src/common/errors"
 	"github.com/growerlab/growerlab/src/go-git-grpc/pb"
 	"github.com/growerlab/growerlab/src/go-git-grpc/server/command"
 )
@@ -104,6 +107,22 @@ func (d *Door) RunCommand(pack pb.Door_RunCommandServer) error {
 	}
 
 	return command.Run(d.root, srvCmd.ctx)
+}
+
+func (d *Door) AddOrUpdateFile(ctx context.Context, req *pb.AddFileRequest) (*pb.AddFileResponse, error) {
+	blob := command.NewBlob(d.root, req.FilePath, req.FileContent, &command.Context{
+		Bin:      req.Bin,
+		RepoPath: req.Path,
+	})
+	commitHash, err := blob.Commit(object.Signature{
+		Name:  req.AuthorName,
+		Email: req.AuthorEmail,
+		When:  time.Now(),
+	}, req.Message, req.Ref)
+	if err != nil {
+		return nil, errors.Trace(err)
+	}
+	return &pb.AddFileResponse{CommitHash: commitHash.String()}, nil
 }
 
 func (d *Door) mustEmbedUnimplementedDoorServer() {}

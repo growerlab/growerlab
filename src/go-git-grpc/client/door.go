@@ -14,6 +14,15 @@ import (
 	"github.com/growerlab/growerlab/src/go-git-grpc/server/command"
 )
 
+type File struct {
+	Ref         string
+	AuthorName  string
+	AuthorEmail string
+	Message     string
+	FilePath    string
+	FileContent []byte
+}
+
 type Door struct {
 	ctx    context.Context //
 	client pb.DoorClient   //
@@ -25,6 +34,29 @@ func NewDoor(ctx context.Context, pbClient pb.DoorClient) *Door {
 		client: pbClient,
 	}
 	return door
+}
+
+func (d *Door) AddOrUpdateFile(ctx *command.Context, file *File) (string, error) {
+	switch true {
+	case ctx == nil,
+		file == nil:
+		panic(errors.New("invalid params"))
+	}
+
+	resp, err := d.client.AddOrUpdateFile(d.ctx, &pb.AddFileRequest{
+		Path:        ctx.RepoPath,
+		Bin:         ctx.Bin,
+		Ref:         file.Ref,
+		AuthorName:  file.AuthorName,
+		AuthorEmail: file.AuthorEmail,
+		Message:     file.Message,
+		FilePath:    file.FilePath,
+		FileContent: file.FileContent,
+	})
+	if err != nil {
+		return "", errors.Trace(err)
+	}
+	return resp.CommitHash, nil
 }
 
 func (d *Door) RunCommand(params *command.Context) error {

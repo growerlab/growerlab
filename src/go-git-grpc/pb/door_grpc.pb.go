@@ -23,6 +23,7 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type DoorClient interface {
 	RunCommand(ctx context.Context, opts ...grpc.CallOption) (Door_RunCommandClient, error)
+	AddOrUpdateFile(ctx context.Context, in *AddFileRequest, opts ...grpc.CallOption) (*AddFileResponse, error)
 }
 
 type doorClient struct {
@@ -64,11 +65,21 @@ func (x *doorRunCommandClient) Recv() (*Response, error) {
 	return m, nil
 }
 
+func (c *doorClient) AddOrUpdateFile(ctx context.Context, in *AddFileRequest, opts ...grpc.CallOption) (*AddFileResponse, error) {
+	out := new(AddFileResponse)
+	err := c.cc.Invoke(ctx, "/pb.Door/AddOrUpdateFile", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // DoorServer is the server API for Door service.
 // All implementations must embed UnimplementedDoorServer
 // for forward compatibility
 type DoorServer interface {
 	RunCommand(Door_RunCommandServer) error
+	AddOrUpdateFile(context.Context, *AddFileRequest) (*AddFileResponse, error)
 	mustEmbedUnimplementedDoorServer()
 }
 
@@ -78,6 +89,9 @@ type UnimplementedDoorServer struct {
 
 func (UnimplementedDoorServer) RunCommand(Door_RunCommandServer) error {
 	return status.Errorf(codes.Unimplemented, "method RunCommand not implemented")
+}
+func (UnimplementedDoorServer) AddOrUpdateFile(context.Context, *AddFileRequest) (*AddFileResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AddOrUpdateFile not implemented")
 }
 func (UnimplementedDoorServer) mustEmbedUnimplementedDoorServer() {}
 
@@ -118,13 +132,36 @@ func (x *doorRunCommandServer) Recv() (*Request, error) {
 	return m, nil
 }
 
+func _Door_AddOrUpdateFile_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AddFileRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DoorServer).AddOrUpdateFile(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pb.Door/AddOrUpdateFile",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DoorServer).AddOrUpdateFile(ctx, req.(*AddFileRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Door_ServiceDesc is the grpc.ServiceDesc for Door service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var Door_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "pb.Door",
 	HandlerType: (*DoorServer)(nil),
-	Methods:     []grpc.MethodDesc{},
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "AddOrUpdateFile",
+			Handler:    _Door_AddOrUpdateFile_Handler,
+		},
+	},
 	Streams: []grpc.StreamDesc{
 		{
 			StreamName:    "RunCommand",
