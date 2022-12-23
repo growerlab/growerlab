@@ -81,7 +81,7 @@ func (c *CreateRepository) validateAndPrepare(src sqlx.Ext, userID int64, req *C
 	req.Name = strings.TrimSpace(req.Name)
 
 	if govalidator.IsNull(req.Namespace) {
-		err = errors.InvalidParameterError(errors.Namespace, errors.Path, errors.Invalid)
+		err = errors.InvalidParameterError(errors.Namespace, errors.Repo, errors.Invalid)
 		return
 	}
 

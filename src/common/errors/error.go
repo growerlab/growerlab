@@ -13,6 +13,8 @@ import (
 const (
 	// 非法参数
 	invalidParameter = "InvalidParameter"
+	// 缺少参数
+	missingParameter = "MissingParameter"
 	// 无法找到
 	notFoundError = "NotFoundError"
 	// GraphQLError
@@ -61,6 +63,7 @@ const (
 
 var httpCodeSet = map[string]int{
 	invalidParameter:  400,
+	missingParameter:  400,
 	notFoundError:     404,
 	graphQLError:      400,
 	alreadyExists:     409,
@@ -93,6 +96,10 @@ var P = InvalidParameterError
 
 func InvalidParameterError(model, field, reason string) error {
 	return mustCode(nil, invalidParameter, model, field, reason)
+}
+
+func MissingParameterError(model, field string) error {
+	return mustCode(nil, missingParameter, field)
 }
 
 func NotFoundError(model string) error {

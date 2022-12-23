@@ -9,6 +9,7 @@ import (
 	"reflect"
 	"sync"
 
+	"github.com/asaskevich/govalidator"
 	"github.com/growerlab/growerlab/src/common/errors"
 	"github.com/growerlab/growerlab/src/go-git-grpc/pb"
 	"github.com/growerlab/growerlab/src/go-git-grpc/server/command"
@@ -21,6 +22,19 @@ type File struct {
 	Message     string
 	FilePath    string
 	FileContent []byte
+}
+
+func (f *File) Verify() error {
+	switch true {
+	case govalidator.IsNull(f.Ref),
+		govalidator.IsNull(f.AuthorName),
+		govalidator.IsNull(f.AuthorEmail),
+		govalidator.IsNull(f.Message),
+		govalidator.IsNull(f.FilePath),
+		len(f.FileContent) == 0:
+		return errors.New("invalid fields, all is required.")
+	}
+	return nil
 }
 
 type Door struct {
@@ -39,7 +53,8 @@ func NewDoor(ctx context.Context, pbClient pb.DoorClient) *Door {
 func (d *Door) AddOrUpdateFile(ctx *command.Context, file *File) (string, error) {
 	switch true {
 	case ctx == nil,
-		file == nil:
+		file == nil,
+		file.Verify() != nil:
 		panic(errors.New("invalid params"))
 	}
 

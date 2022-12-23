@@ -8,6 +8,10 @@ import (
 	"github.com/growerlab/growerlab/src/common/errors"
 )
 
+func GetPathGroup(namespace, repo string) string {
+	return filepath.Join(namespace, repo)
+}
+
 // GetRealRepositoryPath 会根据 pathGroup 获取到真实的仓库地址
 func GetRealRepositoryPath(pathGroup string) string {
 	cfg := configurator.GetConf()

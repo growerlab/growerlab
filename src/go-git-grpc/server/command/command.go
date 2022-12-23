@@ -22,9 +22,20 @@ type Context struct {
 	Args     []string  // args
 	In       io.Reader // input
 	Out      io.Writer // output
-	RepoPath string    // repo dir
+	RepoPath string    // repo relative path ( ab/ab/abcedf/abcdef
 
 	Deadline time.Duration // 命令执行时间，单位秒
+}
+
+func (p *Context) Verify() error {
+	fileParts := strings.Split(p.RepoPath, "/")
+	if len(fileParts) != 4 {
+		return errors.New("invalid repo path, must relative path.")
+	}
+	if len(p.Bin) == 0 {
+		return errors.New("invalid Bin binary, must required.")
+	}
+	return nil
 }
 
 func (p *Context) String() string {
@@ -51,6 +62,9 @@ func Run(root string, params *Context) error {
 	}
 	if len(params.RepoPath) > 0 {
 		root = filepath.Join(root, params.RepoPath)
+	}
+	if err := params.Verify(); err != nil {
+		return errors.Trace(err)
 	}
 
 	// deadline

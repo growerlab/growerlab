@@ -5,8 +5,10 @@ import (
 	"path/filepath"
 	"testing"
 
+	"github.com/go-git/go-git/v5/plumbing"
 	"github.com/growerlab/growerlab/src/common/configurator"
 	"github.com/growerlab/growerlab/src/common/test"
+	"github.com/growerlab/growerlab/src/go-git-grpc/client"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -36,11 +38,41 @@ func TestRepository_DeleteRepository(t *testing.T) {
 	repoPathGroup := "test/admin"
 	r := New(context.TODO(), repoPathGroup)
 	err := r.Delete()
-
-	assert.Nil(t, err)
 	if err != nil {
 		assert.FailNow(t, err.Error())
 	}
 
 	assert.NoDirExists(t, r.repoAbsPath)
+}
+
+func TestRepository_Files(t *testing.T) {
+	repoPathGroup := "test/admin"
+	r := New(context.TODO(), repoPathGroup)
+
+	file := client.File{
+		Ref:         "master",
+		AuthorName:  "moli",
+		AuthorEmail: "fake@growerlab.net",
+		Message:     "test message",
+		FilePath:    "test.md",
+		FileContent: []byte("# title\n\nhello\n\n"),
+	}
+
+	commitHash, err := r.AddFile(&file)
+	assert.Nil(t, err)
+	assert.NotNil(t, commitHash)
+	assert.False(t, plumbing.NewHash(commitHash).IsZero())
+
+	file.FilePath = "test/test2.md"
+	file.FileContent = []byte("# tilte\n\ntest2\n\n")
+	commitHash, err = r.AddFile(&file)
+	assert.Nil(t, err)
+	assert.NotNil(t, commitHash)
+	assert.False(t, plumbing.NewHash(commitHash).IsZero())
+
+	files, err := r.Files("master", "/")
+	if err != nil {
+		assert.FailNow(t, err.Error())
+	}
+	assert.Greater(t, len(files), 1)
 }

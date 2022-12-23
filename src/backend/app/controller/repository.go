@@ -13,10 +13,19 @@ func Repositories(c *gin.Context) {
 
 func Repository(c *gin.Context) {
 	namespace := c.Param("namespace")
-	name := c.Param("name")
+	repo := c.Param("repo")
 
-	repo, err := repository.NewTaker(c, namespace, &name).Get()
-	Render(c, repo, err)
+	r, err := repository.NewTaker(c, namespace, &repo).Get()
+	Render(c, r, err)
+}
+
+func RepositoryFiles(c *gin.Context) {
+	namespace := c.Param("namespace")
+	repo := c.Param("repo")
+	ref := c.Param("ref")
+	dir := c.Param("dir")
+	r, err := repository.NewTaker(c, namespace, &repo).Files(ref, &dir)
+	Render(c, r, err)
 }
 
 func CreateRepository(c *gin.Context) {

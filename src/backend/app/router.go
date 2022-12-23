@@ -22,7 +22,8 @@ func Run(addr string) error {
 	{
 		repositories.POST("/:namespace/create", middleware.Authorized, controller.CreateRepository)
 		repositories.GET("/:namespace/list", controller.Repositories) // TODO 分页
-		repositories.GET("/:namespace/detail/:name", controller.Repository)
+		repositories.GET("/:namespace/detail/:repo", controller.Repository)
+		repositories.GET("/:namespace/detail/:repo/files/:ref/*dir", controller.RepositoryFiles)
 	}
 
 	auth := apiV1.Group("/auth")

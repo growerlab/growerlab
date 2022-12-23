@@ -11,6 +11,7 @@ import (
 	"github.com/growerlab/growerlab/src/common/configurator"
 	"github.com/growerlab/growerlab/src/common/db"
 	"github.com/growerlab/growerlab/src/common/errors"
+	"github.com/growerlab/growerlab/src/common/path"
 	"github.com/jmoiron/sqlx"
 )
 
@@ -67,7 +68,7 @@ func (r *Repository) IsPublic() bool {
 }
 
 func (r *Repository) PathGroup() string {
-	return fmt.Sprintf("%s/%s", r.Namespace().Path, r.Path)
+	return path.GetPathGroup(r.Namespace().Path, r.Path)
 }
 
 // https://domain.com:port/user/path.git

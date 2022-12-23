@@ -37,6 +37,9 @@ func NewBlob(root, filepath string, content []byte, ctx *Context) *Blob {
 }
 
 func (b *Blob) Commit(author object.Signature, message string, toRef string) (plumbing.Hash, error) {
+	if err := b.ctx.Verify(); err != nil {
+		return plumbing.ZeroHash, errors.Trace(err)
+	}
 	if govalidator.IsNull(message) {
 		return plumbing.ZeroHash, errors.New("commit message is required.")
 	}

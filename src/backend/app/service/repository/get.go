@@ -13,8 +13,8 @@ import (
 type Take struct {
 	currentUserID *int64
 	namespace     string
-	// 当取list时，path可以为空
-	path *string
+	// 当取list时，repo可以为空
+	repo *string
 }
 
 func NewTaker(c *gin.Context, namespace string, path *string) *Take {
@@ -26,8 +26,8 @@ func (g *Take) Get() (*Entity, error) {
 	if g.namespace == "" {
 		return nil, errors.InvalidParameterError(errors.Repository, errors.Namespace, errors.Empty)
 	}
-	if g.path == nil {
-		return nil, errors.InvalidParameterError(errors.Repository, errors.Path, errors.Empty)
+	if g.repo == nil {
+		return nil, errors.InvalidParameterError(errors.Repository, errors.Repo, errors.Empty)
 	}
 
 	ns, err := namespaceModel.GetNamespaceByPath(db.DB, g.namespace)
@@ -38,7 +38,7 @@ func (g *Take) Get() (*Entity, error) {
 		return nil, errors.NotFoundError(errors.Namespace)
 	}
 
-	repo, err := repositoryModel.New(db.DB).GetRepositoryByNsWithPath(ns.ID, *g.path)
+	repo, err := repositoryModel.New(db.DB).GetRepositoryByNsWithPath(ns.ID, *g.repo)
 	if err != nil {
 		return nil, err
 	}
