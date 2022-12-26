@@ -27,19 +27,23 @@ var (
 		"description",
 		"created_at",
 		"public",
+		"last_push_at",
+		"default_branch",
 	}
 )
 
 type Repository struct {
-	ID          int64  `db:"id"`
-	UUID        string `db:"uuid"`         // 全站唯一ID（fork时用到）
-	Path        string `db:"path"`         // 在namespace中是唯一的name
-	Name        string `db:"name"`         // 目前与path字段相同
-	NamespaceID int64  `db:"namespace_id"` // 仓库所属的命名空间（个人，组织）
-	OwnerID     int64  `db:"owner_id"`     // 仓库创建者
-	Description string `db:"description"`
-	CreatedAt   int64  `db:"created_at"`
-	Public      bool   `db:"public"` // 公有
+	ID            int64  `db:"id"`
+	UUID          string `db:"uuid"`         // 全站唯一ID（fork时用到）
+	Path          string `db:"path"`         // 在namespace中是唯一的name
+	Name          string `db:"name"`         // 目前与path字段相同
+	NamespaceID   int64  `db:"namespace_id"` // 仓库所属的命名空间（个人，组织）
+	OwnerID       int64  `db:"owner_id"`     // 仓库创建者
+	Description   string `db:"description"`
+	CreatedAt     int64  `db:"created_at"`
+	Public        bool   `db:"public"`         // 公有
+	LastPushAt    int64  `db:"last_push_at"`   // 最后的推送时间
+	DefaultBranch string `db:"default_branch"` // 默认分支
 
 	ns    *namespace.Namespace
 	owner *user.User

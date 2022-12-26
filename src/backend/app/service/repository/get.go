@@ -63,5 +63,5 @@ func (g *Take) Get() (*Entity, error) {
 		return nil, err
 	}
 
-	return BuildRepositryEntity(repo), nil
+	return BuildRepositoryEntity(repo), nil
 }

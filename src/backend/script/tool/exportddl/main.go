@@ -13,11 +13,14 @@ package main
 
 import (
 	"fmt"
-	"net/url"
+	"net"
 	"os"
-	"os/exec"
 	"path/filepath"
+	"regexp"
 
+	"github.com/bitfield/script"
+
+	"github.com/go-sql-driver/mysql"
 	"github.com/growerlab/growerlab/src/common/configurator"
 )
 
@@ -56,13 +59,13 @@ func Export(info *DBInfo) error {
 	}
 	defer sqlFile.Close()
 
-	cmd := exec.Command("pg_dump", "-U", info.Username, "-h", info.Host, info.DBName, "--schema-only")
-	cmd.Stdout = sqlFile
-	cmd.Stderr = os.Stderr
-	err = cmd.Run()
-	if err != nil {
-		panic(err)
-	}
+	cmd := fmt.Sprintf("docker exec mysql8 mysqldump -u%s -p%s -d %s", info.Username, info.Password, info.DBName)
+	script.Exec(cmd).
+		ReplaceRegexp(regexp.MustCompile(" AUTO_INCREMENT=[[:digit:]]+"), "").
+		ReplaceRegexp(regexp.MustCompile("mysqldump:+.+"), "").
+		WithStdout(sqlFile).
+		Stdout()
+	// Wait()
 	return nil
 }
 
@@ -74,16 +77,15 @@ func Prepare() (*DBInfo, error) {
 
 	dbUrl := configurator.GetConf().DBUrl
 
-	u, err := url.Parse(dbUrl)
+	cfg, err := mysql.ParseDSN(dbUrl)
 	if err != nil {
 		return nil, err
 	}
 
 	info := &DBInfo{}
-	info.Username = u.User.Username()
-	info.Password, _ = u.User.Password()
-	info.Host = u.Hostname()
-	info.Port = u.Port()
-	info.DBName = u.Path[1:]
+	info.Username = cfg.User
+	info.Password = cfg.Passwd
+	info.Host, info.Port, _ = net.SplitHostPort(cfg.Addr)
+	info.DBName = cfg.DBName
 	return info, nil
 }

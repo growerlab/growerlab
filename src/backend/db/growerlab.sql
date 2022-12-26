@@ -1,8 +1,9 @@
--- MySQL dump 10.13  Distrib 8.0.26, for Linux (aarch64)
+
+-- MySQL dump 10.13  Distrib 8.0.28, for Linux (aarch64)
 --
 -- Host: localhost    Database: growerlab
 -- ------------------------------------------------------
--- Server version	8.0.26-0ubuntu0.21.04.3
+-- Server version	8.0.28
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -15,6 +16,7 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
+
 --
 -- Table structure for table `activate_code`
 --
@@ -25,7 +27,7 @@ DROP TABLE IF EXISTS `activate_code`;
 CREATE TABLE `activate_code` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int NOT NULL,
-  `code` varchar(16) NOT NULL DEFAULT '',
+  `code` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
   `created_at` bigint NOT NULL,
   `used_at` bigint NOT NULL,
   `expired_at` bigint NOT NULL,
@@ -43,7 +45,7 @@ DROP TABLE IF EXISTS `namespace`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `namespace` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `path` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '路径',
+  `path` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '路径',
   `owner_id` int NOT NULL COMMENT '命名空间所有者（用户）',
   `type` tinyint NOT NULL COMMENT '1用户 2组织',
   PRIMARY KEY (`id`),
@@ -85,15 +87,17 @@ DROP TABLE IF EXISTS `repository`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `repository` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `uuid` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '仓库uuid（fork仓库相同）',
+  `uuid` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '仓库uuid（fork仓库相同）',
   `fork` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否fork项目',
-  `path` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '仓库路径',
+  `path` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '仓库路径',
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '仓库名',
   `namespace_id` int NOT NULL COMMENT '仓库所属命名空间id',
   `owner_id` int NOT NULL COMMENT '仓库创建者,fork后不变',
   `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '仓库描述',
   `created_at` bigint NOT NULL,
   `public` tinyint(1) NOT NULL DEFAULT '1' COMMENT '是否公开',
+  `last_push_at` int NOT NULL DEFAULT '0' COMMENT '最后推送时间',
+  `default_branch` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT 'main' COMMENT '默认分支名',
   PRIMARY KEY (`id`),
   UNIQUE KEY `unq_namespace_path` (`namespace_id`,`path`),
   KEY `idx_uuid` (`uuid`)
@@ -110,10 +114,10 @@ DROP TABLE IF EXISTS `session`;
 CREATE TABLE `session` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `owner_id` int NOT NULL,
-  `token` varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '',
+  `token` varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
   `created_at` bigint NOT NULL,
   `expired_at` bigint NOT NULL,
-  `client_ip` varchar(46) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '用户当前登录的ip',
+  `client_ip` varchar(46) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '用户当前登录的ip',
   PRIMARY KEY (`id`),
   UNIQUE KEY `unq_owner` (`owner_id`,`token`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -129,8 +133,8 @@ DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '用户邮箱',
-  `encrypted_password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '用户密码',
-  `username` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '唯一性用户名（将用在url中）',
+  `encrypted_password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '用户密码',
+  `username` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '唯一性用户名（将用在url中）',
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '用户昵称',
   `public_email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '公开的邮箱地址',
   `last_login_ip` varchar(46) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '最后的登录ip（兼容ipv6长度）',
@@ -138,7 +142,7 @@ CREATE TABLE `user` (
   `created_at` bigint NOT NULL,
   `deleted_at` int DEFAULT NULL,
   `verified_at` int DEFAULT NULL,
-  `register_ip` varchar(46) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '注册ip',
+  `register_ip` varchar(46) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '注册ip',
   `is_admin` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否管理员',
   `namespace_id` int NOT NULL COMMENT '用户的用户域id',
   PRIMARY KEY (`id`),
@@ -156,4 +160,4 @@ CREATE TABLE `user` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-11-30 20:53:49
+-- Dump completed on 2022-12-26 17:12:39

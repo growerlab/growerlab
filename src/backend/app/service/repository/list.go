@@ -44,7 +44,7 @@ func (g *Take) List() (*ListResponse, error) {
 
 	var result = make([]*Entity, 0, len(repos))
 	for _, repo := range repos {
-		result = append(result, BuildRepositryEntity(repo))
+		result = append(result, BuildRepositoryEntity(repo))
 	}
 
 	return &ListResponse{Repositories: result}, nil

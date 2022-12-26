@@ -25,16 +25,16 @@ func BuildNewRepository(
 	return repo
 }
 
-func BuildRepositryEntity(
-	repo *repository.Repository) *Entity {
-
+func BuildRepositoryEntity(repo *repository.Repository) *Entity {
 	return &Entity{
-		UUID:        repo.UUID,
-		Name:        repo.Name,
-		Path:        repo.Path,
-		Description: repo.Description,
-		CreatedAt:   repo.CreatedAt,
-		Public:      repo.Public,
+		UUID:          repo.UUID,
+		Name:          repo.Name,
+		Path:          repo.Path,
+		Description:   repo.Description,
+		CreatedAt:     repo.CreatedAt,
+		Public:        repo.Public,
+		LastPushAt:    repo.LastPushAt,
+		DefaultBranch: repo.DefaultBranch,
 		Namespace: &NamespaceEntity{
 			Path: repo.Namespace().Path,
 			Type: repo.Namespace().TypeLabel(),
