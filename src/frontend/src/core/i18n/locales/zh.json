@@ -94,7 +94,8 @@
     "model": {
       "User": "用户",
       "ActivationCode": "激活码",
-      "Repository": "仓库"
+      "Repository": "仓库",
+      "Reference": "分支或引用"
     },
     "field": {
       "Name": "名称",

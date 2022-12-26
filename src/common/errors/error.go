@@ -2,6 +2,7 @@ package errors
 
 import (
 	"fmt"
+	"net/http"
 	"strings"
 
 	pkgerr "github.com/pkg/errors"
@@ -62,17 +63,17 @@ const (
 )
 
 var httpCodeSet = map[string]int{
-	invalidParameter:  400,
-	missingParameter:  400,
-	notFoundError:     404,
-	graphQLError:      400,
-	alreadyExists:     409,
-	accessDeniedError: 403,
-	sqlError:          500,
-	unauthorizedError: 401,
-	permissionError:   403,
-	repositoryError:   500,
-	timeoutError:      408,
+	invalidParameter:  http.StatusBadRequest,
+	missingParameter:  http.StatusBadRequest,
+	notFoundError:     http.StatusNotFound,
+	graphQLError:      http.StatusBadRequest,
+	alreadyExists:     http.StatusConflict,
+	accessDeniedError: http.StatusForbidden,
+	sqlError:          http.StatusInternalServerError,
+	unauthorizedError: http.StatusUnauthorized,
+	permissionError:   http.StatusForbidden,
+	repositoryError:   http.StatusBadRequest,
+	timeoutError:      http.StatusRequestTimeout,
 }
 
 type Result struct {

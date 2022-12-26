@@ -1,4 +1,4 @@
-import { Router } from "../../../config/router";
+import { Router } from "../../config/router";
 
 const AuthUserToken = "growerlab-token";
 

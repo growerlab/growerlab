@@ -1,8 +1,8 @@
 import { AxiosResponse } from "axios";
 
 import { UserInfo } from "./session";
-import { API, request, Result } from "../api";
-import { GlobalObject, useGlobal } from "../../global/global";
+import { API, request, Result } from "./api";
+import { GlobalObject, useGlobal } from "../global/global";
 
 interface RegisterArgs {
   username: string;

@@ -9,8 +9,8 @@ import {
 } from "@elastic/eui";
 
 import i18n from "../../i18n/i18n";
-import { useSession } from "../../api/auth/session";
-import { useAuth } from "../../api/auth/auth";
+import { useSession } from "../../api/session";
+import { useAuth } from "../../api/auth";
 import { useNotice } from "../../global/recoil/notice";
 
 interface Options {

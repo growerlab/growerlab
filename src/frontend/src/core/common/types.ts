@@ -44,3 +44,13 @@ export interface RepositoryPathGroup {
   namespace: string;
   repo: string;
 }
+
+export interface RepositoryPathTree extends RepositoryPathGroup {
+  ref: "master" | string;
+  dir: "" | string;
+}
+
+export interface FileEntity {
+  name: string;
+  blob_hash: string;
+}

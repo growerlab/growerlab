@@ -10,7 +10,7 @@ import {
 import { RepositoryPathGroup, RepositoryEntity } from "../../common/types";
 import { Item } from "./Item";
 import { useGlobal } from "../../global/global";
-import { useRepositoryAPI } from "../../api/repository/repository";
+import { useRepositoryAPI } from "../../api/repository";
 import useSWR, { Fetcher } from "swr";
 import Loading from "../common/Loading";
 import { Files } from "./detail/Files";
@@ -28,7 +28,9 @@ export function RepositoryDetail(props: RepositoryPathGroup) {
     {
       id: "files",
       name: i18n.t<string>("repository.files"),
-      content: <Files branch="master" namespace={namespace} repo={repo} />,
+      content: (
+        <Files reference="main" dir="/" namespace={namespace} repo={repo} />
+      ),
     },
     {
       id: "clone",
@@ -52,7 +54,7 @@ export function RepositoryDetail(props: RepositoryPathGroup) {
   }, [currentTab]);
 
   const fetcher: Fetcher = () => {
-    return repositoryAPI.get(repo).then((res) => {
+    return repositoryAPI.getDetail(repo).then((res) => {
       setRepository(res.data);
       return res.data;
     });
@@ -61,6 +63,10 @@ export function RepositoryDetail(props: RepositoryPathGroup) {
   if (!repository) {
     return <Loading />;
   }
+
+  // TODO 未初始化仓库显示未初始化页面
+  // if (repository.uninitialized) {
+  // }
 
   const renderTabs = () => {
     return tabs.map((tab, index) => (

@@ -12,7 +12,7 @@ import {
 } from "@elastic/eui";
 
 import { Router } from "../../config/router";
-import { useSession } from "../../core/api/auth/session";
+import { useSession } from "../../core/api/session";
 import i18n from "../../core/i18n/i18n";
 import { useTitle } from "react-use";
 import { useUserMenu } from "../../core/global/recoil/userMenu";

@@ -1,4 +1,4 @@
-import { UserInfo, useSession } from "../api/auth/session";
+import { UserInfo, useSession } from "../api/session";
 import { Notice, useNotice } from "./recoil/notice";
 
 export type GlobalObject = {

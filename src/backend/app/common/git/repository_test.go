@@ -70,7 +70,7 @@ func TestRepository_Files(t *testing.T) {
 	assert.NotNil(t, commitHash)
 	assert.False(t, plumbing.NewHash(commitHash).IsZero())
 
-	files, err := r.Files("master", "/")
+	files, err := r.TreeFiles("master", "/")
 	if err != nil {
 		assert.FailNow(t, err.Error())
 	}

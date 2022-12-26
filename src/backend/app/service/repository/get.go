@@ -19,7 +19,11 @@ type Take struct {
 
 func NewTaker(c *gin.Context, namespace string, path *string) *Take {
 	currentUserID := session.New(c).UserID()
-	return &Take{currentUserID, namespace, path}
+	return &Take{
+		currentUserID: currentUserID,
+		namespace:     namespace,
+		repo:          path,
+	}
 }
 
 func (g *Take) Get() (*Entity, error) {

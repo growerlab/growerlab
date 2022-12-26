@@ -1,8 +1,13 @@
 import { AxiosResponse } from "axios";
 
-import { RepositoryEntity, TypeRepositories } from "../../common/types";
-import { API, request } from "../api";
-import { GlobalObject, useGlobal } from "../../global/global";
+import {
+  FileEntity,
+  RepositoryEntity,
+  RepositoryPathTree,
+  TypeRepositories,
+} from "../common/types";
+import { API, request } from "./api";
+import { GlobalObject, useGlobal } from "../global/global";
 
 export interface RepositoryRequest {
   namespace: string;
@@ -13,8 +18,7 @@ export interface RepositoryRequest {
 
 export function useRepositoryAPI(namespace: string) {
   const global = useGlobal();
-  const repo = new Repository(namespace, global);
-  return repo;
+  return new Repository(namespace, global);
 }
 
 class Repository {
@@ -26,23 +30,27 @@ class Repository {
     this.global = global;
   }
 
-  create(req: RepositoryRequest): Promise<AxiosResponse> {
+  create(req: RepositoryRequest) {
     const url = API.Repositories.Create.render({ namespace: this.namespace });
-    return request(this.global).post<RepositoryRequest, AxiosResponse>(
-      url,
-      req
-    );
+    return request(this.global).post<RepositoryRequest>(url, req);
   }
 
-  get(repo: string): Promise<AxiosResponse<RepositoryEntity>> {
+  getDetail(repo: string) {
     const url = API.Repositories.Detail.render({
       namespace: this.namespace,
       repo: repo,
     });
-    return request(this.global).get<
-      RepositoryEntity,
-      AxiosResponse<RepositoryEntity>
-    >(url);
+    return request(this.global).get<RepositoryEntity>(url);
+  }
+
+  treeFiles(params: RepositoryPathTree) {
+    const url = API.Repositories.TreeFiles.render({
+      namespace: this.namespace,
+      repo: params.repo,
+      ref: params.ref,
+      dir: params.dir,
+    });
+    return request(this.global).get<FileEntity[]>(url);
   }
 
   // TODO 分页

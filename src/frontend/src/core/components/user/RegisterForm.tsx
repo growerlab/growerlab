@@ -10,7 +10,7 @@ import {
   EuiFormRow,
 } from "@elastic/eui";
 
-import { useAuth } from "../../api/auth/auth";
+import { useAuth } from "../../api/auth";
 import { Router } from "../../../config/router";
 import { useGlobal } from "../../global/global";
 import { userRules } from "../../api/rule";

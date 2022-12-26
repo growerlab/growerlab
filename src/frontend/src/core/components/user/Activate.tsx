@@ -3,7 +3,7 @@ import { EuiButton, EuiIcon, EuiEmptyPrompt } from "@elastic/eui";
 
 import { useNavigate } from "react-router-dom";
 import { Router } from "../../../config/router";
-import { useAuth } from "../../api/auth/auth";
+import { useAuth } from "../../api/auth";
 import i18n from "../../i18n/i18n";
 
 interface Status {

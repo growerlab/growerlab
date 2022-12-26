@@ -8,4 +8,5 @@ const (
 	ActivationCode = "ActivationCode"
 	Namespace      = "Namespace"
 	Repository     = "Repository"
+	Reference      = "Reference"
 )

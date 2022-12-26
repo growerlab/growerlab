@@ -1,7 +1,11 @@
 import axios, { AxiosInstance, AxiosResponse } from "axios";
 import i18n from "../i18n/i18n";
 import { dynamicRouter } from "../../config/router";
-import { RepositoriesNamespace, RepositoryPathGroup } from "../common/types";
+import {
+  RepositoriesNamespace,
+  RepositoryPathGroup,
+  RepositoryPathTree,
+} from "../common/types";
 import { GlobalObject } from "../global/global";
 
 const baseUrl = "http://localhost:8081/api/v1";
@@ -21,6 +25,9 @@ export const API = {
     ),
     Create: dynamicRouter.new<RepositoriesNamespace>(
       "/repositories/:namespace/create"
+    ),
+    TreeFiles: dynamicRouter.new<RepositoryPathTree>(
+      "/repositories/:namespace/detail/:repo/tree/:ref/:dir"
     ),
   },
 };
@@ -55,8 +62,14 @@ export const request = function (global: GlobalObject): AxiosInstance {
       const status = response.status;
 
       if (status >= 300 || status < 200) {
-        notice.error(response.data.message);
-        return Promise.reject(response);
+        if (response.data === "") {
+          console.error(`error: ${status}`);
+          notice.error(i18n.t("message.error.ERROR"));
+          return Promise.reject("network error");
+        } else {
+          notice.error(response.data.message);
+          return Promise.reject(response);
+        }
       }
       return response;
     },

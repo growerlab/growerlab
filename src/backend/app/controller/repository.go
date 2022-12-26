@@ -19,12 +19,12 @@ func Repository(c *gin.Context) {
 	Render(c, r, err)
 }
 
-func RepositoryFiles(c *gin.Context) {
+func RepositoryTree(c *gin.Context) {
 	namespace := c.Param("namespace")
 	repo := c.Param("repo")
 	ref := c.Param("ref")
 	dir := c.Param("dir")
-	r, err := repository.NewTaker(c, namespace, &repo).Files(ref, &dir)
+	r, err := repository.NewTaker(c, namespace, &repo).TreeFiles(ref, &dir)
 	Render(c, r, err)
 }
 

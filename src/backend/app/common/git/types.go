@@ -6,10 +6,18 @@ import (
 	"github.com/go-git/go-git/v5/plumbing/object"
 )
 
+type ReferenceType string
+
+const (
+	RefBranch ReferenceType = "branch"
+	RefTag    ReferenceType = "tag"
+	RefCommit ReferenceType = "commit"
+)
+
 type FileEntity struct {
-	Name     string
-	Mode     filemode.FileMode
-	BlobHash plumbing.Hash
+	Name     string            `json:"name"`
+	Mode     filemode.FileMode `json:"-"`
+	BlobHash plumbing.Hash     `json:"blob_hash"`
 }
 
 func buildFileEntity(file *object.File) *FileEntity {

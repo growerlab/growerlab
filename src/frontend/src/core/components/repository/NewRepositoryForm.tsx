@@ -12,10 +12,7 @@ import { useNavigate } from "react-router-dom";
 
 import i18n from "../../i18n/i18n";
 import { repositoryRules } from "../../api/rule";
-import {
-  RepositoryRequest,
-  useRepositoryAPI,
-} from "../../api/repository/repository";
+import { RepositoryRequest, useRepositoryAPI } from "../../api/repository";
 import { useGlobal } from "../../global/global";
 import { Router } from "../../../config/router";
 import { Namespace } from "../../common/types";

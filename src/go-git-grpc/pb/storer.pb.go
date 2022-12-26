@@ -1699,7 +1699,7 @@ func (x *Tree) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use Tree.ProtoReflect.Descriptor instead.
+// Deprecated: Use TreeFiles.ProtoReflect.Descriptor instead.
 func (*Tree) Descriptor() ([]byte, []int) {
 	return file_pb_storer_proto_rawDescGZIP(), []int{26}
 }
@@ -2793,7 +2793,7 @@ var file_pb_storer_proto_goTypes = []interface{}{
 	(*ResolveUndo)(nil),         // 24: pb.ResolveUndo
 	(*ResolveUndoEntry)(nil),    // 25: pb.ResolveUndoEntry
 	(*MapFieldEntry)(nil),       // 26: pb.MapFieldEntry
-	(*Tree)(nil),                // 27: pb.Tree
+	(*Tree)(nil),                // 27: pb.TreeFiles
 	(*TreeEntry)(nil),           // 28: pb.TreeEntry
 	(*Entry)(nil),               // 29: pb.Entry
 	(*Hashs)(nil),               // 30: pb.Hashs
@@ -2822,12 +2822,12 @@ var file_pb_storer_proto_depIdxs = []int32{
 	20, // 12: pb.RemoteConfig.raw:type_name -> pb.Subsection
 	26, // 13: pb.Subsection.Options:type_name -> pb.MapFieldEntry
 	29, // 14: pb.Index.Entries:type_name -> pb.Entry
-	27, // 15: pb.Index.Cache:type_name -> pb.Tree
+	27, // 15: pb.Index.Cache:type_name -> pb.TreeFiles
 	24, // 16: pb.Index.ResolveUndo:type_name -> pb.ResolveUndo
 	23, // 17: pb.Index.EndOfIndexEntry:type_name -> pb.EndOfIndexEntry
 	25, // 18: pb.ResolveUndo.Entries:type_name -> pb.ResolveUndoEntry
 	26, // 19: pb.ResolveUndoEntry.Stages:type_name -> pb.MapFieldEntry
-	28, // 20: pb.Tree.Entries:type_name -> pb.TreeEntry
+	28, // 20: pb.TreeFiles.Entries:type_name -> pb.TreeEntry
 	31, // 21: pb.References.refs:type_name -> pb.Reference
 	31, // 22: pb.SetReferenceParams.new:type_name -> pb.Reference
 	31, // 23: pb.SetReferenceParams.old:type_name -> pb.Reference

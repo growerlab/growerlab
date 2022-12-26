@@ -15,7 +15,7 @@ import {
   RepositoryEntity,
   TypeRepositories,
 } from "../../common/types";
-import { useRepositoryAPI } from "../../api/repository/repository";
+import { useRepositoryAPI } from "../../api/repository";
 import { useGlobal } from "../../global/global";
 
 export function RepositoryList(props: RepositoriesNamespace) {

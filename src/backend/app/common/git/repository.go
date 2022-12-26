@@ -96,13 +96,28 @@ func (r *Repository) AddFile(file *client.File) (string, error) {
 	return commitHash, errors.Trace(err)
 }
 
-func (r *Repository) Files(ref, dir string) ([]*FileEntity, error) {
+func (r *Repository) TreeFiles(ref, dir string) ([]*FileEntity, error) {
 	var result = make([]*FileEntity, 0)
 
 	err := r.getRepo(r.ctx, r.pathGroup, func(repo *git.Repository) error {
-		refer, err := repo.Reference(plumbing.NewBranchReferenceName(ref), false)
+		var refer *plumbing.Reference
+		var err error
+
+		if plumbing.IsHash(ref) {
+			refer = plumbing.NewHashReference(plumbing.ReferenceName(RefCommit), plumbing.NewHash(ref))
+		} else {
+			refer, err = r.findRefByName(repo, ref)
+		}
 		if err != nil {
 			return errors.Trace(err)
+		}
+		if refer == nil {
+			return errors.NotFoundError(errors.Reference)
+		}
+
+		// not init
+		if refer.Hash().IsZero() {
+			return errors.RepositoryError(errors.Empty)
 		}
 
 		// take commit
@@ -127,6 +142,33 @@ func (r *Repository) Files(ref, dir string) ([]*FileEntity, error) {
 	}
 	// TODO sort
 	return result, nil
+}
+
+func (r *Repository) findRefByName(repo *git.Repository, ref string) (*plumbing.Reference, error) {
+	refs, err := r.listRefs(repo)
+	if err != nil {
+		return nil, errors.Trace(err)
+	}
+	for _, reference := range refs {
+		if reference.Name().Short() == ref ||
+			reference.Target().Short() == ref {
+			return reference, nil
+		}
+	}
+	return nil, nil
+}
+
+func (r *Repository) listRefs(repo *git.Repository) ([]*plumbing.Reference, error) {
+	var references = make([]*plumbing.Reference, 0)
+	iter, err := repo.References()
+	if err != nil {
+		return nil, errors.Trace(err)
+	}
+	err = iter.ForEach(func(reference *plumbing.Reference) error {
+		references = append(references, reference)
+		return nil
+	})
+	return references, errors.Trace(err)
 }
 
 func (r *Repository) runCommand(cmd string, args []string, in io.Reader, out io.Writer) error {
