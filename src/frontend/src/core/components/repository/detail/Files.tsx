@@ -6,7 +6,7 @@ import { formatDate, EuiBasicTable, EuiLink } from "@elastic/eui";
 import { FileEntity, RepositoryPathGroup } from "../../../common/types";
 import Loading from "../../common/Loading";
 import { useRepositoryAPI } from "../../../api/repository";
-import EmptyTree from "../../common/EmptyTree";
+import EmptyTree from "./EmptyTree";
 
 interface Props extends RepositoryPathGroup {
   reference: "master" | string;
@@ -32,7 +32,13 @@ export function Files(props: Props) {
     { shouldRetryOnError: false }
   );
   if (isEmptyTree) {
-    return <EmptyTree />;
+    return (
+      <EmptyTree
+        cloneURLSSH={"ssh://git.com"}
+        cloneURLHttp={"https://git.com"}
+        defaultBranch={"main"}
+      />
+    );
   }
   if (!fileEntities) {
     return <Loading lines={5} />;
