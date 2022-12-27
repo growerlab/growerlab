@@ -3,21 +3,30 @@ import useSWRImmutable, { Fetcher } from "swr";
 
 import { formatDate, EuiBasicTable, EuiLink } from "@elastic/eui";
 
-import { FileEntity, RepositoryPathGroup } from "../../../common/types";
+import {
+  FileEntity,
+  RepositoryEntity,
+  RepositoryPathGroup,
+} from "../../../common/types";
 import Loading from "../../common/Loading";
 import { useRepositoryAPI } from "../../../api/repository";
 import EmptyTree from "./EmptyTree";
 
 interface Props extends RepositoryPathGroup {
-  reference: "master" | string;
-  dir: "" | string;
-  isEmptyTree: boolean;
+  reference: string;
+  dir: string;
+  repository?: RepositoryEntity;
 }
 
 export function Files(props: Props) {
-  const { namespace, repo, reference, dir, isEmptyTree } = props;
+  const { namespace, repo, reference, dir, repository } = props;
   const repositoryAPI = useRepositoryAPI(namespace);
   const [fileEntities, setFileEntities] = useState<FileEntity[]>();
+  const [isEmptyTree, setTreeEmpty] = useState<boolean>(false);
+
+  if (!isEmptyTree && repository?.last_push_at == 0) {
+    setTreeEmpty(true);
+  }
 
   const fetcher: Fetcher = () => {
     const params = { namespace, repo, ref: reference, dir };
@@ -26,18 +35,21 @@ export function Files(props: Props) {
       return res.data;
     });
   };
-  const { error } = useSWRImmutable(
+  useSWRImmutable(
     isEmptyTree ? null : `/swr/key/repo/${namespace}/${repo}/tree_files`,
     fetcher,
     { shouldRetryOnError: false }
   );
+
   if (isEmptyTree) {
+    if (repository === undefined) {
+      return <></>;
+    }
     return (
-      // TODO clone url
       <EmptyTree
-        cloneURLSSH={"ssh://git.com"}
-        cloneURLHttp={"https://git.com"}
-        defaultBranch={"main"}
+        cloneURLSSH={repository.git_ssh_url}
+        cloneURLHttp={repository.git_http_url}
+        defaultBranch={repository.default_branch}
       />
     );
   }

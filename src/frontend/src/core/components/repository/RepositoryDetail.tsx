@@ -21,7 +21,6 @@ export function RepositoryDetail(props: RepositoryPathGroup) {
   const global = useGlobal();
   const [currentTab, setCurrentTab] = useState("files");
   const [repository, setRepository] = useState<RepositoryEntity>();
-  const [isEmptyTree, setTreeEmpty] = useState<boolean>(false);
 
   const repositoryAPI = useRepositoryAPI(namespace);
 
@@ -32,10 +31,10 @@ export function RepositoryDetail(props: RepositoryPathGroup) {
       content: (
         <Files
           reference="main"
-          dir="/"
+          dir=""
           namespace={namespace}
           repo={repo}
-          isEmptyTree={isEmptyTree}
+          repository={repository}
         />
       ),
     },
@@ -58,7 +57,7 @@ export function RepositoryDetail(props: RepositoryPathGroup) {
   ];
   const selectedTabContent = useMemo(() => {
     return tabs.find((obj) => obj.id === currentTab)?.content;
-  }, [currentTab, isEmptyTree]);
+  }, [currentTab, repository]);
 
   const fetcher: Fetcher = () => {
     return repositoryAPI.getDetail(repo).then((res) => {
@@ -69,9 +68,6 @@ export function RepositoryDetail(props: RepositoryPathGroup) {
   useSWRImmutable(`/swr/key/repo/${namespace}/${repo}`, fetcher);
   if (!repository) {
     return <Loading />;
-  }
-  if (!isEmptyTree && repository.last_push_at == 0) {
-    setTreeEmpty(true);
   }
 
   const renderTabs = () => {
