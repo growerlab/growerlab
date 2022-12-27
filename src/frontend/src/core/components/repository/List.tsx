@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import useSWR, { Fetcher } from "swr";
+import useSWRImmutable, { Fetcher } from "swr";
 import {
   EuiButton,
   EuiIcon,
@@ -28,12 +28,12 @@ export function RepositoryList(props: RepositoriesNamespace) {
       return res.data;
     });
   };
-  const { data } = useSWR<TypeRepositories>(
+  const { data } = useSWRImmutable<TypeRepositories>(
     `/swr/key/repos/${namespace}`,
     fetcher
   );
 
-  if (data === undefined || data?.repositories.length == 0) {
+  if (data?.repositories.length == 0) {
     return (
       <div>
         <EuiEmptyPrompt
@@ -56,7 +56,7 @@ export function RepositoryList(props: RepositoriesNamespace) {
     <div className="p-5">
       {data?.repositories.map((repo: RepositoryEntity) => (
         <>
-          <Item global={global} repo={repo} key={repo.uuid} />
+          <Item global={global} repo={repo} />
           <EuiHorizontalRule />
         </>
       ))}

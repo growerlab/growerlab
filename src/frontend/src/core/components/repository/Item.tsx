@@ -25,13 +25,9 @@ export function Item(props: Args) {
 
   return (
     <div>
-      <Link to={path}>
-        <a className={"text-xl font-bold"}>
-          {repoIcon(repo.public)}
-          <span className={"ml-3"}>
-            {repo.namespace.path + "/" + repo.name}
-          </span>
-        </a>
+      <Link to={path} className={"text-xl font-bold"}>
+        {repoIcon(repo.public)}
+        <span className={"ml-3"}>{repo.namespace.path + "/" + repo.name}</span>
       </Link>
       <div className={"text-slate-500 mt-2 ml-12 text-sm"}>
         {repo.description}

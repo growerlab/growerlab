@@ -5,9 +5,9 @@ import React from "react";
 import { RecoilRoot } from "recoil";
 import { EuiProvider } from "@elastic/eui";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { SWRConfig } from "swr";
 
 import Notice from "./core/components/notice/Notice";
-// import { setup } from "./core/global/init";
 import { Router } from "./config/router";
 
 import Home from "./Home";
@@ -74,12 +74,16 @@ export default function App() {
 
   return (
     <div>
-      <RecoilRoot>
-        <Notice />
-        <EuiProvider colorMode="light">
-          <RouterProvider router={router} />
-        </EuiProvider>
-      </RecoilRoot>
+      <SWRConfig
+        value={{ revalidateOnFocus: false, shouldRetryOnError: false }}
+      >
+        <RecoilRoot>
+          <Notice />
+          <EuiProvider colorMode="light">
+            <RouterProvider router={router} />
+          </EuiProvider>
+        </RecoilRoot>
+      </SWRConfig>
     </div>
   );
 }

@@ -11,7 +11,7 @@ import { RepositoryPathGroup, RepositoryEntity } from "../../common/types";
 import { Item } from "./Item";
 import { useGlobal } from "../../global/global";
 import { useRepositoryAPI } from "../../api/repository";
-import useSWR, { Fetcher } from "swr";
+import useSWRImmutable, { Fetcher } from "swr";
 import Loading from "../common/Loading";
 import { Files } from "./detail/Files";
 import i18n from "../../i18n/i18n";
@@ -41,7 +41,7 @@ export function RepositoryDetail(props: RepositoryPathGroup) {
     },
     {
       id: "clone",
-      name: i18n.t<string>("repository.clond_and_download"),
+      name: i18n.t<string>("repository.clone_and_download"),
       content: (
         <Fragment>
           <EuiSpacer />
@@ -58,7 +58,7 @@ export function RepositoryDetail(props: RepositoryPathGroup) {
   ];
   const selectedTabContent = useMemo(() => {
     return tabs.find((obj) => obj.id === currentTab)?.content;
-  }, [currentTab]);
+  }, [currentTab, isEmptyTree]);
 
   const fetcher: Fetcher = () => {
     return repositoryAPI.getDetail(repo).then((res) => {
@@ -66,11 +66,11 @@ export function RepositoryDetail(props: RepositoryPathGroup) {
       return res.data;
     });
   };
-  useSWR(`/swr/key/repo/${namespace}/${repo}`, fetcher);
+  useSWRImmutable(`/swr/key/repo/${namespace}/${repo}`, fetcher);
   if (!repository) {
     return <Loading />;
   }
-  if (repository.last_push_at == 0) {
+  if (!isEmptyTree && repository.last_push_at == 0) {
     setTreeEmpty(true);
   }
 
@@ -81,8 +81,8 @@ export function RepositoryDetail(props: RepositoryPathGroup) {
         onClick={() => setCurrentTab(tab.id)}
         isSelected={tab.id === currentTab}
         disabled={tab.disabled}
-        prepend={tab.prepend}
-        append={tab.append}
+        // prepend={tab.prepend}
+        // append={tab.append}
       >
         {tab.name}
       </EuiTab>

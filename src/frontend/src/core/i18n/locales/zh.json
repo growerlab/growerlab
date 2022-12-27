@@ -54,7 +54,7 @@
     "private": "私有仓库",
     "create_repository": "创建仓库",
     "files": "文件",
-    "clond_and_download": "克隆或下载",
+    "clone_and_download": "克隆或下载",
     "tooltip": {
       "success": "仓库创建成功",
       "name": "请填写2-50位字符的仓库名(字母，数字，下划线，不能以'..'开头)"

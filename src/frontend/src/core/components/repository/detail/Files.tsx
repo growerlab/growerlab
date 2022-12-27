@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import useSWR, { Fetcher } from "swr";
+import useSWRImmutable, { Fetcher } from "swr";
 
 import { formatDate, EuiBasicTable, EuiLink } from "@elastic/eui";
 
@@ -26,9 +26,10 @@ export function Files(props: Props) {
       return res.data;
     });
   };
-  useSWR(
+  const { error } = useSWRImmutable(
     isEmptyTree ? null : `/swr/key/repo/${namespace}/${repo}/tree_files`,
-    fetcher
+    fetcher,
+    { shouldRetryOnError: false }
   );
   if (isEmptyTree) {
     return <EmptyTree />;
@@ -37,14 +38,14 @@ export function Files(props: Props) {
     return <Loading lines={5} />;
   }
 
-  const columns = [
+  const columns: any = [
     {
       field: "firstName",
       name: "First Name",
       sortable: true,
       "data-test-subj": "firstNameCell",
       mobileOptions: {
-        render: (item) => (
+        render: (item: any) => (
           <span>
             {item.firstName}{" "}
             <EuiLink href="#" target="_blank">
@@ -62,7 +63,7 @@ export function Files(props: Props) {
       field: "lastName",
       name: "Last Name",
       truncateText: true,
-      render: (name) => (
+      render: (name: string) => (
         <EuiLink href="#" target="_blank">
           {name}
         </EuiLink>
@@ -75,22 +76,22 @@ export function Files(props: Props) {
       field: "dateOfBirth",
       name: "Date of Birth",
       dataType: "date",
-      render: (date) => formatDate(date, "dobLong"),
+      render: (date: Date) => formatDate(date, "dobLong"),
     },
   ];
 
-  const items = store.users.filter((user, index) => index < 10);
+  const items: any = []; //store.users.filter((user, index) => index < 10);
 
-  const getRowProps = (item) => {
+  const getRowProps = (item: { id: string }) => {
     const { id } = item;
     return {
       "data-test-subj": `row-${id}`,
       className: "customRowClass",
-      onClick: () => {},
+      // onClick: () => {},
     };
   };
 
-  const getCellProps = (item, column) => {
+  const getCellProps = (item: { id: string }, column: { field: string }) => {
     const { id } = item;
     const { field } = column;
     return {
