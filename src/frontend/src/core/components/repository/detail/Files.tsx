@@ -33,6 +33,7 @@ export function Files(props: Props) {
   );
   if (isEmptyTree) {
     return (
+      // TODO clone url
       <EmptyTree
         cloneURLSSH={"ssh://git.com"}
         cloneURLHttp={"https://git.com"}
