@@ -21,6 +21,7 @@ export function RepositoryDetail(props: RepositoryPathGroup) {
   const global = useGlobal();
   const [currentTab, setCurrentTab] = useState("files");
   const [repository, setRepository] = useState<RepositoryEntity>();
+  const [isEmptyTree, setTreeEmpty] = useState<boolean>(false);
 
   const repositoryAPI = useRepositoryAPI(namespace);
 
@@ -29,7 +30,13 @@ export function RepositoryDetail(props: RepositoryPathGroup) {
       id: "files",
       name: i18n.t<string>("repository.files"),
       content: (
-        <Files reference="main" dir="/" namespace={namespace} repo={repo} />
+        <Files
+          reference="main"
+          dir="/"
+          namespace={namespace}
+          repo={repo}
+          isEmptyTree={isEmptyTree}
+        />
       ),
     },
     {
@@ -63,10 +70,9 @@ export function RepositoryDetail(props: RepositoryPathGroup) {
   if (!repository) {
     return <Loading />;
   }
-
-  // TODO 未初始化仓库显示未初始化页面
-  // if (repository.uninitialized) {
-  // }
+  if (repository.last_push_at == 0) {
+    setTreeEmpty(true);
+  }
 
   const renderTabs = () => {
     return tabs.map((tab, index) => (

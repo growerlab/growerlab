@@ -1,17 +1,21 @@
 import React, { useState } from "react";
 import useSWR, { Fetcher } from "swr";
 
+import { formatDate, EuiBasicTable, EuiLink } from "@elastic/eui";
+
 import { FileEntity, RepositoryPathGroup } from "../../../common/types";
 import Loading from "../../common/Loading";
 import { useRepositoryAPI } from "../../../api/repository";
+import EmptyTree from "../../common/EmptyTree";
 
 interface Props extends RepositoryPathGroup {
   reference: "master" | string;
   dir: "" | string;
+  isEmptyTree: boolean;
 }
 
 export function Files(props: Props) {
-  const { namespace, repo, reference, dir } = props;
+  const { namespace, repo, reference, dir, isEmptyTree } = props;
   const repositoryAPI = useRepositoryAPI(namespace);
   const [fileEntities, setFileEntities] = useState<FileEntity[]>();
 
@@ -22,14 +26,89 @@ export function Files(props: Props) {
       return res.data;
     });
   };
-  useSWR(`/swr/key/repo/${namespace}/${repo}/tree_files`, fetcher);
+  useSWR(
+    isEmptyTree ? null : `/swr/key/repo/${namespace}/${repo}/tree_files`,
+    fetcher
+  );
+  if (isEmptyTree) {
+    return <EmptyTree />;
+  }
   if (!fileEntities) {
     return <Loading lines={5} />;
   }
 
+  const columns = [
+    {
+      field: "firstName",
+      name: "First Name",
+      sortable: true,
+      "data-test-subj": "firstNameCell",
+      mobileOptions: {
+        render: (item) => (
+          <span>
+            {item.firstName}{" "}
+            <EuiLink href="#" target="_blank">
+              {item.lastName}
+            </EuiLink>
+          </span>
+        ),
+        header: false,
+        truncateText: false,
+        enlarge: true,
+        width: "100%",
+      },
+    },
+    {
+      field: "lastName",
+      name: "Last Name",
+      truncateText: true,
+      render: (name) => (
+        <EuiLink href="#" target="_blank">
+          {name}
+        </EuiLink>
+      ),
+      mobileOptions: {
+        show: false,
+      },
+    },
+    {
+      field: "dateOfBirth",
+      name: "Date of Birth",
+      dataType: "date",
+      render: (date) => formatDate(date, "dobLong"),
+    },
+  ];
+
+  const items = store.users.filter((user, index) => index < 10);
+
+  const getRowProps = (item) => {
+    const { id } = item;
+    return {
+      "data-test-subj": `row-${id}`,
+      className: "customRowClass",
+      onClick: () => {},
+    };
+  };
+
+  const getCellProps = (item, column) => {
+    const { id } = item;
+    const { field } = column;
+    return {
+      className: "customCellClass",
+      "data-test-subj": `cell-${id}-${field}`,
+      textOnly: true,
+    };
+  };
   return (
     <>
-      <Loading lines={5}></Loading>
+      <EuiBasicTable
+        tableCaption="Demo of EuiBasicTable"
+        items={items}
+        rowHeader="firstName"
+        columns={columns}
+        rowProps={getRowProps}
+        cellProps={getCellProps}
+      />
     </>
   );
 }

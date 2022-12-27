@@ -13,6 +13,8 @@ export interface RepositoryEntity {
   public: boolean;
   git_http_url: string;
   git_ssh_url: string;
+  last_push_at: number;
+  default_branch: string;
   owner: Owner;
   namespace: NamespaceEntity;
 }
