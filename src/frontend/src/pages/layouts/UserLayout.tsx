@@ -15,8 +15,8 @@ import { Router } from "../../config/router";
 import { useSession } from "../../core/api/session";
 import i18n from "../../core/i18n/i18n";
 import { useTitle } from "react-use";
-import { useUserMenu } from "../../core/global/recoil/userMenu";
-import { useNotice } from "../../core/global/recoil/notice";
+import { useUserMenu } from "../../core/global/recoil/useMenu";
+import { useNotice } from "../../core/global/recoil/useNotice";
 
 interface Props extends React.PropsWithChildren {
   title: string;

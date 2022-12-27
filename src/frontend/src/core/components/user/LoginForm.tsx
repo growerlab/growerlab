@@ -11,7 +11,7 @@ import {
 import i18n from "../../i18n/i18n";
 import { useSession } from "../../api/session";
 import { useAuth } from "../../api/auth";
-import { useNotice } from "../../global/recoil/notice";
+import { useNotice } from "../../global/recoil/useNotice";
 
 interface Options {
   onSuccess: () => any;

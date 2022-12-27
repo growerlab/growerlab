@@ -1,6 +1,6 @@
 import React from "react";
 import { useOutlet } from "react-router-dom";
-import { useUserMenu } from "../../../core/global/recoil/userMenu";
+import { useUserMenu } from "../../../core/global/recoil/useMenu";
 
 interface Props extends React.PropsWithChildren {
   defaultChild?: React.ReactElement;

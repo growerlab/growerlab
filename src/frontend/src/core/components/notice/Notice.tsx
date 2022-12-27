@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { EuiGlobalToastList } from "@elastic/eui";
 
-import { useNoticeValues } from "../../global/recoil/notice";
+import { useNoticeValues } from "../../global/recoil/useNotice";
 
 interface Toast {
   id: string;
