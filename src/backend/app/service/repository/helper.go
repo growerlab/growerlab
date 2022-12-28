@@ -35,6 +35,8 @@ func BuildRepositoryEntity(repo *repository.Repository) *Entity {
 		Public:        repo.Public,
 		LastPushAt:    repo.LastPushAt,
 		DefaultBranch: repo.DefaultBranch,
+		GitSSHUrl:     repo.GitSshURL(),
+		GitHTTPUrl:    repo.GitHttpURL(),
 		Namespace: &NamespaceEntity{
 			Path: repo.Namespace().Path,
 			Type: repo.Namespace().TypeLabel(),

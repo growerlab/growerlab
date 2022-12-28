@@ -13,6 +13,8 @@ type Entity struct {
 	Public        bool   `json:"public"`         // 公有
 	LastPushAt    int64  `json:"last_push_at"`   // 最后的推送时间
 	DefaultBranch string `json:"default_branch"` // 默认分支
+	GitSSHUrl     string `json:"git_ssh_url"`    // git ssh clone/push url
+	GitHTTPUrl    string `json:"git_http_url"`   // git http clone/push url
 
 	Namespace *NamespaceEntity `json:"namespace"`
 	Owner     *UserEntity      `json:"owner"`
