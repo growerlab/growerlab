@@ -77,10 +77,15 @@ func (r *Repository) PathGroup() string {
 
 // https://domain.com:port/user/path.git
 func (r *Repository) GitHttpURL() string {
-	cfg := configurator.GetConf()
+	cfg := configurator.GetConf().Mensa
 
 	var sb strings.Builder
-	sb.WriteString(cfg.WebsiteURL)
+	if cfg.Https {
+		sb.WriteString("https://")
+	} else {
+		sb.WriteString("http://")
+	}
+	sb.WriteString(cfg.HTTPListen)
 	sb.WriteByte('/')
 	sb.WriteString(r.PathGroup())
 	sb.WriteString(".git")

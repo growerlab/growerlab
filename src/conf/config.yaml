@@ -23,6 +23,7 @@ default: &base
     user: git
     ssh_listen: 0.0.0.0:22
     http_listen: 0.0.0.0:8080
+    https: true
     deadline: 3600
     idle_timeout: 30
 
@@ -31,6 +32,8 @@ local:
   mensa:
     <<: *mensa
     ssh_listen: localhost:8022
+    http_listen: localhost:8080
+    https: false
 
 dev:
   <<: *base

@@ -25,6 +25,7 @@ type Mensa struct {
 	User        string `yaml:"user"`
 	SSHListen   string `yaml:"ssh_listen"`
 	HTTPListen  string `yaml:"http_listen"`
+	Https       bool   `yaml:"https"`
 	Deadline    int    `yaml:"deadline"`
 	IdleTimeout int    `yaml:"idle_timeout"`
 }
