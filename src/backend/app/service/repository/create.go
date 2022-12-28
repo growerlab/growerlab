@@ -19,9 +19,9 @@ import (
 )
 
 type CreateParams struct {
-	Namespace   string `json:"namespace"` // 命名空间的路径（这里要考虑某个人在组织下创建项目）
-	Name        string `json:"name"`
-	Public      bool   `json:"public"`
+	Namespace   string `json:"namespace" validate:"required"` // 命名空间的路径（这里要考虑某个人在组织下创建项目）
+	Name        string `json:"name" validate:"required"`
+	Public      bool   `json:"public" validate:"required"`
 	Description string `json:"description"`
 }
 
