@@ -30,7 +30,7 @@ local:
   <<: *base
   mensa:
     <<: *mensa
-    ssh_listen: 0.0.0.0:8022
+    ssh_listen: localhost:8022
 
 dev:
   <<: *base
