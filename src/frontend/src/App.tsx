@@ -10,15 +10,18 @@ import { SWRConfig } from "swr";
 import Notice from "./core/components/notice/Notice";
 import { Router } from "./config/router";
 
+import Notfound404 from "./core/components/common/404";
+
 import Home from "./Home";
+
 import User from "./pages/user/User";
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
+
 import ActivateUser from "./pages/auth/ActivateUser";
 import RepositoryIndex from "./pages/user/repos/Index";
 import RepositoryShow from "./pages/user/repos/Show";
 import RepositoryNew from "./pages/user/repos/New";
-import Notfound404 from "./core/components/common/404";
 import Branchs from "./pages/user/repos/detail/Branchs";
 import Detail from "./pages/user/repos/detail/Detail";
 import RepositoryLayout from "./pages/user/repos/Layout";
