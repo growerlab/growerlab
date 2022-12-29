@@ -30,7 +30,7 @@ func InitEvents() (err error) {
 
 	events := []EventProcessor{
 		NewEmailProcessor(),
-		NewGitEventHandler(),
+		NewGitEventProcessor(),
 	}
 
 	for _, event := range events {

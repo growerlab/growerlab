@@ -61,7 +61,7 @@ var _ EventProcessor = (*GitEvent)(nil)
 type GitEvent struct {
 }
 
-func NewGitEventHandler() EventProcessor {
+func NewGitEventProcessor() EventProcessor {
 	return &GitEvent{}
 }
 
