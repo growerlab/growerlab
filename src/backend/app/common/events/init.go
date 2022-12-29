@@ -4,6 +4,7 @@ import (
 	"github.com/ThreeDotsLabs/watermill/message"
 	"github.com/growerlab/growerlab/src/backend/app/common/mq"
 	"github.com/growerlab/growerlab/src/backend/app/common/notify"
+	"github.com/growerlab/growerlab/src/common/errors"
 	"github.com/growerlab/growerlab/src/common/logger"
 )
 
@@ -20,6 +21,9 @@ type EventPublisher interface {
 
 func InitEvents() (err error) {
 	eventMQ, err = mq.NewRedisMQ()
+	if err != nil {
+		return errors.Trace(err)
+	}
 
 	notify.Subscribe(func() {
 		err = eventMQ.Close()
