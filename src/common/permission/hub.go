@@ -1,10 +1,11 @@
 package permission
 
 import (
+	stdContent "context"
 	"fmt"
 	"time"
 
-	"github.com/go-redis/redis/v7"
+	"github.com/go-redis/redis/v8"
 	permModel "github.com/growerlab/growerlab/src/backend/app/model/permission"
 	"github.com/growerlab/growerlab/src/backend/app/utils/timestamp"
 	"github.com/growerlab/growerlab/src/common/context"
@@ -104,12 +105,12 @@ func (p *Hub) CheckCache(userID int64, c *context.Context, code int, rebuild boo
 	)
 
 	if rebuild {
-		lastPermissionUpdateStamp, err := p.DBCtx.MemDB.HGet(keyStamp, fieldContextPermission).Int64()
+		lastPermissionUpdateStamp, err := p.DBCtx.MemDB.HGet(stdContent.TODO(), keyStamp, fieldContextPermission).Int64()
 		if err != nil && err != redis.Nil {
 			return errors.Trace(err)
 		}
 
-		existPermissionStamp, err := p.DBCtx.MemDB.HGet(keyUser, fieldContextPermission).Int64()
+		existPermissionStamp, err := p.DBCtx.MemDB.HGet(stdContent.TODO(), keyUser, fieldContextPermission).Int64()
 		if err != nil && err != redis.Nil {
 			return errors.Trace(err)
 		}
@@ -130,7 +131,7 @@ func (p *Hub) CheckCache(userID int64, c *context.Context, code int, rebuild boo
 		}
 	}
 
-	if b := p.DBCtx.MemDB.HExists(keyUser, fieldContextPermission); !b.Val() {
+	if b := p.DBCtx.MemDB.HExists(stdContent.TODO(), keyUser, fieldContextPermission); !b.Val() {
 		return errors.PermissionError(errors.NoPermission)
 	}
 	return nil
@@ -139,6 +140,8 @@ func (p *Hub) CheckCache(userID int64, c *context.Context, code int, rebuild boo
 // buildCache 重新构建缓存
 // - 每天凌晨12点自动过期
 func (p *Hub) buildCache(rule *Rule, c *context.Context) error {
+	ctx := stdContent.TODO()
+
 	userDomains, err := p.listUserDomainsByContext(rule, c)
 	if err != nil {
 		return err
@@ -176,11 +179,11 @@ func (p *Hub) buildCache(rule *Rule, c *context.Context) error {
 
 	pipe := p.DBCtx.MemDB.Pipeline()
 	for userKey, ctxWithStampSet := range userContextSet {
-		_ = pipe.HMSet(userKey, ctxWithStampSet)
-		_ = pipe.HMSet(p.keyStamp(), ctxWithStampSet)
-		_ = pipe.ExpireAt(userKey, todayEndTime)
+		_ = pipe.HMSet(ctx, userKey, ctxWithStampSet)
+		_ = pipe.HMSet(ctx, p.keyStamp(), ctxWithStampSet)
+		_ = pipe.ExpireAt(ctx, userKey, todayEndTime)
 	}
-	_, err = pipe.Exec()
+	_, err = pipe.Exec(ctx)
 	if err != nil {
 		return errors.Trace(err)
 	}
@@ -235,12 +238,12 @@ func (p *Hub) keyStamp() string {
 
 func (p *Hub) UpdateStamp(code int, c *context.Context) error {
 	key := p.keyFieldContextPermission(code, c)
-	err := p.DBCtx.MemDB.HSet(p.keyStamp(), key, time.Now().Unix()).Err()
+	err := p.DBCtx.MemDB.HSet(stdContent.TODO(), p.keyStamp(), key, time.Now().Unix()).Err()
 	return errors.Trace(err)
 }
 
 func (p *Hub) FlushUserContexts(ud *userdomain.UserDomain) error {
 	keyUser := p.keyUser(ud.Param)
-	err := p.DBCtx.MemDB.Del(keyUser).Err()
+	err := p.DBCtx.MemDB.Del(stdContent.TODO(), keyUser).Err()
 	return errors.Trace(err)
 }

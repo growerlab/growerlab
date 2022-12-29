@@ -1,7 +1,9 @@
 package service
 
 import (
-	"github.com/go-redis/redis/v7"
+	"context"
+
+	"github.com/go-redis/redis/v8"
 	"github.com/growerlab/growerlab/src/common/db"
 	"github.com/growerlab/growerlab/src/common/errors"
 )
@@ -19,7 +21,7 @@ func NewCache() *Cache {
 func (c *Cache) GetOrSet(key, field string, getf getFunc) (string, error) {
 	key = c.memDB.KeyMaker().Append(key).String()
 
-	cmd := c.memDB.HGet(key, field)
+	cmd := c.memDB.HGet(context.TODO(), key, field)
 	if cmd.Err() != redis.Nil {
 		return cmd.Val(), nil
 	} else {
@@ -27,7 +29,7 @@ func (c *Cache) GetOrSet(key, field string, getf getFunc) (string, error) {
 		if err != nil {
 			return "", err
 		}
-		err = c.memDB.HSet(key, field, value).Err()
+		err = c.memDB.HSet(context.TODO(), key, field, value).Err()
 		if err != nil {
 			return "", errors.Trace(err)
 		}

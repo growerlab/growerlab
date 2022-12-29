@@ -3,12 +3,13 @@
 package db
 
 import (
+	"context"
 	"net"
 	"strconv"
 	"strings"
 	"time"
 
-	"github.com/go-redis/redis/v7"
+	"github.com/go-redis/redis/v8"
 	"github.com/growerlab/growerlab/src/common/configurator"
 	"github.com/growerlab/growerlab/src/common/errors"
 )
@@ -36,7 +37,7 @@ func DoInitMemDB(cfg *configurator.Redis, db int) (*MemDBClient, error) {
 }
 
 func testMemDB(mem *MemDBClient) error {
-	reply, err := mem.Ping().Result()
+	reply, err := mem.Ping(context.TODO()).Result()
 	if err != nil || reply != "PONG" {
 		return errors.New("memdb not ready")
 	}
@@ -63,7 +64,7 @@ func newPool(cfg *configurator.Redis, db int) *MemDBClient {
 }
 
 type MemDBClient struct {
-	redis.Cmdable
+	redis.UniversalClient
 	*KeyBuilder
 }
 

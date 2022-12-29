@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/go-redis/redis/v7"
+	"github.com/go-redis/redis/v8"
 	"github.com/growerlab/growerlab/src/common/db"
 )
 
@@ -14,7 +14,7 @@ func InitRedis() error {
 	idleTimeout := time.Duration(Conf.Redis.IdleTimeout) * time.Second
 
 	db.MemDB = &db.MemDBClient{
-		Cmdable: redis.NewClient(&redis.Options{
+		UniversalClient: redis.NewClient(&redis.Options{
 			Addr:         addr,
 			DB:           0,
 			PoolSize:     Conf.Redis.MaxActive,
