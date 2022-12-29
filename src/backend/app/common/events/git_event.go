@@ -2,9 +2,12 @@ package events
 
 import (
 	"fmt"
-	"github.com/growerlab/growerlab/src/common/errors"
 
-	"github.com/growerlab/growerlab/src/backend/app/common/mq"
+	"github.com/growerlab/growerlab/src/common/jsonutils"
+
+	"github.com/ThreeDotsLabs/watermill/message"
+
+	"github.com/growerlab/growerlab/src/common/errors"
 )
 
 type PushSession struct {
@@ -49,42 +52,38 @@ type GitEventPayload struct {
 	Message     string         `json:"commit_message"` // commit/tag message
 }
 
-type AsyncPushGitEvent interface {
-	AsyncPushGitEvent(gitEvent interface{}) error
+type PublishGitEvent interface {
+	PublishGitEvent(gitEvent any) error
 }
 
-var _ mq.Consumer = (*GitEvent)(nil)
+var _ EventProcessor = (*GitEvent)(nil)
 
 type GitEvent struct {
 }
 
-func newGitEventConsumer() mq.Consumer {
+func NewGitEventHandler() EventProcessor {
 	return &GitEvent{}
 }
 
-func NewGitEvent() AsyncPushGitEvent {
+func NewGitEvent() PublishGitEvent {
 	return &GitEvent{}
 }
 
-func (*GitEvent) Name() string {
+func (g *GitEvent) Topic() string {
 	return "git_event"
 }
 
-func (*GitEvent) DefaultField() string {
-	return "default"
+func (g *GitEvent) PublishGitEvent(gitEvent any) error {
+	return eventMQ.DirectlyPublish(g.Topic(), gitEvent)
 }
 
-func (g *GitEvent) Consume(payload *mq.Payload) error {
+func (g *GitEvent) Handler(msg *message.Message) ([]*message.Message, error) {
 	gitEventPayload := new(GitEventPayload)
-	err := getPayload(payload, g.DefaultField(), gitEventPayload)
+	err := jsonutils.DecodeBytesToObject(msg.Payload, gitEventPayload)
 	if err != nil {
-		return errors.Trace(err)
+		return nil, errors.Trace(err)
 	}
 	// TODO 消费消息
 	fmt.Println(gitEventPayload)
-	return nil
-}
-
-func (g *GitEvent) AsyncPushGitEvent(gitEvent interface{}) error {
-	return async(g.Name(), g.DefaultField(), gitEvent)
+	return nil, nil
 }

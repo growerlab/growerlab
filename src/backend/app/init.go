@@ -19,7 +19,7 @@ func init() {
 	onStart(db.InitDatabase)
 	onStart(notify.InitNotify)
 	onStart(permission.InitPermission)
-	onStart(events.InitMQ)
+	onStart(events.InitEvents)
 }
 
 func onStart(fn func() error) {

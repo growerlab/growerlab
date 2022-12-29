@@ -25,6 +25,10 @@ func Error(format string, a ...interface{}) {
 	// TODO error
 }
 
+func ErrorTrace(err error) {
+	output("[ErrorTrace]", fmt.Sprintf("%+v", err))
+}
+
 func GraphQLErrors(errs []gqlerrors.FormattedError) {
 	sbErr := strings.Builder{}
 	sbErr.WriteString("[GraphQL] ")
