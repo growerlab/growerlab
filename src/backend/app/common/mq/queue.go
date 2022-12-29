@@ -6,8 +6,8 @@ import (
 	"time"
 
 	"github.com/go-redis/redis/v7"
-	"github.com/growerlab/growerlab/src/backend/app/utils/logger"
 	"github.com/growerlab/growerlab/src/common/db"
+	"github.com/growerlab/growerlab/src/common/logger"
 	"github.com/ivpusic/grpool"
 )
 

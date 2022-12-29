@@ -8,11 +8,11 @@ import (
 	"github.com/asaskevich/govalidator"
 	"github.com/growerlab/growerlab/src/backend/app/model/activate"
 	"github.com/growerlab/growerlab/src/backend/app/model/user"
-	"github.com/growerlab/growerlab/src/backend/app/utils/logger"
-	"github.com/growerlab/growerlab/src/backend/app/utils/uuid"
 	"github.com/growerlab/growerlab/src/common/configurator"
 	"github.com/growerlab/growerlab/src/common/db"
 	"github.com/growerlab/growerlab/src/common/errors"
+	"github.com/growerlab/growerlab/src/common/logger"
+	"github.com/growerlab/growerlab/src/common/uuid"
 	"github.com/jmoiron/sqlx"
 )
 

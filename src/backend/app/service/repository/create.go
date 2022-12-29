@@ -12,9 +12,9 @@ import (
 	"github.com/growerlab/growerlab/src/backend/app/model/repository"
 	"github.com/growerlab/growerlab/src/backend/app/model/user"
 	"github.com/growerlab/growerlab/src/backend/app/service/common/session"
-	"github.com/growerlab/growerlab/src/backend/app/utils/regex"
 	"github.com/growerlab/growerlab/src/common/db"
 	"github.com/growerlab/growerlab/src/common/errors"
+	"github.com/growerlab/growerlab/src/common/regex"
 	"github.com/jmoiron/sqlx"
 )
 

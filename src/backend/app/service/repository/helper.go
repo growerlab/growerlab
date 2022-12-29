@@ -4,7 +4,7 @@ import (
 	"time"
 
 	"github.com/growerlab/growerlab/src/backend/app/model/repository"
-	"github.com/growerlab/growerlab/src/backend/app/utils/uuid"
+	"github.com/growerlab/growerlab/src/common/uuid"
 )
 
 func BuildNewRepository(

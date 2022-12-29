@@ -6,8 +6,8 @@ import (
 
 	"github.com/growerlab/growerlab/src/backend/app"
 	"github.com/growerlab/growerlab/src/backend/app/common/notify"
-	"github.com/growerlab/growerlab/src/backend/app/utils/logger"
 	"github.com/growerlab/growerlab/src/common/configurator"
+	"github.com/growerlab/growerlab/src/common/logger"
 )
 
 func main() {

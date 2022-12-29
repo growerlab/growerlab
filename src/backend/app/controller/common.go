@@ -4,8 +4,8 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/growerlab/growerlab/src/backend/app/utils/logger"
 	"github.com/growerlab/growerlab/src/common/errors"
+	"github.com/growerlab/growerlab/src/common/logger"
 )
 
 func Render(c *gin.Context, payload interface{}, err error) {

@@ -10,9 +10,9 @@ import (
 	userModel "github.com/growerlab/growerlab/src/backend/app/model/user"
 	"github.com/growerlab/growerlab/src/backend/app/service/common/session"
 	"github.com/growerlab/growerlab/src/backend/app/utils/pwd"
-	"github.com/growerlab/growerlab/src/backend/app/utils/uuid"
 	"github.com/growerlab/growerlab/src/common/db"
 	"github.com/growerlab/growerlab/src/common/errors"
+	"github.com/growerlab/growerlab/src/common/uuid"
 	"github.com/jmoiron/sqlx"
 )
 

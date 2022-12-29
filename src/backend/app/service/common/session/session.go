@@ -4,8 +4,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/growerlab/growerlab/src/backend/app/common/env"
 	userModel "github.com/growerlab/growerlab/src/backend/app/model/user"
-	"github.com/growerlab/growerlab/src/backend/app/utils/logger"
 	"github.com/growerlab/growerlab/src/common/db"
+	"github.com/growerlab/growerlab/src/common/logger"
 )
 
 const (

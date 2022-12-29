@@ -7,9 +7,9 @@ import (
 	"runtime/debug"
 
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/growerlab/growerlab/src/backend/app/utils/logger"
 	"github.com/growerlab/growerlab/src/common/configurator"
 	"github.com/growerlab/growerlab/src/common/errors"
+	"github.com/growerlab/growerlab/src/common/logger"
 	"github.com/jmoiron/sqlx"
 )
 
