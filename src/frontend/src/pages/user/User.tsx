@@ -12,8 +12,8 @@ export default function User(props: Props) {
   const defaultOutlet = outlet === null ? props.defaultChild : outlet;
 
   return (
-    <div>
+    <>
       <UserLayout title="Dashboard">{defaultOutlet}</UserLayout>
-    </div>
+    </>
   );
 }

@@ -129,7 +129,7 @@ export default function UserLayout(props: Props) {
   };
 
   return (
-    <div>
+    <>
       <div className="flex flex-row fixed bottom-0 w-full top-0">
         <div className="bg-blue-800 ">
           <nav className="flex flex-col h-full">
@@ -235,6 +235,6 @@ export default function UserLayout(props: Props) {
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }

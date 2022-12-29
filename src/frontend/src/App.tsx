@@ -73,7 +73,7 @@ export default function App() {
   ]);
 
   return (
-    <div>
+    <>
       <SWRConfig
         value={{ revalidateOnFocus: false, shouldRetryOnError: false }}
       >
@@ -84,6 +84,6 @@ export default function App() {
           </EuiProvider>
         </RecoilRoot>
       </SWRConfig>
-    </div>
+    </>
   );
 }
