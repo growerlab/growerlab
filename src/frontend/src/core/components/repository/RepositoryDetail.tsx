@@ -92,7 +92,7 @@ export function RepositoryDetail(props: RepositoryPathGroup) {
       <EuiTabs size="s" className="flex justify-between">
         {renderTabs()}
       </EuiTabs>
-      <div className="pt-4 p-1">{selectedTabContent}</div>
+      <div className="pt-4">{selectedTabContent}</div>
     </div>
   );
 }

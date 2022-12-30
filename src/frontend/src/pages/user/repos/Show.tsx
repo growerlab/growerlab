@@ -60,7 +60,7 @@ export default function RepositoryShow(props: Props) {
   return (
     <div className="flex h-full w-full">
       <div className="flex flex-row w-full h-full">
-        <div className="flex-none h-auto bg-gray-100 border-y-0 border-l-0 border-solid border-r border-gray-200">
+        <div className="flex-none h-full bg-gray-100 border-y-0 border-l-0 border-solid border-r border-gray-200">
           <div className="w-52 mt-3">
             <EuiListGroup
               listItems={leftMenus}
@@ -72,10 +72,9 @@ export default function RepositoryShow(props: Props) {
             />
           </div>
         </div>
-        <div className="flex-auto mx-auto">
-          <div className="overflow-y-auto">
-            <div className="space-y-1 p-5 ">{defaultOutlet}</div>
-          </div>
+        <div className="flex-auto mx-auto overflow-y-scroll h-full pb-10">
+          <div className="space-y-1 p-5 ">{defaultOutlet}</div>
+          <div className="h-8"></div>
         </div>
       </div>
     </div>

@@ -54,14 +54,14 @@ git push -u origin ${props.defaultBranch}`;
               <strong>Option 1: </strong>
               {i18n.t<string>("repository.empty_option1")}
             </h4>
-            <EuiCodeBlock language="bash" fontSize="m" paddingSize="m">
+            <EuiCodeBlock language="bash" fontSize="s" paddingSize="m">
               {newShell}
             </EuiCodeBlock>
             <h4>
               <strong>Option 2: </strong>
               {i18n.t<string>("repository.empty_option2")}
             </h4>
-            <EuiCodeBlock language="bash" fontSize="m" paddingSize="m">
+            <EuiCodeBlock language="bash" fontSize="s" paddingSize="m">
               {oldShell}
             </EuiCodeBlock>
           </div>

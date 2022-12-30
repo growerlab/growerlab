@@ -47,7 +47,7 @@ export default function UserLayout(props: Props) {
       iconType="plus"
       color={"primary"}
       size={"s"}
-      title={i18n.t<string>("repository.new")}
+      title={i18n.t("repository.new")}
       onClick={() => navigate(Router.User.Repository.New)}
     />
   );
@@ -129,80 +129,79 @@ export default function UserLayout(props: Props) {
   };
 
   return (
-    <>
-      <div className="flex flex-row fixed bottom-0 w-full top-0">
-        <div className="bg-blue-800 ">
-          <nav className="flex flex-col h-full">
-            <div className="flex-none">
-              <div>
-                <a
-                  href={Router.User.Index}
-                  className="text-white block px-3 py-5  text-base font-medium text-center"
-                  aria-current="page"
-                >
-                  <EuiIcon type={"color"} className="inline" />
-                </a>
-              </div>
-              <div className="px-2 pt-2 pb-3 space-y-1 ">
-                {[
-                  [
-                    "user",
-                    "Home",
-                    Router.User.Index,
-                    <EuiIcon type="grid" key={"home"} />,
-                  ],
-                  [
-                    "repository",
-                    i18n.t<string>("repository.menu"),
-                    Router.User.Repository.Index,
-                    <EuiIcon
-                      type={"visVega"}
-                      key={"repository"}
-                      className="inline"
-                    />,
-                  ],
-                  [
-                    "project",
-                    i18n.t<string>("project.menu"),
-                    Router.User.Project.Index,
-                    <EuiIcon
-                      type={"sessionViewer"}
-                      key={"project"}
-                      className="inline"
-                    />,
-                  ],
-                  [
-                    "note",
-                    i18n.t<string>("note.menu"),
-                    Router.User.Project.Index,
-                    <EuiIcon
-                      type={"sessionViewer"}
-                      key={"project"}
-                      className="inline"
-                    />,
-                  ],
-                ].map(([key, title, href, icon]) => (
-                  <MenuItem
-                    key={key as string}
-                    selected={key as string}
-                    icon={icon}
-                    href={href.toString()}
-                    title={title.toString()}
-                  ></MenuItem>
-                ))}
-              </div>
+    <div className="h-full">
+      {/* sidebar */}
+      <div className="bg-blue-800 sidebar">
+        <nav className="flex flex-col">
+          <div className="flex-none">
+            <div>
+              <a
+                href={Router.User.Index}
+                className="text-white block px-3 py-5  text-base font-medium text-center"
+                aria-current="page"
+              >
+                <EuiIcon type={"color"} className="inline" />
+              </a>
             </div>
-            <div className="flex-auto">{/* 填充 */}</div>
-          </nav>
-        </div>
+            <div className="px-2 pt-2 pb-3 space-y-1 ">
+              {[
+                [
+                  "user",
+                  "Home",
+                  Router.User.Index,
+                  <EuiIcon type="grid" key={"home"} />,
+                ],
+                [
+                  "repository",
+                  i18n.t<string>("repository.menu"),
+                  Router.User.Repository.Index,
+                  <EuiIcon
+                    type={"visVega"}
+                    key={"repository"}
+                    className="inline"
+                  />,
+                ],
+                [
+                  "project",
+                  i18n.t<string>("project.menu"),
+                  Router.User.Project.Index,
+                  <EuiIcon
+                    type={"sessionViewer"}
+                    key={"project"}
+                    className="inline"
+                  />,
+                ],
+                [
+                  "note",
+                  i18n.t<string>("note.menu"),
+                  Router.User.Project.Index,
+                  <EuiIcon
+                    type={"sessionViewer"}
+                    key={"project"}
+                    className="inline"
+                  />,
+                ],
+              ].map(([key, title, href, icon]) => (
+                <MenuItem
+                  key={key as string}
+                  selected={key as string}
+                  icon={icon}
+                  href={href.toString()}
+                  title={title.toString()}
+                ></MenuItem>
+              ))}
+            </div>
+          </div>
+        </nav>
+      </div>
 
+      {/* main */}
+      <div className="flex flex-grow bottom-0 w-full h-full main">
         <div className="grow">
           <div className="flex flex-col h-full">
             <header className="bg-white shadow z-10">
-              <div className="max-w-full  mx-auto py-3 px-4 sm:px-2 lg:px-6">
+              <div className="max-w-full h-full mx-auto py-3 px-4 sm:px-2 lg:px-6">
                 <div className="flex">
-                  <div className="flex-none"></div>
-                  {/* search */}
                   <div className="grow">
                     <div className="flex">
                       <div className="flex-1"></div>
@@ -220,21 +219,19 @@ export default function UserLayout(props: Props) {
                     </div>
                   </div>
                   {/* user */}
-                  <div className="flex-none">
-                    <div className="flex">
-                      <div className={"mr-5"}>{plusMenu}</div>
-                      <div>{userMenu}</div>
-                    </div>
+                  <div className="flex">
+                    <div className={"mr-5"}>{plusMenu}</div>
+                    <div>{userMenu}</div>
                   </div>
                 </div>
               </div>
             </header>
             <main className="w-full h-full">
-              <div className="max-w-full h-full mx-auto">{props.children}</div>
+              <div className="max-w-full mx-auto h-full">{props.children}</div>
             </main>
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
