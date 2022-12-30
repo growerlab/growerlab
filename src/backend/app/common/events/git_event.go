@@ -53,7 +53,7 @@ type GitEventPayload struct {
 }
 
 type PublishGitEvent interface {
-	PublishGitEvent(gitEvent any) error
+	Publish(gitEvent any) error
 }
 
 var _ EventProcessor = (*GitEvent)(nil)
@@ -73,7 +73,7 @@ func (g *GitEvent) Topic() string {
 	return "git_event"
 }
 
-func (g *GitEvent) PublishGitEvent(gitEvent any) error {
+func (g *GitEvent) Publish(gitEvent any) error {
 	return eventMQ.DirectlyPublish(g.Topic(), gitEvent)
 }
 

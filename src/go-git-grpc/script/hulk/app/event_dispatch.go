@@ -17,5 +17,5 @@ type EventDispatch struct {
 
 // Dispatch 将event推送给redis的stream
 func (e *EventDispatch) Dispatch(event *PushEvent) error {
-	return events.NewGitEvent().AsyncPushGitEvent(event)
+	return events.NewGitEvent().Publish(event)
 }
