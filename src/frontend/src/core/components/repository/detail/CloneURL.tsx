@@ -7,6 +7,9 @@ import {
   EuiFlexGroup,
 } from "@elastic/eui";
 
+import { useNotice } from "../../../global/recoil/useNotice";
+import i18n from "../../../i18n/i18n";
+
 interface Props {
   defaultBranch: string;
   cloneURLSSH: string;
@@ -16,6 +19,7 @@ interface Props {
 
 export default function CloneURL(props: Props) {
   const [cloneURL, setCloneURL] = useState<string>(props.cloneURLHttp);
+  const notice = useNotice();
 
   const toggleButtons = [
     {
@@ -54,7 +58,10 @@ export default function CloneURL(props: Props) {
           append={
             <EuiButtonIcon
               iconType={"copy"}
-              onClick={() => copyToClipboard(cloneURL)}
+              onClick={() => {
+                copyToClipboard(cloneURL);
+                notice.success(i18n.t<string>("notice.copy_notice"));
+              }}
             />
           }
         />
