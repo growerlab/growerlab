@@ -28,9 +28,11 @@ type Context struct {
 }
 
 func (p *Context) Verify() error {
-	fileParts := strings.Split(p.RepoPath, "/")
-	if len(fileParts) != 4 {
-		return errors.New("invalid repo path, must relative path.")
+	if len(p.RepoPath) > 0 {
+		fileParts := strings.Split(p.RepoPath, "/")
+		if len(fileParts) != 4 {
+			return errors.New("invalid repo path, must relative path.")
+		}
 	}
 	if len(p.Bin) == 0 {
 		return errors.New("invalid Bin binary, must required.")

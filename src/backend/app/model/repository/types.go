@@ -15,6 +15,10 @@ import (
 	"github.com/jmoiron/sqlx"
 )
 
+const (
+	DefaultBranch = "main"
+)
+
 var (
 	tableName = "repository"
 	columns   = []string{

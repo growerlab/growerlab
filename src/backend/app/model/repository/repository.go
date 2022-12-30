@@ -16,6 +16,8 @@ func (m *model) AddRepository(repo *Repository) error {
 		repo.Description,
 		repo.CreatedAt,
 		repo.Public,
+		repo.LastPushAt,
+		repo.DefaultBranch,
 	}
 	_, err := m.Insert(columns[1:], values).Exec()
 	return errors.SQLError(err)

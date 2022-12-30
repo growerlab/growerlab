@@ -13,14 +13,16 @@ func BuildNewRepository(
 	req *CreateParams,
 ) (repo *repository.Repository) {
 	repo = &repository.Repository{
-		NamespaceID: nsID,
-		UUID:        uuid.UUIDv16(),
-		Path:        req.Name,
-		Name:        req.Name,
-		OwnerID:     userID,
-		Description: req.Description,
-		CreatedAt:   time.Now().Unix(),
-		Public:      req.Public,
+		NamespaceID:   nsID,
+		UUID:          uuid.UUIDv16(),
+		Path:          req.Name,
+		Name:          req.Name,
+		OwnerID:       userID,
+		Description:   req.Description,
+		CreatedAt:     time.Now().Unix(),
+		Public:        req.Public,
+		LastPushAt:    0,
+		DefaultBranch: repository.DefaultBranch,
 	}
 	return repo
 }
