@@ -26,7 +26,7 @@ func (g *Take) TreeFiles(ref string, dir *string) ([]*git.FileEntity, error) {
 	defer cancel()
 
 	pathGroup := g.pathGroup()
-	files, err := git.New(ctx, pathGroup).TreeFiles(ref, "/")
+	files, err := git.New(ctx, pathGroup).TreeFiles(ref, *dir)
 	if err != nil {
 		return nil, errors.Trace(err)
 	}

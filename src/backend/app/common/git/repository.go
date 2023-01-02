@@ -130,6 +130,15 @@ func (r *Repository) TreeFiles(ref, dir string) ([]*FileEntity, error) {
 		if err != nil {
 			return errors.Trace(err)
 		}
+		if dir != "" && dir != "/" {
+			tree, err = tree.Tree(dir)
+			if err != nil {
+				return errors.Trace(err)
+			}
+		}
+		// tree.FindEntry()
+		// TODO 完善 buildFileEntity 方法，文件 -> commit
+		// TODO 参考 https://github.com/src-d/go-git/blob/master/_examples/ls/main.go#L173
 
 		err = tree.Files().ForEach(func(file *object.File) error {
 			result = append(result, buildFileEntity(file))
