@@ -1,4 +1,5 @@
 import React, { Fragment, useMemo, useState } from "react";
+import { useParams, useSearchParams } from "react-router-dom";
 import {
   EuiSpacer,
   EuiTab,
@@ -22,6 +23,9 @@ export function RepositoryDetail(props: RepositoryPathGroup) {
   const [currentTab, setCurrentTab] = useState("files");
   const [repository, setRepository] = useState<RepositoryEntity>();
 
+  const [searchParams, setSearchParams] = useSearchParams();
+  const { filePath } = useParams();
+
   const repositoryAPI = useRepositoryAPI(namespace);
 
   const tabs: EuiTabbedContentProps["tabs"] = [
@@ -31,10 +35,17 @@ export function RepositoryDetail(props: RepositoryPathGroup) {
       content: (
         <Files
           reference="main"
-          dir=""
+          filePath={filePath || ""}
           namespace={namespace}
           repo={repo}
           repository={repository}
+          onChangeFilePath={(filePath: string) => {
+            if (filePath !== "" && filePath !== "/") {
+              setSearchParams({ filePath: filePath });
+            } else {
+              setSearchParams({ filePath: "" });
+            }
+          }}
         />
       ),
     },

@@ -1,7 +1,6 @@
 package git
 
 import (
-	"github.com/go-git/go-git/v5/plumbing"
 	"github.com/go-git/go-git/v5/plumbing/filemode"
 	"github.com/go-git/go-git/v5/plumbing/object"
 )
@@ -17,13 +16,13 @@ const (
 type FileEntity struct {
 	Name     string            `json:"name"`
 	Mode     filemode.FileMode `json:"-"`
-	BlobHash plumbing.Hash     `json:"blob_hash"`
+	BlobHash string            `json:"blob_hash"`
 }
 
 func buildFileEntity(file *object.File) *FileEntity {
 	return &FileEntity{
 		Name:     file.Name,
 		Mode:     file.Mode,
-		BlobHash: file.Hash,
+		BlobHash: file.Hash.String(),
 	}
 }

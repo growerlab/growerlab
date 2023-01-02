@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import useSWRImmutable, { Fetcher } from "swr";
-
-import { formatDate, EuiBasicTable, EuiLink } from "@elastic/eui";
+// import { useSearchParams } from "react-router-dom";
+import { formatDate, EuiBasicTable, EuiLink, EuiPanel } from "@elastic/eui";
+import { useSearchParams } from "react-router-dom";
+import { useTitle } from "react-use";
 
 import {
   FileEntity,
@@ -11,25 +13,32 @@ import {
 import Loading from "../../common/Loading";
 import { useRepositoryAPI } from "../../../api/repository";
 import EmptyTree from "./EmptyTree";
+import { getTitle } from "../../../common/document";
 
 interface Props extends RepositoryPathGroup {
   reference: string;
-  dir: string;
+  filePath: string;
   repository?: RepositoryEntity;
+  onChangeFilePath: (filePath: string) => void;
 }
 
 export function Files(props: Props) {
-  const { namespace, repo, reference, dir, repository } = props;
+  const { namespace, repo, reference, filePath, repository, onChangeFilePath } =
+    props;
+
+  useTitle(getTitle(repo));
+
   const repositoryAPI = useRepositoryAPI(namespace);
   const [fileEntities, setFileEntities] = useState<FileEntity[]>();
   const [isEmptyTree, setTreeEmpty] = useState<boolean>(false);
+  const [repoFilePath, setRepoFilePath] = useState(filePath);
 
   if (!isEmptyTree && repository?.last_push_at == 0) {
     setTreeEmpty(true);
   }
 
   const fetcher: Fetcher = () => {
-    const params = { namespace, repo, ref: reference, dir };
+    const params = { namespace, repo, ref: reference, dir: filePath };
     return repositoryAPI.treeFiles(params).then((res) => {
       setFileEntities(res.data);
       return res.data;
@@ -59,47 +68,23 @@ export function Files(props: Props) {
 
   const columns: any = [
     {
-      field: "firstName",
-      name: "First Name",
+      field: "name",
+      name: "Name",
       sortable: true,
-      "data-test-subj": "firstNameCell",
-      mobileOptions: {
-        render: (item: any) => (
-          <span>
-            {item.firstName}{" "}
-            <EuiLink href="#" target="_blank">
-              {item.lastName}
-            </EuiLink>
-          </span>
-        ),
-        header: false,
-        truncateText: false,
-        enlarge: true,
-        width: "100%",
-      },
+      render: (name: string) => <EuiLink href="#">{name}</EuiLink>,
     },
     {
-      field: "lastName",
-      name: "Last Name",
-      truncateText: true,
-      render: (name: string) => (
-        <EuiLink href="#" target="_blank">
-          {name}
-        </EuiLink>
-      ),
-      mobileOptions: {
-        show: false,
-      },
+      field: "lastCommitMessage",
+      name: "Last commit message",
+      render: (item: any) => <EuiLink href="#">{item}</EuiLink>,
     },
     {
-      field: "dateOfBirth",
-      name: "Date of Birth",
+      field: "lastCommitDate",
+      name: "Last commit date",
       dataType: "date",
       render: (date: Date) => formatDate(date, "dobLong"),
     },
   ];
-
-  const items: any = []; //store.users.filter((user, index) => index < 10);
 
   const getRowProps = (item: { id: string }) => {
     const { id } = item;
@@ -121,14 +106,16 @@ export function Files(props: Props) {
   };
   return (
     <>
-      <EuiBasicTable
-        tableCaption="Demo of EuiBasicTable"
-        items={items}
-        rowHeader="firstName"
-        columns={columns}
-        rowProps={getRowProps}
-        cellProps={getCellProps}
-      />
+      <EuiPanel hasBorder={true} paddingSize={"s"}>
+        <EuiBasicTable
+          tableCaption="Git files"
+          items={fileEntities}
+          rowHeader="name"
+          columns={columns}
+          rowProps={getRowProps}
+          cellProps={getCellProps}
+        />
+      </EuiPanel>
     </>
   );
 }

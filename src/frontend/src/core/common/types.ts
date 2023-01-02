@@ -53,6 +53,7 @@ export interface RepositoryPathTree extends RepositoryPathGroup {
 }
 
 export interface FileEntity {
+  id: string;
   name: string;
   blob_hash: string;
 }
