@@ -8,7 +8,6 @@ import (
 
 	"github.com/go-git/go-git/v5"
 	"github.com/go-git/go-git/v5/plumbing"
-	"github.com/go-git/go-git/v5/plumbing/object"
 	"github.com/growerlab/growerlab/src/common/configurator"
 	"github.com/growerlab/growerlab/src/common/errors"
 	"github.com/growerlab/growerlab/src/common/logger"
@@ -106,7 +105,11 @@ func (r *Repository) TreeFiles(ref, dir string) ([]*FileEntity, error) {
 		if plumbing.IsHash(ref) {
 			refer = plumbing.NewHashReference(plumbing.ReferenceName(RefCommit), plumbing.NewHash(ref))
 		} else {
-			refer, err = r.findRefByName(repo, ref)
+			commitHash, err := repo.ResolveRevision(plumbing.Revision(ref))
+			if err != nil {
+				return errors.Trace(err)
+			}
+			refer = plumbing.NewHashReference(plumbing.ReferenceName(RefCommit), *commitHash)
 		}
 		if err != nil {
 			return errors.Trace(err)
@@ -140,10 +143,9 @@ func (r *Repository) TreeFiles(ref, dir string) ([]*FileEntity, error) {
 		// TODO 完善 buildFileEntity 方法，文件 -> commit
 		// TODO 参考 https://github.com/src-d/go-git/blob/master/_examples/ls/main.go#L173
 
-		err = tree.Files().ForEach(func(file *object.File) error {
-			result = append(result, buildFileEntity(file))
-			return nil
-		})
+		for _, entry := range tree.Entries {
+			result = append(result, buildFileEntity(&entry))
+		}
 		return errors.Trace(err)
 	})
 	if err != nil {
@@ -151,20 +153,6 @@ func (r *Repository) TreeFiles(ref, dir string) ([]*FileEntity, error) {
 	}
 	// TODO sort
 	return result, nil
-}
-
-func (r *Repository) findRefByName(repo *git.Repository, ref string) (*plumbing.Reference, error) {
-	refs, err := r.listRefs(repo)
-	if err != nil {
-		return nil, errors.Trace(err)
-	}
-	for _, reference := range refs {
-		if reference.Name().Short() == ref ||
-			reference.Target().Short() == ref {
-			return reference, nil
-		}
-	}
-	return nil, nil
 }
 
 func (r *Repository) listRefs(repo *git.Repository) ([]*plumbing.Reference, error) {

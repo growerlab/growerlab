@@ -23,7 +23,7 @@ type FileEntity struct {
 	LastCommitDate    int64             `json:"last_commit_date"`
 }
 
-func buildFileEntity(file *object.File) *FileEntity {
+func buildFileEntity(file *object.TreeEntry) *FileEntity {
 	return &FileEntity{
 		Name:     file.Name,
 		Mode:     file.Mode,
