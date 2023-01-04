@@ -20,18 +20,26 @@ interface Props extends RepositoryPathGroup {
   filePath: string;
   repository?: RepositoryEntity;
   onChangeFilePath: (filePath: string) => void;
+  onChangeReference: (reference: string) => void;
 }
 
 export function Files(props: Props) {
-  const { namespace, repo, reference, filePath, repository, onChangeFilePath } =
-    props;
+  const {
+    namespace,
+    repo,
+    reference,
+    filePath,
+    repository,
+    onChangeFilePath,
+    onChangeReference,
+  } = props;
 
   useTitle(getTitle(repo));
 
   const repositoryAPI = useRepositoryAPI(namespace);
   const [fileEntities, setFileEntities] = useState<FileEntity[]>();
   const [isEmptyTree, setTreeEmpty] = useState<boolean>(false);
-  const [repoFilePath, setRepoFilePath] = useState(filePath);
+  const [repoFilePath, setRepoFilePath] = useState(filePath); // 正在访问的repo路径
 
   if (!isEmptyTree && repository?.last_push_at == 0) {
     setTreeEmpty(true);

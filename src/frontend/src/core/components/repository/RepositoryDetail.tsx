@@ -23,7 +23,7 @@ export function RepositoryDetail(props: RepositoryPathGroup) {
   const [currentTab, setCurrentTab] = useState("files");
   const [repository, setRepository] = useState<RepositoryEntity>();
 
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [, setSearchParams] = useSearchParams();
   const { filePath } = useParams();
 
   const repositoryAPI = useRepositoryAPI(namespace);
@@ -39,6 +39,9 @@ export function RepositoryDetail(props: RepositoryPathGroup) {
           namespace={namespace}
           repo={repo}
           repository={repository}
+          onChangeReference={(reference: string) => {
+            setSearchParams({ ref: reference });
+          }}
           onChangeFilePath={(filePath: string) => {
             if (filePath !== "" && filePath !== "/") {
               setSearchParams({ filePath: filePath });
