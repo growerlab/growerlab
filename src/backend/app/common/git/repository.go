@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"io"
+	"strings"
 	"time"
 
 	"github.com/go-git/go-git/v5"
@@ -98,7 +99,14 @@ func (r *Repository) AddFile(file *client.File) (string, error) {
 func (r *Repository) TreeFiles(ref, dir string) ([]*FileEntity, error) {
 	var result = make([]*FileEntity, 0)
 
-	err := r.getRepo(r.ctx, r.pathGroup, func(repo *git.Repository) error {
+	if dir == "/" {
+		dir = ""
+	}
+	if strings.HasPrefix(dir, "/") {
+		dir = strings.TrimPrefix(dir, "/")
+	}
+
+	err := r.getRepo(func(repo *git.Repository) error {
 		var refer *plumbing.Reference
 		var err error
 
@@ -133,19 +141,27 @@ func (r *Repository) TreeFiles(ref, dir string) ([]*FileEntity, error) {
 		if err != nil {
 			return errors.Trace(err)
 		}
-		if dir != "" && dir != "/" {
+
+		if dir != "" {
 			tree, err = tree.Tree(dir)
 			if err != nil {
 				return errors.Trace(err)
 			}
 		}
-		// tree.FindEntry()
-		// TODO 完善 buildFileEntity 方法，文件 -> commit
-		// TODO 参考 https://github.com/src-d/go-git/blob/master/_examples/ls/main.go#L173
 
+		var paths = make([]string, 0, len(tree.Entries))
 		for _, entry := range tree.Entries {
-			result = append(result, buildFileEntity(&entry))
+			paths = append(paths, entry.Name)
 		}
+
+		nameCommitSet, err := r.getCommitForPaths(repo, commit.Hash, dir, paths)
+		if err != nil {
+			return errors.Trace(err)
+		}
+		for filehash, cmt := range nameCommitSet {
+			result = append(result, buildFileEntity(filehash, cmt))
+		}
+
 		return errors.Trace(err)
 	})
 	if err != nil {
@@ -183,8 +199,8 @@ func (r *Repository) runCommand(cmd string, args []string, in io.Reader, out io.
 	return errors.Trace(err)
 }
 
-func (r *Repository) getRepo(ctx context.Context, pathGroup string, gitcb gitCallbackFunc) error {
-	err := r.getGrpcStoreClient(ctx, pathGroup, func(c *client.Store) error {
+func (r *Repository) getRepo(gitcb gitCallbackFunc) error {
+	err := r.getGrpcStoreClient(r.ctx, r.pathGroup, func(c *client.Store) error {
 		repo, err := git.Open(c, nil)
 		if err != nil {
 			return errors.Trace(err)

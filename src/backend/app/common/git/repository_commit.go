@@ -2,26 +2,41 @@ package git
 
 import (
 	"github.com/emirpasic/gods/trees/binaryheap"
+	"github.com/go-git/go-git/v5"
 	"github.com/go-git/go-git/v5/plumbing"
+	"github.com/go-git/go-git/v5/plumbing/filemode"
 	"github.com/go-git/go-git/v5/plumbing/object"
 	"github.com/go-git/go-git/v5/plumbing/object/commitgraph"
+	"github.com/growerlab/growerlab/src/common/errors"
 )
+
+type fileHash struct {
+	name string
+	hash plumbing.Hash
+	mode filemode.FileMode
+}
 
 type commitAndPaths struct {
 	commit commitgraph.CommitNode
 	// Paths that are still on the branch represented by commit
 	paths []string
 	// Set of hashes for the paths
-	hashes map[string]plumbing.Hash
+	hashes map[string]fileHash
 }
 
-/*
-该算法理论上会遍历整个commit
-1、缓存，避免多次遍历
-2、对commit做索引，实现快速根据path获取commit
-*/
+// 这里性能比较差，后期可以考虑给commit加索引
+func (r *Repository) getCommitForPaths(repo *git.Repository, hash plumbing.Hash, treePath string, paths []string) (map[fileHash]*object.Commit, error) {
+	var result map[fileHash]*object.Commit
+	nodeIndex := commitgraph.NewObjectCommitNodeIndex(repo.Storer)
+	commitNode, err := nodeIndex.Get(hash)
+	if err != nil {
+		return nil, errors.Trace(err)
+	}
+	result, err = r.getLastCommitForPaths(commitNode, treePath, paths)
+	return result, errors.Trace(err)
+}
 
-func (r *Repository) getLastCommitForPaths(c commitgraph.CommitNode, treePath string, paths []string) (map[string]*object.Commit, error) {
+func (r *Repository) getLastCommitForPaths(c commitgraph.CommitNode, treePath string, paths []string) (map[fileHash]*object.Commit, error) {
 	// We do a tree traversal with nodes sorted by commit time
 	heap := binaryheap.NewWith(func(a, b interface{}) int {
 		if a.(*commitAndPaths).commit.CommitTime().Before(b.(*commitAndPaths).commit.CommitTime()) {
@@ -30,14 +45,22 @@ func (r *Repository) getLastCommitForPaths(c commitgraph.CommitNode, treePath st
 		return -1
 	})
 
+	globalFileHashSet := make(map[string]fileHash)
 	resultNodes := make(map[string]commitgraph.CommitNode)
 	initialHashes, err := r.getFileHashes(c, treePath, paths)
 	if err != nil {
 		return nil, err
 	}
+	for fileName, fh := range initialHashes {
+		globalFileHashSet[fileName] = fh
+	}
 
 	// Start search from the root commit and with full set of paths
-	heap.Push(&commitAndPaths{c, paths, initialHashes})
+	heap.Push(&commitAndPaths{
+		commit: c,
+		paths:  paths,
+		hashes: initialHashes,
+	})
 
 	for {
 		cIn, ok := heap.Pop()
@@ -59,11 +82,14 @@ func (r *Repository) getLastCommitForPaths(c commitgraph.CommitNode, treePath st
 
 		// Examine the current commit and set of interesting paths
 		pathUnchanged := make([]bool, len(current.paths))
-		parentHashes := make([]map[string]plumbing.Hash, len(parents))
+		parentHashes := make([]map[string]fileHash, len(parents))
 		for j, parent := range parents {
 			parentHashes[j], err = r.getFileHashes(parent, treePath, current.paths)
 			if err != nil {
 				break
+			}
+			for fileName, fh := range parentHashes[j] {
+				globalFileHashSet[fileName] = fh
 			}
 
 			for i, path := range current.paths {
@@ -126,37 +152,46 @@ func (r *Repository) getLastCommitForPaths(c commitgraph.CommitNode, treePath st
 	}
 
 	// Post-processing
-	result := make(map[string]*object.Commit)
+	result := make(map[fileHash]*object.Commit)
 	for path, commitNode := range resultNodes {
-		var err error
-		result[path], err = commitNode.Commit()
-		if err != nil {
-			return nil, err
+		fh, found := globalFileHashSet[path]
+		if found {
+			result[fh], err = commitNode.Commit()
+			if err != nil {
+				return nil, err
+			}
 		}
 	}
-
 	return result, nil
 }
 
-func (r *Repository) getFileHashes(c commitgraph.CommitNode, treePath string, paths []string) (map[string]plumbing.Hash, error) {
+func (r *Repository) getFileHashes(c commitgraph.CommitNode, treePath string, paths []string) (map[string]fileHash, error) {
 	tree, err := r.getCommitTree(c, treePath)
 	if err == object.ErrDirectoryNotFound {
 		// The whole tree didn't exist, so return empty map
-		return make(map[string]plumbing.Hash), nil
+		return make(map[string]fileHash), nil
 	}
 	if err != nil {
 		return nil, err
 	}
 
-	hashes := make(map[string]plumbing.Hash)
+	hashes := make(map[string]fileHash)
 	for _, path := range paths {
 		if path != "" {
 			entry, err := tree.FindEntry(path)
 			if err == nil {
-				hashes[path] = entry.Hash
+				hashes[path] = fileHash{
+					name: entry.Name,
+					hash: entry.Hash,
+					mode: entry.Mode,
+				}
 			}
 		} else {
-			hashes[path] = tree.Hash
+			hashes[path] = fileHash{
+				name: "",
+				hash: tree.Hash,
+				mode: filemode.Dir,
+			}
 		}
 	}
 
