@@ -26,7 +26,10 @@ require (
 	bitbucket.org/creachadair/shell v0.0.7
 	github.com/ThreeDotsLabs/watermill v1.1.1
 	github.com/bitfield/script v0.21.4
+	github.com/emirpasic/gods v1.12.0
 	github.com/go-playground/validator/v10 v10.10.0
+	github.com/go-redis/redis/v8 v8.11.4
+	github.com/lib/pq v1.2.0
 	github.com/minghsu0107/watermill-redistream v1.0.1
 	github.com/samber/lo v1.36.0
 )
@@ -40,13 +43,11 @@ require (
 	github.com/cespare/xxhash/v2 v2.1.2 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
-	github.com/emirpasic/gods v1.12.0 // indirect
 	github.com/gin-contrib/sse v0.1.0 // indirect
 	github.com/go-git/gcfg v1.5.0 // indirect
 	github.com/go-git/go-billy/v5 v5.3.1 // indirect
 	github.com/go-playground/locales v0.14.0 // indirect
 	github.com/go-playground/universal-translator v0.18.0 // indirect
-	github.com/go-redis/redis/v8 v8.11.4 // indirect
 	github.com/goccy/go-json v0.9.7 // indirect
 	github.com/google/go-cmp v0.5.9 // indirect
 	github.com/imdario/mergo v0.3.12 // indirect
@@ -58,7 +59,6 @@ require (
 	github.com/lann/builder v0.0.0-20180802200727-47ae307949d0 // indirect
 	github.com/lann/ps v0.0.0-20150810152359-62de8c46ede0 // indirect
 	github.com/leodido/go-urn v1.2.1 // indirect
-	github.com/lib/pq v1.2.0 // indirect
 	github.com/lithammer/shortuuid/v3 v3.0.7 // indirect
 	github.com/mattn/go-isatty v0.0.14 // indirect
 	github.com/mitchellh/go-homedir v1.1.0 // indirect

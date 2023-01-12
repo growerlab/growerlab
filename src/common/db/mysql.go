@@ -6,11 +6,11 @@ import (
 	"io"
 	"runtime/debug"
 
-	_ "github.com/go-sql-driver/mysql"
 	"github.com/growerlab/growerlab/src/common/configurator"
 	"github.com/growerlab/growerlab/src/common/errors"
 	"github.com/growerlab/growerlab/src/common/logger"
 	"github.com/jmoiron/sqlx"
+	"github.com/lib/pq"
 )
 
 var (
@@ -29,7 +29,12 @@ func DoInitDatabase(databaseURL string, debug bool) (*DBQuery, error) {
 	var err error
 	var sqlxDB *sqlx.DB
 
-	sqlxDB, err = sqlx.Connect("mysql", databaseURL)
+	_, err = pq.ParseURL(databaseURL)
+	if err != nil {
+		return nil, errors.SQLError(err)
+	}
+
+	sqlxDB, err = sqlx.Connect("postgres", databaseURL)
 	if err != nil {
 		return nil, errors.SQLError(err)
 	}
