@@ -21,8 +21,8 @@ import (
 	"github.com/growerlab/growerlab/src/common/configurator"
 )
 
-var projectPath = filepath.Join(os.Getenv("GOPATH"), "src", "github.com/growerlab/growerlab/src/backend")
-var ddlPath = "db/growerlab.sql"
+var projectPath = filepath.Join(os.Getenv("GOPATH"), "src", "github.com/growerlab/growerlab/cmd")
+var ddlPath = "database/growerlab.sql"
 
 type DBInfo struct {
 	Username string

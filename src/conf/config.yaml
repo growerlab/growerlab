@@ -2,7 +2,7 @@ default: &base
   debug: true
   website_url: http://localhost
   backend_port: 8081
-  db_url: postgres://growerlab:growerlab@localhost:5432/growerlab?sslmode=false
+  db_url: postgres://growerlab:growerlab@localhost:5432/growerlab?sslmode=disable
   redis:
     host: 127.0.0.1
     port: 6379
