@@ -3,6 +3,10 @@ set +x
 
 echo "------------------------- start -------------------------"
 
+shopt -s expand_aliases
+
+alias go="go1.19.3"
+
 if [ ! -d ".repositories" ]; then
     mkdir .repositories
 fi
