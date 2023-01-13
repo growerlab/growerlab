@@ -9,7 +9,7 @@ KeyDB 5.x
 
 ### 初始数据
 
-如果有种子数据，应该放入 `db/seed.sql` 文件中
+如果有种子数据，应该放入 `init/db/seed.sql` 文件中
 
 ```
 初始账号 admin@admin.com

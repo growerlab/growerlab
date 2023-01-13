@@ -1,12 +1,6 @@
 /*
-该工具主要是为了方便将数据库结构快速导出到 db/growerlab.sql
-避免，修改一个字段或者相关数据库结构操作频繁的手动导出到 db/growerlab.sql，同时避免手动操作可能的失误
-
-使用方法：
-
-$ cd backend
-$ go run script/tool/exportddl/main.go
-
+该工具主要是为了方便将数据库结构快速导出到 growerlab.sql
+避免，修改一个字段或者相关数据库结构操作频繁的手动导出到 growerlab.sql，同时避免手动操作可能的失误
 */
 
 package main
@@ -21,8 +15,8 @@ import (
 	"github.com/growerlab/growerlab/src/common/configurator"
 )
 
-var projectPath = filepath.Join(os.Getenv("GOPATH"), "src", "github.com/growerlab/growerlab/cmd")
-var ddlPath = "database/growerlab.sql"
+var projectPath = filepath.Join(os.Getenv("GOPATH"), "src", "github.com/growerlab/growerlab")
+var ddlPath = "init/db/growerlab.sql"
 
 type DBInfo struct {
 	Username string
@@ -56,7 +50,7 @@ func Export(info *DBInfo) error {
 	}
 	defer sqlFile.Close()
 
-	cmd := exec.Command("pg_dump", "-U", info.Username, "-h", info.Host, info.DBName, "--schema-only")
+	cmd := exec.Command("pg_dump", "-U", info.Username, "-h", info.Host, info.DBName, "--schema-only", "--if-exists", "--clean")
 	cmd.Stdout = sqlFile
 	cmd.Stderr = os.Stderr
 	err = cmd.Run()
