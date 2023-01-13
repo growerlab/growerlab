@@ -395,7 +395,7 @@ CREATE TABLE public."user" (
     name character varying(255) NOT NULL,
     public_email character varying(255) NOT NULL,
     last_login_ip character varying(46) DEFAULT NULL::character varying,
-    last_login_at integer DEFAULT 0 NOT NULL,
+    last_login_at integer,
     created_at integer NOT NULL,
     deleted_at integer,
     verified_at integer,
