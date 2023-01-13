@@ -5,7 +5,7 @@ echo "------------------------- start -------------------------"
 
 shopt -s expand_aliases
 
-alias go="go1.19.3"
+alias go="go"
 
 if [ ! -d ".repositories" ]; then
     mkdir .repositories
