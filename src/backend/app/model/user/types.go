@@ -6,7 +6,7 @@ import (
 )
 
 var tableName = "user"
-var tableNameMark = "`user`" // user 是 pgsql中的保留关键字，所以加上引号
+var tableNameMark = "\"user\"" // user 是 pgsql中的保留关键字，所以加上引号
 
 var columns = []string{
 	"id",

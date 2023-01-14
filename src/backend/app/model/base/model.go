@@ -4,6 +4,8 @@ import (
 	"fmt"
 
 	sq "github.com/Masterminds/squirrel"
+	"github.com/growerlab/growerlab/src/backend/app/model/utils"
+	"github.com/growerlab/growerlab/src/common/db"
 	"github.com/growerlab/growerlab/src/common/errors"
 	"github.com/jmoiron/sqlx"
 )
@@ -134,7 +136,7 @@ func (d *Deleter) Exec() error {
 
 func (m *Model) Insert(columns []string, values []interface{}) *Inserter {
 	if len(values) == 0 || len(columns) == 0 {
-		panic("'columns' or 'values' must required")
+		panic("'columns' and 'values' must required")
 	}
 
 	builder := sq.Insert(m.table).Columns(columns...)
@@ -182,6 +184,14 @@ type Inserter struct {
 	columns []string
 	values  []interface{}
 	builder sq.InsertBuilder
+
+	sqlReturningColumn string
+}
+
+func (i *Inserter) SqlReturning(column string) db.Execor {
+	i.builder = i.builder.Suffix(utils.SqlReturning(column))
+	i.sqlReturningColumn = column
+	return i
 }
 
 func (i *Inserter) Exec() (int64, error) {
@@ -193,18 +203,32 @@ func (i *Inserter) Exec() (int64, error) {
 	// hook before
 	err := hook.Effect(i.src, i.table, ActionCreate, TenseBefore, set)
 	if err != nil {
-		return 0, err
+		return -1, err
 	}
 
 	i.builder = i.builder.Values(i.values...)
-	result, err := sq.ExecWith(i.src, i.builder)
+	query, args, err := i.builder.ToSql()
 	if err != nil {
-		return 0, errors.Wrap(err, "insert error")
+		return -1, errors.Trace(err)
 	}
+	row := i.src.QueryRowx(query, args...)
 
 	// hook after
 	err = hook.Effect(i.src, i.table, ActionCreate, TenseAfter, set)
-	return result.LastInsertId()
+	if err != nil {
+		return -1, errors.Trace(err)
+	}
+
+	if len(i.sqlReturningColumn) > 0 {
+		var returningVal int64
+		err = row.Scan(&returningVal)
+		if err != nil {
+			return -1, errors.Trace(err)
+		}
+		return returningVal, nil
+	}
+
+	return -1, nil
 }
 
 type Updater struct {

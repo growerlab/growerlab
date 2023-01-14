@@ -6,10 +6,12 @@ import (
 	"io"
 	"runtime/debug"
 
+	sq "github.com/Masterminds/squirrel"
 	"github.com/growerlab/growerlab/src/common/configurator"
 	"github.com/growerlab/growerlab/src/common/errors"
 	"github.com/growerlab/growerlab/src/common/logger"
 	"github.com/jmoiron/sqlx"
+	"github.com/lann/builder"
 	"github.com/lib/pq"
 )
 
@@ -19,6 +21,8 @@ var (
 )
 
 func InitDatabase() error {
+	sq.StatementBuilder = sq.StatementBuilderType(builder.EmptyBuilder).PlaceholderFormat(sq.Dollar)
+
 	var err error
 	var config = configurator.GetConf()
 	DB, err = DoInitDatabase(config.DBUrl, config.Debug)
@@ -69,6 +73,10 @@ func Transact(txFn func(tx sqlx.Ext) error) (err error) {
 	}()
 	err = txFn(txa)
 	return
+}
+
+type Execor interface {
+	Exec() (int64, error)
 }
 
 type DBQuery struct {

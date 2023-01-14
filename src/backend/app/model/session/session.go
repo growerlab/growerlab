@@ -13,6 +13,6 @@ func (m *model) Add(sess *Session) error {
 		sess.ExpiredAt,
 	}
 	var err error
-	sess.ID, err = m.Insert(columns[1:], values).Exec()
+	sess.ID, err = m.Insert(columns[1:], values).SqlReturning("id").Exec()
 	return errors.SQLError(err)
 }

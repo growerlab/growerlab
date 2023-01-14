@@ -69,7 +69,7 @@ func (r *LoginService) Do(auth *LoginBasicAuth) (
 ) {
 	user, err := r.Verify(auth)
 	if err != nil {
-		return nil, err
+		return nil, errors.Trace(err)
 	}
 
 	err = userModel.UpdateLogin(r.tx, user.ID, r.ip)
