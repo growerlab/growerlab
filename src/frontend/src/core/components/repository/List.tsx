@@ -17,6 +17,7 @@ import {
 } from "../../common/types";
 import { useRepositoryAPI } from "../../api/repository";
 import { useGlobal } from "../../global/global";
+import i18n from "../../i18n/i18n";
 
 export function RepositoryList(props: RepositoriesNamespace) {
   const { namespace } = props;
@@ -37,7 +38,9 @@ export function RepositoryList(props: RepositoriesNamespace) {
     return (
       <div>
         <EuiEmptyPrompt
-          title={<h2>无任何仓库，立即创建！</h2>}
+          title={
+            <h2>{i18n.t<string>("repository.tooltip.no_repositories")}</h2>
+          }
           actions={[
             <Link to={Router.User.Repository.New} key={""}>
               <EuiButton type="button" color={"primary"}>
