@@ -45,11 +45,16 @@ type FileEntitySorter []*FileEntity
 func (f FileEntitySorter) Len() int      { return len(f) }
 func (f FileEntitySorter) Swap(i, j int) { f[i], f[j] = f[j], f[i] }
 func (f FileEntitySorter) Less(i, j int) bool {
-	if !f[i].IsFile {
-		return true
+	if (f[i].IsFile && f[j].IsFile) || (!f[i].IsFile && !f[j].IsFile) {
+		if f[i].Name < f[j].Name {
+			return true
+		} else {
+			return false
+		}
 	}
-	if f[i].Name < f[j].Name {
+	if !f[i].IsFile && f[j].IsFile {
 		return true
+	} else {
+		return false
 	}
-	return false
 }
