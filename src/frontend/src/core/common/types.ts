@@ -54,6 +54,10 @@ export interface RepositoryPathTree extends RepositoryPathGroup {
 
 export interface FileEntity {
   id: string;
+  is_file: boolean;
+  last_commit_date: number;
+  last_commit_hash: string;
+  last_commit_message: string;
   name: string;
-  blob_hash: string;
+  tree_hash: string;
 }

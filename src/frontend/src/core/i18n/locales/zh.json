@@ -66,6 +66,11 @@
       "name": "请填写2-50位字符的仓库名(字母，数字，下划线，不能以'..'开头)",
       "no_repositories": "无任何仓库，立即创建！"
     },
+    "commit": {
+      "file_name": "文件名",
+      "lastCommitMessage": "最后提交的消息",
+      "lastCommitDate": "最后提交的时间"
+    },
     "menus": {
       "code": "代码",
       "branchs": "分支",

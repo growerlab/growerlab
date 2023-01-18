@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import useSWRImmutable, { Fetcher } from "swr";
-// import { useSearchParams } from "react-router-dom";
-import { formatDate, EuiBasicTable, EuiLink, EuiPanel } from "@elastic/eui";
-import { useSearchParams } from "react-router-dom";
+import { EuiBasicTable, EuiIcon, EuiLink, EuiPanel } from "@elastic/eui";
 import { useTitle } from "react-use";
+import TimeAgo from "timeago-react";
 
 import {
   FileEntity,
@@ -14,6 +13,8 @@ import Loading from "../../common/Loading";
 import { useRepositoryAPI } from "../../../api/repository";
 import EmptyTree from "./EmptyTree";
 import { getTitle } from "../../../common/document";
+import i18n from "../../../i18n/i18n";
+import { is } from "@elastic/eui/src/utils/prop_types/is";
 
 interface Props extends RepositoryPathGroup {
   reference: string;
@@ -77,20 +78,37 @@ export function Files(props: Props) {
   const columns: any = [
     {
       field: "name",
-      name: "Name",
-      sortable: true,
-      render: (name: string) => <EuiLink href="#">{name}</EuiLink>,
+      name: i18n.t("repository.commit.file_name"),
+      render: (name: string, record: FileEntity) => {
+        const icon = record.is_file ? (
+          <EuiIcon type={"document"} />
+        ) : (
+          <EuiIcon type={"folderClosed"} />
+        );
+        return (
+          <EuiLink href="#文件内容">
+            {icon} {name}
+          </EuiLink>
+        );
+      },
     },
     {
-      field: "lastCommitMessage",
-      name: "Last commit message",
-      render: (item: any) => <EuiLink href="#">{item}</EuiLink>,
+      field: "last_commit_message",
+      name: i18n.t("repository.commit.lastCommitMessage"),
+      truncateText: true,
+      render: (last_commit_message: string) => (
+        <EuiLink href="#commit详情">{last_commit_message}</EuiLink>
+      ),
     },
     {
-      field: "lastCommitDate",
-      name: "Last commit date",
+      field: "last_commit_date",
+      name: i18n.t("repository.commit.lastCommitDate"),
       dataType: "date",
-      render: (date: Date) => formatDate(date, "dobLong"),
+      align: "right",
+      render: (last_commit_date: number) => {
+        const lastDate = new Date(last_commit_date * 1000);
+        return <TimeAgo datetime={lastDate} locale="zh_CN" />;
+      },
     },
   ];
 

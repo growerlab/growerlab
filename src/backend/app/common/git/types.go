@@ -16,6 +16,7 @@ const (
 )
 
 type FileEntity struct {
+	ID                string            `json:"id"`
 	Name              string            `json:"name"`
 	Mode              filemode.FileMode `json:"-"`
 	IsFile            bool              `json:"is_file"`
@@ -28,6 +29,7 @@ type FileEntity struct {
 func buildFileEntity(fh fileHash, commit *object.Commit) *FileEntity {
 	line := strings.Split(commit.Message, "\n")
 	return &FileEntity{
+		ID:                fh.name,
 		Name:              fh.name,
 		Mode:              fh.mode,
 		IsFile:            fh.mode.IsFile(),
