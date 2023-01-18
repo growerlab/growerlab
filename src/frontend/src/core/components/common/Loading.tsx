@@ -6,7 +6,7 @@ import { LineRange } from "@elastic/eui/src/components/loading/loading_content";
 import { getTitle } from "../../common/document";
 
 interface Props {
-  lines?: 2 | LineRange;
+  lines?: LineRange;
 }
 
 export default function Loading(props: Props) {

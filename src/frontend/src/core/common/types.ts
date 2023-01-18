@@ -42,14 +42,24 @@ export interface RepositoryPath {
   repo: string; // repo path
 }
 
+export interface RepositoryFile extends RepositoryPath {
+  ref: string; // repo ref
+  folder?: string; // repo folder path
+  filepath?: string; // repo file path（only file, not folder)
+}
+
+export interface RepositoryCommit extends RepositoryPath {
+  commit: string; // commit detail
+}
+
 export interface RepositoryPathGroup {
   namespace: string;
   repo: string;
 }
 
 export interface RepositoryPathTree extends RepositoryPathGroup {
-  ref: "master" | string;
-  dir: "" | string;
+  ref: string | "main";
+  folder: string | "";
 }
 
 export interface FileEntity {

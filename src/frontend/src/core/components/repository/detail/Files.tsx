@@ -1,8 +1,9 @@
-import React, { useState } from "react";
-import useSWRImmutable, { Fetcher } from "swr";
+import React, { useState, Suspense } from "react";
+import useSWR from "swr";
 import { EuiBasicTable, EuiIcon, EuiLink, EuiPanel } from "@elastic/eui";
 import { useTitle } from "react-use";
 import TimeAgo from "timeago-react";
+import { Link } from "react-router-dom";
 
 import {
   FileEntity,
@@ -14,11 +15,11 @@ import { useRepositoryAPI } from "../../../api/repository";
 import EmptyTree from "./EmptyTree";
 import { getTitle } from "../../../common/document";
 import i18n from "../../../i18n/i18n";
-import { is } from "@elastic/eui/src/utils/prop_types/is";
+import { Router } from "../../../../config/router";
 
 interface Props extends RepositoryPathGroup {
   reference: string;
-  filePath: string;
+  folder: string;
   repository?: RepositoryEntity;
   onChangeFilePath: (filePath: string) => void;
   onChangeReference: (reference: string) => void;
@@ -29,7 +30,7 @@ export function Files(props: Props) {
     namespace,
     repo,
     reference,
-    filePath,
+    folder,
     repository,
     onChangeFilePath,
     onChangeReference,
@@ -38,25 +39,30 @@ export function Files(props: Props) {
   useTitle(getTitle(repo));
 
   const repositoryAPI = useRepositoryAPI(namespace);
-  const [fileEntities, setFileEntities] = useState<FileEntity[]>();
+  // const [fileEntities, setFileEntities] = useState<FileEntity[]>();
   const [isEmptyTree, setTreeEmpty] = useState<boolean>(false);
-  const [repoFilePath, setRepoFilePath] = useState(filePath); // 正在访问的repo路径
+  const [currentRepoFolder, setCurrentRepoFolder] = useState(folder); // 正在访问的repo路径
 
   if (!isEmptyTree && repository?.last_push_at == 0) {
     setTreeEmpty(true);
   }
 
-  const fetcher: Fetcher = () => {
-    const params = { namespace, repo, ref: reference, dir: filePath };
+  // api
+  const fetcher = () => {
+    const params = {
+      namespace,
+      repo,
+      ref: reference,
+      folder: currentRepoFolder,
+    };
     return repositoryAPI.treeFiles(params).then((res) => {
-      setFileEntities(res.data);
       return res.data;
     });
   };
-  useSWRImmutable(
+  const { data } = useSWR<FileEntity[]>(
     isEmptyTree ? null : `/swr/key/repo/${namespace}/${repo}/tree_files`,
     fetcher,
-    { shouldRetryOnError: false }
+    { suspense: true }
   );
 
   if (isEmptyTree) {
@@ -71,9 +77,6 @@ export function Files(props: Props) {
       />
     );
   }
-  if (!fileEntities) {
-    return <Loading lines={5} />;
-  }
 
   const columns: any = [
     {
@@ -85,10 +88,28 @@ export function Files(props: Props) {
         ) : (
           <EuiIcon type={"folderClosed"} />
         );
+        const link = record.is_file
+          ? Router.User.Repository.Blob.render({
+              filepath: name,
+              ref: reference,
+              repo: repo,
+            })
+          : Router.User.Repository.Tree.render({
+              folder: name,
+              ref: reference,
+              repo: repo,
+            });
         return (
-          <EuiLink href="#文件内容">
-            {icon} {name}
-          </EuiLink>
+          <>
+            {icon}{" "}
+            <Link
+              to={link}
+              replace={false}
+              onClick={() => setCurrentRepoFolder(name)}
+            >
+              {name}
+            </Link>
+          </>
         );
       },
     },
@@ -131,17 +152,17 @@ export function Files(props: Props) {
     };
   };
   return (
-    <>
+    <Suspense fallback={<Loading lines={5} />}>
       <EuiPanel hasBorder={true} paddingSize={"s"}>
         <EuiBasicTable
           tableCaption="Git files"
-          items={fileEntities}
+          items={data!}
           rowHeader="name"
           columns={columns}
           rowProps={getRowProps}
           cellProps={getCellProps}
         />
       </EuiPanel>
-    </>
+    </Suspense>
   );
 }

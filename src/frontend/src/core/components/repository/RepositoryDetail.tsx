@@ -1,4 +1,4 @@
-import React, { Fragment, useMemo, useState } from "react";
+import React, { Fragment, Suspense, useMemo, useState } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
 import {
   EuiSpacer,
@@ -9,10 +9,10 @@ import {
 } from "@elastic/eui";
 
 import { RepositoryPathGroup, RepositoryEntity } from "../../common/types";
-import { Item } from "./Item";
+import { Header } from "./Header";
 import { useGlobal } from "../../global/global";
 import { useRepositoryAPI } from "../../api/repository";
-import useSWRImmutable, { Fetcher } from "swr";
+import useSWR from "swr";
 import Loading from "../common/Loading";
 import { Files } from "./detail/Files";
 import i18n from "../../i18n/i18n";
@@ -21,12 +21,21 @@ export function RepositoryDetail(props: RepositoryPathGroup) {
   const { namespace, repo } = props;
   const global = useGlobal();
   const [currentTab, setCurrentTab] = useState("files");
-  const [repository, setRepository] = useState<RepositoryEntity>();
 
   const [, setSearchParams] = useSearchParams();
-  const { filePath } = useParams();
+  const { folder } = useParams();
 
   const repositoryAPI = useRepositoryAPI(namespace);
+
+  const fetcher = () =>
+    repositoryAPI.getDetail(repo).then((res) => {
+      return res.data;
+    });
+  const { data } = useSWR<RepositoryEntity>(
+    `/swr/key/repo/${namespace}/${repo}`,
+    fetcher,
+    { suspense: true }
+  );
 
   const tabs: EuiTabbedContentProps["tabs"] = [
     {
@@ -35,10 +44,10 @@ export function RepositoryDetail(props: RepositoryPathGroup) {
       content: (
         <Files
           reference="main"
-          filePath={filePath || ""}
+          folder={folder || ""}
           namespace={namespace}
           repo={repo}
-          repository={repository}
+          repository={data}
           onChangeReference={(reference: string) => {
             setSearchParams({ ref: reference });
           }}
@@ -71,18 +80,7 @@ export function RepositoryDetail(props: RepositoryPathGroup) {
   ];
   const selectedTabContent = useMemo(() => {
     return tabs.find((obj) => obj.id === currentTab)?.content;
-  }, [currentTab, repository]);
-
-  const fetcher: Fetcher = () => {
-    return repositoryAPI.getDetail(repo).then((res) => {
-      setRepository(res.data);
-      return res.data;
-    });
-  };
-  useSWRImmutable(`/swr/key/repo/${namespace}/${repo}`, fetcher);
-  if (!repository) {
-    return <Loading />;
-  }
+  }, [currentTab, namespace, repo]);
 
   const renderTabs = () => {
     return tabs.map((tab, index) => (
@@ -101,12 +99,14 @@ export function RepositoryDetail(props: RepositoryPathGroup) {
 
   return (
     <div>
-      <Item global={global} repo={repository} />
-      <div className=" mb-3"></div>
-      <EuiTabs size="s" className="flex justify-between">
-        {renderTabs()}
-      </EuiTabs>
-      <div className="pt-4">{selectedTabContent}</div>
+      <Suspense fallback={<Loading lines={3} />}>
+        <Header global={global} repo={data!} />
+        <div className=" mb-3"></div>
+        <EuiTabs size="s" className="flex justify-between">
+          {renderTabs()}
+        </EuiTabs>
+        <div className="pt-4">{selectedTabContent}</div>
+      </Suspense>
     </div>
   );
 }

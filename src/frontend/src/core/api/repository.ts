@@ -48,7 +48,7 @@ class Repository {
       namespace: this.namespace,
       repo: params.repo,
       ref: params.ref,
-      dir: params.dir,
+      folder: params.folder,
     });
     return request(this.global).get<FileEntity[]>(url);
   }

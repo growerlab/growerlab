@@ -1,4 +1,9 @@
-import { RepositoryPath, RepositoryPathGroup } from "../core/common/types";
+import {
+  RepositoryCommit,
+  RepositoryFile,
+  RepositoryPath,
+  RepositoryPathGroup,
+} from "../core/common/types";
 
 type Params<T> = {
   [key in keyof T]: string;
@@ -36,8 +41,17 @@ export const Router = {
     Repository: {
       Index: "/user/repos",
       New: "/user/repos/new",
-      Show: dynamicRouter.new<RepositoryPath>("/user/repos/:repo"),
-      Branchs: dynamicRouter.new<RepositoryPath>("/user/repos/:repo/branchs"),
+      Show: dynamicRouter.new<RepositoryPath>("/user/repos/:repo"), // 默认文件树
+      Tree: dynamicRouter.new<RepositoryFile>(
+        "/user/repos/:repo/tree/:ref/:folder" // 文件树
+      ),
+      Blob: dynamicRouter.new<RepositoryFile>(
+        "/user/repos/:repo/blob/:ref/:filepath" // 文件详情
+      ),
+      Commit: dynamicRouter.new<RepositoryCommit>(
+        "/user/repos/:repo/commit/:commit" // commit详情
+      ),
+      Branches: dynamicRouter.new<RepositoryPath>("/user/repos/:repo/branches"), // 分支列表
     },
     Project: {
       Index: "/user/projects",

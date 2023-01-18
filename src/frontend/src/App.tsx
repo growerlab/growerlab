@@ -22,7 +22,7 @@ import ActivateUser from "./pages/auth/ActivateUser";
 import RepositoryIndex from "./pages/user/repos/Index";
 import RepositoryShow from "./pages/user/repos/Show";
 import RepositoryNew from "./pages/user/repos/New";
-import Branchs from "./pages/user/repos/detail/Branchs";
+import Branches from "./pages/user/repos/detail/Branches";
 import Detail from "./pages/user/repos/detail/Detail";
 import RepositoryLayout from "./pages/user/repos/Layout";
 
@@ -64,8 +64,12 @@ export default function App() {
               element: <RepositoryShow defaultChild={<Detail />} />,
               children: [
                 {
-                  path: Router.User.Repository.Branchs.string(),
-                  element: <Branchs />,
+                  path: Router.User.Repository.Tree.string(),
+                  element: <Detail />,
+                },
+                {
+                  path: Router.User.Repository.Branches.string(),
+                  element: <Branches />,
                 },
               ],
             },

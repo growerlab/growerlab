@@ -9,7 +9,7 @@ import {
 } from "@elastic/eui";
 
 import { Router } from "../../../config/router";
-import { Item } from "./Item";
+import { Header } from "./Header";
 import {
   RepositoriesNamespace,
   RepositoryEntity,
@@ -59,7 +59,7 @@ export function RepositoryList(props: RepositoriesNamespace) {
     <div className="p-5">
       {data?.repositories.map((repo: RepositoryEntity) => (
         <>
-          <Item global={global} repo={repo} />
+          <Header global={global} repo={repo} />
           <EuiHorizontalRule />
         </>
       ))}

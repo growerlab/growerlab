@@ -16,7 +16,7 @@ export default function RepositoryShow(props: Props) {
   useTitle(getTitle(i18n.t("repository.menu")));
 
   const outlet = useOutlet();
-  const defaultOutlet = outlet === null ? props.defaultChild : outlet;
+  const defaultOutlet = outlet || props.defaultChild;
 
   const { isInvalid } = useRepositoryPathGroup();
   if (isInvalid) {

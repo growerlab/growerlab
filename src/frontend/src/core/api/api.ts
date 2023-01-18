@@ -27,7 +27,7 @@ export const API = {
       "/repositories/:namespace/create"
     ),
     TreeFiles: dynamicRouter.new<RepositoryPathTree>(
-      "/repositories/:namespace/detail/:repo/tree/:ref/:dir"
+      "/repositories/:namespace/detail/:repo/tree/:ref/:folder"
     ),
   },
 };

@@ -10,7 +10,7 @@ interface Args {
   repo: RepositoryEntity;
 }
 
-export function Item(props: Args) {
+export function Header(props: Args) {
   const { global, repo } = props;
 
   let path = publicRepoPath(repo.owner.username, repo.path);
