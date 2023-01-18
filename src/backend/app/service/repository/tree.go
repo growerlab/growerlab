@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"sort"
 	"time"
 
 	"github.com/asaskevich/govalidator"
@@ -13,23 +14,26 @@ import (
 // TreeFiles 获取仓库的文件列表
 // ref: 分支、commit、tag等
 // dir: 目录
-func (g *Take) TreeFiles(ref string, dir *string) ([]*git.FileEntity, error) {
+func (g *Take) TreeFiles(ref string, folder *string) ([]*git.FileEntity, error) {
 	if g.repo == nil || govalidator.IsNull(*g.repo) {
 		return nil, errors.MissingParameterError(errors.Repository, errors.Repo)
 	}
-	if dir == nil || govalidator.IsNull(*dir) {
+	if folder == nil || govalidator.IsNull(*folder) {
 		temp := "/"
-		dir = &temp
+		folder = &temp
 	}
 
 	var ctx, cancel = context.WithTimeout(context.TODO(), 30*time.Second)
 	defer cancel()
 
 	pathGroup := g.pathGroup()
-	files, err := git.New(ctx, pathGroup).TreeFiles(ref, *dir)
+	files, err := git.New(ctx, pathGroup).TreeFiles(ref, *folder)
 	if err != nil {
 		return nil, errors.Trace(err)
 	}
+
+	// sort
+	sort.Sort(git.FileEntitySorter(files))
 	return files, nil
 }
 

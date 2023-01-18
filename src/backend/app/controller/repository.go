@@ -23,8 +23,8 @@ func RepositoryTree(c *gin.Context) {
 	namespace := c.Param("namespace")
 	repo := c.Param("repo")
 	ref := c.Param("ref")
-	dir := c.Param("dir")
-	r, err := repository.NewTaker(c, namespace, &repo).TreeFiles(ref, &dir)
+	folder := c.Param("folder")
+	r, err := repository.NewTaker(c, namespace, &repo).TreeFiles(ref, &folder)
 	Render(c, r, err)
 }
 

@@ -39,3 +39,17 @@ func buildFileEntity(fh fileHash, commit *object.Commit) *FileEntity {
 		LastCommitDate:    commit.Committer.When.Unix(),
 	}
 }
+
+type FileEntitySorter []*FileEntity
+
+func (f FileEntitySorter) Len() int      { return len(f) }
+func (f FileEntitySorter) Swap(i, j int) { f[i], f[j] = f[j], f[i] }
+func (f FileEntitySorter) Less(i, j int) bool {
+	if !f[i].IsFile {
+		return true
+	}
+	if f[i].Name < f[j].Name {
+		return true
+	}
+	return false
+}
