@@ -9,4 +9,5 @@ const (
 	Namespace      = "Namespace"
 	Repository     = "Repository"
 	Reference      = "Reference"
+	Folder         = "Folder"
 )

@@ -158,8 +158,8 @@ func (r *Repository) TreeFiles(ref, dir string) ([]*FileEntity, error) {
 		if err != nil {
 			return errors.Trace(err)
 		}
-		for filehash, cmt := range nameCommitSet {
-			result = append(result, buildFileEntity(filehash, cmt))
+		for fileHash, cmt := range nameCommitSet {
+			result = append(result, buildFileEntity(fileHash, cmt))
 		}
 
 		return errors.Trace(err)

@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/asaskevich/govalidator"
+	"github.com/go-git/go-git/v5/plumbing/object"
 	"github.com/growerlab/growerlab/src/backend/app/common/git"
 	"github.com/growerlab/growerlab/src/common/errors"
 	"github.com/growerlab/growerlab/src/common/path"
@@ -29,6 +30,9 @@ func (g *Take) TreeFiles(ref string, folder *string) ([]*git.FileEntity, error) 
 	pathGroup := g.pathGroup()
 	files, err := git.New(ctx, pathGroup).TreeFiles(ref, *folder)
 	if err != nil {
+		if err.Error() == object.ErrDirectoryNotFound.Error() {
+			return nil, errors.NotFoundError(errors.Folder)
+		}
 		return nil, errors.Trace(err)
 	}
 
