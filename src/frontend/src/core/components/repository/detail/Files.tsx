@@ -21,25 +21,14 @@ interface Props extends RepositoryPathGroup {
   reference: string;
   folder: string;
   repository?: RepositoryEntity;
-  onChangeFilePath: (filePath: string) => void;
-  onChangeReference: (reference: string) => void;
 }
 
 export function Files(props: Props) {
-  const {
-    namespace,
-    repo,
-    reference,
-    folder,
-    repository,
-    onChangeFilePath,
-    onChangeReference,
-  } = props;
+  const { namespace, repo, reference, folder, repository } = props;
 
   useTitle(getTitle(repo));
 
   const repositoryAPI = useRepositoryAPI(namespace);
-  // const [fileEntities, setFileEntities] = useState<FileEntity[]>();
   const [isEmptyTree, setTreeEmpty] = useState<boolean>(false);
   const [currentRepoFolder, setCurrentRepoFolder] = useState(folder); // 正在访问的repo路径
 
@@ -60,7 +49,9 @@ export function Files(props: Props) {
     });
   };
   const { data } = useSWR<FileEntity[]>(
-    isEmptyTree ? null : `/swr/key/repo/${namespace}/${repo}/tree_files`,
+    isEmptyTree
+      ? null
+      : `/swr/key/repo/${namespace}/${repo}/${window.location.pathname}`,
     fetcher,
     { suspense: true }
   );
@@ -88,6 +79,7 @@ export function Files(props: Props) {
         ) : (
           <EuiIcon type={"folderClosed"} />
         );
+        const folderPath = folder != "" ? folder + "/" + name : name;
         const link = record.is_file
           ? Router.User.Repository.Blob.render({
               filepath: name,
@@ -95,18 +87,14 @@ export function Files(props: Props) {
               repo: repo,
             })
           : Router.User.Repository.Tree.render({
-              folder: name,
+              "*": folderPath,
               ref: reference,
               repo: repo,
             });
         return (
           <>
             {icon}{" "}
-            <Link
-              to={link}
-              replace={false}
-              onClick={() => setCurrentRepoFolder(name)}
-            >
+            <Link to={link} onClick={() => setCurrentRepoFolder(folderPath)}>
               {name}
             </Link>
           </>

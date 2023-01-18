@@ -4,6 +4,7 @@ import {
   RepositoryPath,
   RepositoryPathGroup,
 } from "../core/common/types";
+import { generatePath } from "react-router-dom";
 
 type Params<T> = {
   [key in keyof T]: string;
@@ -21,7 +22,8 @@ export class dynamicRouter<T> {
   }
 
   public render(params: Params<T>) {
-    return this.r.replace(/:([^/]+)/g, (_: unknown, p: keyof T) => params[p]);
+    return generatePath(this.r, params);
+    // return this.r.replace(/:([^/]+)/g, (_: unknown, p: keyof T) => params[p]);
   }
 
   public string() {
@@ -43,7 +45,7 @@ export const Router = {
       New: "/user/repos/new",
       Show: dynamicRouter.new<RepositoryPath>("/user/repos/:repo"), // 默认文件树
       Tree: dynamicRouter.new<RepositoryFile>(
-        "/user/repos/:repo/tree/:ref/:folder" // 文件树
+        "/user/repos/:repo/tree/:ref/*" // 文件树
       ),
       Blob: dynamicRouter.new<RepositoryFile>(
         "/user/repos/:repo/blob/:ref/:filepath" // 文件详情

@@ -44,7 +44,7 @@ export interface RepositoryPath {
 
 export interface RepositoryFile extends RepositoryPath {
   ref: string; // repo ref
-  folder?: string; // repo folder path
+  "*"?: string; // repo folder path
   filepath?: string; // repo file path（only file, not folder)
 }
 
