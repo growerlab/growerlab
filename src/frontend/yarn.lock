@@ -3900,18 +3900,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"aria-hidden@npm:^1.1.3":
-  version: 1.2.1
-  resolution: "aria-hidden@npm:1.2.1"
+"aria-hidden@npm:^1.2.2":
+  version: 1.2.2
+  resolution: "aria-hidden@npm:1.2.2"
   dependencies:
-    tslib: "npm:^2.0.0"
+    tslib: ^2.0.0
   peerDependencies:
     "@types/react": ^16.9.0 || ^17.0.0 || ^18.0.0
     react: ^16.9.0 || ^17.0.0 || ^18.0.0
   peerDependenciesMeta:
     "@types/react":
       optional: true
-  checksum: cd8047a0113d5ecc11bce1616ae2772abcb0a6e1da5a70cbfc3555e8da063b0416d62cced3e704b6d424cbf408c1fc21225d69723cd62c3f1f0cf3b41d674c2b
+  checksum: ee1a3688db5491eeb87b73eea624614f24ef62a74cf9e47bc8229dde1ff7457f7e4a26425cadc0d3efd89380305e6fb4a4e505bccdee16beaa4686014861d7b1
   languageName: node
   linkType: hard
 
@@ -12498,44 +12498,44 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-focus-lock@npm:^2.9.0":
-  version: 2.9.1
-  resolution: "react-focus-lock@npm:2.9.1"
+"react-focus-lock@npm:^2.9.2":
+  version: 2.9.2
+  resolution: "react-focus-lock@npm:2.9.2"
   dependencies:
-    "@babel/runtime": "npm:^7.0.0"
-    focus-lock: "npm:^0.11.2"
-    prop-types: "npm:^15.6.2"
-    react-clientside-effect: "npm:^1.2.6"
-    use-callback-ref: "npm:^1.3.0"
-    use-sidecar: "npm:^1.1.2"
+    "@babel/runtime": ^7.0.0
+    focus-lock: ^0.11.2
+    prop-types: ^15.6.2
+    react-clientside-effect: ^1.2.6
+    use-callback-ref: ^1.3.0
+    use-sidecar: ^1.1.2
   peerDependencies:
     "@types/react": ^16.8.0 || ^17.0.0 || ^18.0.0
     react: ^16.8.0 || ^17.0.0 || ^18.0.0
   peerDependenciesMeta:
     "@types/react":
       optional: true
-  checksum: 4dbc2166ac397d9e9340bd0722c6165c23f21629515f13e9cb96eaff82aa1543a2f7f3cccf15689821f19166e3a3ce59f380c43643099eb119b5f9c529b23181
+  checksum: f8db4d64aa5c983d15e80d0fd86d1d649e33744e7b6b70babb08c95f7828e38c2cce7068c0007cf3263eec8b738ebd317d24a613df7f75b472bad6529cf8d6b6
   languageName: node
   linkType: hard
 
 "react-focus-on@npm:^3.5.4":
-  version: 3.6.0
-  resolution: "react-focus-on@npm:3.6.0"
+  version: 3.7.0
+  resolution: "react-focus-on@npm:3.7.0"
   dependencies:
-    aria-hidden: "npm:^1.1.3"
-    react-focus-lock: "npm:^2.9.0"
-    react-remove-scroll: "npm:^2.5.2"
-    react-style-singleton: "npm:^2.2.0"
-    tslib: "npm:^2.3.1"
-    use-callback-ref: "npm:^1.3.0"
-    use-sidecar: "npm:^1.1.2"
+    aria-hidden: ^1.2.2
+    react-focus-lock: ^2.9.2
+    react-remove-scroll: ^2.5.5
+    react-style-singleton: ^2.2.0
+    tslib: ^2.3.1
+    use-callback-ref: ^1.3.0
+    use-sidecar: ^1.1.2
   peerDependencies:
     "@types/react": ^16.8.0 || ^17.0.0 || ^18.0.0
     react: ^16.8.0 || ^17.0.0 || ^18.0.0
   peerDependenciesMeta:
     "@types/react":
       optional: true
-  checksum: 834675b4f1a186df2df450e0e3c85c1257625e0c0a431cafd947864f6e9785768781d6ac3c6acfad3b1ae8f8c55c2312436e7d83ef36ca74730d576a00e326bc
+  checksum: c405e2564a955ae3543dcfe128085e01f56456ead1f73e5a0feb63d7b6bec2201b2e30bb7fe78f56d580821fbc32ecdcd565c404ea90d1b09c1a0b6234e0ccbe
   languageName: node
   linkType: hard
 
@@ -12642,7 +12642,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-remove-scroll@npm:^2.5.2":
+"react-remove-scroll@npm:^2.5.5":
   version: 2.5.5
   resolution: "react-remove-scroll@npm:2.5.5"
   dependencies:
@@ -13083,22 +13083,22 @@ __metadata:
   version: 8.0.3
   resolution: "remark-parse@npm:8.0.3"
   dependencies:
-    ccount: "npm:^1.0.0"
-    collapse-white-space: "npm:^1.0.2"
-    is-alphabetical: "npm:^1.0.0"
-    is-decimal: "npm:^1.0.0"
-    is-whitespace-character: "npm:^1.0.0"
-    is-word-character: "npm:^1.0.0"
-    markdown-escapes: "npm:^1.0.0"
-    parse-entities: "npm:^2.0.0"
-    repeat-string: "npm:^1.5.4"
-    state-toggle: "npm:^1.0.0"
-    trim: "npm:0.0.1"
-    trim-trailing-lines: "npm:^1.0.0"
-    unherit: "npm:^1.0.4"
-    unist-util-remove-position: "npm:^2.0.0"
-    vfile-location: "npm:^3.0.0"
-    xtend: "npm:^4.0.1"
+    ccount: ^1.0.0
+    collapse-white-space: ^1.0.2
+    is-alphabetical: ^1.0.0
+    is-decimal: ^1.0.0
+    is-whitespace-character: ^1.0.0
+    is-word-character: ^1.0.0
+    markdown-escapes: ^1.0.0
+    parse-entities: ^2.0.0
+    repeat-string: ^1.5.4
+    state-toggle: ^1.0.0
+    trim: 0.0.1
+    trim-trailing-lines: ^1.0.0
+    unherit: ^1.0.4
+    unist-util-remove-position: ^2.0.0
+    vfile-location: ^3.0.0
+    xtend: ^4.0.1
   checksum: 2dfea250e7606ddfc9e223b9f41e0b115c5c701be4bd35181beaadd46ee59816bc00aadc6085a420f8df00b991ada73b590ea7fd34ace14557de4a0a41805be5
   languageName: node
   linkType: hard
