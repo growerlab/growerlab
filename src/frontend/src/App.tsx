@@ -10,7 +10,7 @@ import { SWRConfig } from "swr";
 import Notice from "./core/components/notice/Notice";
 import { Router } from "./config/router";
 
-import Notfound404 from "./core/components/common/404";
+import Notfound404 from "./core/components/ui/common/404";
 
 import Home from "./Home";
 

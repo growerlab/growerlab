@@ -4,7 +4,7 @@ import { useTitle } from "react-use";
 import Activate from "../../core/components/user/Activate";
 import { getTitle } from "../../core/common/document";
 import i18n from "../../core/i18n/i18n";
-import Notfound404 from "../../core/components/common/404";
+import Notfound404 from "../../core/components/ui/common/404";
 import { useParams } from "react-router-dom";
 
 export default function ActivateUser(props: any) {

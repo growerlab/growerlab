@@ -3,7 +3,7 @@ import { useTitle } from "react-use";
 import { EuiLoadingContent } from "@elastic/eui";
 import { LineRange } from "@elastic/eui/src/components/loading/loading_content";
 
-import { getTitle } from "../../common/document";
+import { getTitle } from "../../../common/document";
 
 interface Props {
   lines?: LineRange;

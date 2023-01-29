@@ -33,3 +33,10 @@ body, html {
     padding-left: 75px;
 }
 
+.euiControlBar .euiControlBar__icon {
+    @apply !text-slate-800;
+}
+
+.euiControlBar__controls {
+    @apply !p-0;
+}

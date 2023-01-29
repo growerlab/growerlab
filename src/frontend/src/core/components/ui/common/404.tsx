@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { useTitle } from "react-use";
 
-import { getTitle } from "../../common/document";
+import { getTitle } from "../../../common/document";
 
 export default function Notfound404() {
   useTitle(getTitle("404 Not Found"));

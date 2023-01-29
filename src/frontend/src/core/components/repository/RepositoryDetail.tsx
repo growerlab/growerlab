@@ -1,5 +1,5 @@
 import React, { Fragment, Suspense, useMemo, useState } from "react";
-import { useParams, useSearchParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import {
   EuiSpacer,
   EuiTab,
@@ -7,13 +7,13 @@ import {
   EuiTabs,
   EuiText,
 } from "@elastic/eui";
+import useSWR from "swr";
 
 import { RepositoryPathGroup, RepositoryEntity } from "../../common/types";
 import { Header } from "./Header";
 import { useGlobal } from "../../global/global";
 import { useRepositoryAPI } from "../../api/repository";
-import useSWR from "swr";
-import Loading from "../common/Loading";
+import Loading from "../ui/common/Loading";
 import { Files } from "./detail/Files";
 import i18n from "../../i18n/i18n";
 
@@ -42,7 +42,7 @@ export function RepositoryDetail(props: RepositoryPathGroup) {
       content: (
         <Files
           reference="main"
-          folder={folder || ""}
+          initialFolder={folder || ""}
           namespace={namespace}
           repo={repo}
           repository={data}

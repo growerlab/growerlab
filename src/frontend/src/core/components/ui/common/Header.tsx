@@ -5,7 +5,7 @@ interface Props {
   title: string;
 }
 
-export default function Title(props: Props) {
+export default function Header(props: Props) {
   return (
     <EuiTitle size={"s"} className={"mb-5"}>
       <div>{props.title}</div>

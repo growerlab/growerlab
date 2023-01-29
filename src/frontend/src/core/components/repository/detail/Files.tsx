@@ -1,40 +1,64 @@
-import React, { useState, Suspense } from "react";
+import React, { useState, Suspense, useEffect } from "react";
 import useSWR from "swr";
-import { EuiBasicTable, EuiIcon, EuiLink, EuiPanel } from "@elastic/eui";
 import { useTitle } from "react-use";
 import TimeAgo from "timeago-react";
-import { Link } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+import { EuiBasicTable, EuiIcon, EuiLink, EuiPanel } from "@elastic/eui";
+import { EuiBreadcrumbProps } from "@elastic/eui/src/components/breadcrumbs/breadcrumb";
 
 import {
   FileEntity,
   RepositoryEntity,
   RepositoryPathGroup,
 } from "../../../common/types";
-import Loading from "../../common/Loading";
 import { useRepositoryAPI } from "../../../api/repository";
 import EmptyTree from "./EmptyTree";
 import { getTitle } from "../../../common/document";
 import i18n from "../../../i18n/i18n";
 import { Router } from "../../../../config/router";
+import Loading from "../../ui/common/Loading";
+import Breadcrumbs from "../../ui/Breadcrumbs";
+import { Path } from "../../../common/path";
 
 interface Props extends RepositoryPathGroup {
   reference: string;
-  folder: string;
+  initialFolder: string;
   repository?: RepositoryEntity;
 }
 
 export function Files(props: Props) {
-  const { namespace, repo, reference, folder, repository } = props;
+  const { namespace, repo, reference, initialFolder, repository } = props;
 
   useTitle(getTitle(repo));
 
+  const navigate = useNavigate();
+  const location = useLocation();
   const repositoryAPI = useRepositoryAPI(namespace);
   const [isEmptyTree, setTreeEmpty] = useState<boolean>(false);
-  const [currentRepoFolder, setCurrentRepoFolder] = useState(folder); // 正在访问的repo路径
-
+  const [currentRepoFolder] = useState(new Path(initialFolder)); // 正在访问的repo路径
   if (!isEmptyTree && repository?.last_push_at == 0) {
     setTreeEmpty(true);
   }
+
+  const buildTreeURL = (tree: string) => {
+    return Router.User.Repository.Tree.render({
+      "*": tree,
+      ref: reference,
+      repo: repo,
+    });
+  };
+  const buildBlobURL = (filePath: string) => {
+    return Router.User.Repository.Blob.render({
+      filepath: filePath,
+      ref: reference,
+      repo: repo,
+    });
+  };
+
+  const icons = {
+    document: <EuiIcon type={"document"} />,
+    folderClosed: <EuiIcon type={"folderClosed"} />,
+  };
 
   // api
   const fetcher = () => {
@@ -42,7 +66,7 @@ export function Files(props: Props) {
       namespace,
       repo,
       ref: reference,
-      folder: currentRepoFolder,
+      folder: currentRepoFolder.toString(),
     };
     return repositoryAPI.treeFiles(params).then((res) => {
       return res.data;
@@ -74,29 +98,24 @@ export function Files(props: Props) {
       field: "name",
       name: i18n.t("repository.commit.file_name"),
       render: (name: string, record: FileEntity) => {
-        const icon = record.is_file ? (
-          <EuiIcon type={"document"} />
-        ) : (
-          <EuiIcon type={"folderClosed"} />
-        );
-        const folderPath = folder != "" ? folder + "/" + name : name;
+        const icon = record.is_file ? icons.document : icons.folderClosed;
+        const folderPath = currentRepoFolder.toString() + "/" + name;
         const link = record.is_file
-          ? Router.User.Repository.Blob.render({
-              filepath: name,
-              ref: reference,
-              repo: repo,
-            })
-          : Router.User.Repository.Tree.render({
-              "*": folderPath,
-              ref: reference,
-              repo: repo,
-            });
+          ? buildBlobURL(name)
+          : buildTreeURL(folderPath);
         return (
           <>
             {icon}{" "}
-            <Link to={link} onClick={() => setCurrentRepoFolder(folderPath)}>
+            <EuiLink
+              // to={link}
+              onClick={() => {
+                navigate(link, { state: link });
+                currentRepoFolder.append(name);
+                return;
+              }}
+            >
               {name}
-            </Link>
+            </EuiLink>
           </>
         );
       },
@@ -125,8 +144,6 @@ export function Files(props: Props) {
     const { id } = item;
     return {
       "data-test-subj": `row-${id}`,
-      className: "customRowClass",
-      // onClick: () => {},
     };
   };
 
@@ -134,14 +151,46 @@ export function Files(props: Props) {
     const { id } = item;
     const { field } = column;
     return {
-      className: "customCellClass",
       "data-test-subj": `cell-${id}-${field}`,
       textOnly: true,
     };
   };
+
+  // folder paths
+  const folderBreadcrumbs: EuiBreadcrumbProps[] = [
+    {
+      text: "/",
+      onClick: () => {
+        const rootURL = buildTreeURL("");
+        navigate(rootURL, { state: rootURL });
+        currentRepoFolder.reset("");
+      },
+    },
+  ];
+  currentRepoFolder.forEach((value, index, array) => {
+    if (value === "") {
+      return;
+    }
+    const link = buildTreeURL(value);
+    const onClick = () => {
+      navigate(link, { state: link });
+      currentRepoFolder.reset(array.slice(0, index + 1));
+    };
+    folderBreadcrumbs.push({
+      text: value,
+      onClick: index == array.length - 1 ? undefined : onClick,
+    });
+  });
+
   return (
     <Suspense fallback={<Loading lines={5} />}>
       <EuiPanel hasBorder={true} paddingSize={"s"}>
+        <Breadcrumbs
+          truncate={true}
+          max={4}
+          breadcrumbs={folderBreadcrumbs}
+          icon={"submodule"}
+        />
         <EuiBasicTable
           tableCaption="Git files"
           items={data!}
