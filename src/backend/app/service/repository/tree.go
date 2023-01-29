@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"path/filepath"
 	"sort"
 	"time"
 
@@ -23,6 +24,7 @@ func (g *Take) TreeFiles(ref string, folder *string) ([]*git.FileEntity, error) 
 		temp := "/"
 		folder = &temp
 	}
+	*folder = filepath.Clean(*folder)
 
 	var ctx, cancel = context.WithTimeout(context.TODO(), 30*time.Second)
 	defer cancel()
