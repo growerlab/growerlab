@@ -1,8 +1,8 @@
-import React, { useState, Suspense, useEffect } from "react";
+import React, { useState, Suspense } from "react";
 import useSWR from "swr";
 import { useTitle } from "react-use";
 import TimeAgo from "timeago-react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { EuiBasicTable, EuiIcon, EuiLink, EuiPanel } from "@elastic/eui";
 import { EuiBreadcrumbProps } from "@elastic/eui/src/components/breadcrumbs/breadcrumb";
 
@@ -32,7 +32,6 @@ export function Files(props: Props) {
   useTitle(getTitle(repo));
 
   const navigate = useNavigate();
-  const location = useLocation();
   const repositoryAPI = useRepositoryAPI(namespace);
   const [isEmptyTree, setTreeEmpty] = useState<boolean>(false);
   const [currentRepoFolder] = useState(new Path(initialFolder)); // 正在访问的repo路径
