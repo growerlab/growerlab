@@ -107,11 +107,9 @@ export function Files(props: Props) {
           <>
             {icon}{" "}
             <EuiLink
-              // to={link}
               onClick={() => {
                 navigate(link, { state: link });
                 currentRepoFolder.append(name);
-                return;
               }}
             >
               {name}
