@@ -6,5 +6,11 @@ interface Props extends RepositoryPathGroup {
 }
 
 export default function Blob(props: Props) {
+  // blob api
+  const blobFetcher = () => {
+    return;
+  };
+  // TODO blob
+
   return <>hello</>;
 }

@@ -61,10 +61,12 @@ export default function App() {
             },
             {
               path: Router.User.Repository.Show.string(),
-              element: <RepositoryShow defaultChild={<Detail />} />,
+              element: (
+                <RepositoryShow defaultChild={<Detail type={"tree"} />} />
+              ),
               children: [
                 {
-                  path: Router.User.Repository.Tree.string(),
+                  path: Router.User.Repository.Reference.string(),
                   element: <Detail />,
                 },
                 {

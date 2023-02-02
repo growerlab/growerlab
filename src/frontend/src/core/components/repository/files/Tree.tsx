@@ -26,29 +26,31 @@ interface Props extends RepositoryPathGroup {
   repository?: RepositoryEntity;
 }
 
-export function Files(props: Props) {
+export function Tree(props: Props) {
   const { namespace, repo, reference, initialFolder, repository } = props;
 
   useTitle(getTitle(repo));
 
   const navigate = useNavigate();
   const repositoryAPI = useRepositoryAPI(namespace);
-  const [isEmptyTree, setTreeEmpty] = useState<boolean>(false);
+  const [isEmptyRepository, setTreeEmpty] = useState<boolean>(false);
   const [currentRepoFolder] = useState(new Path(initialFolder)); // 正在访问的repo路径
-  if (!isEmptyTree && repository?.last_push_at == 0) {
+  if (!isEmptyRepository && repository?.last_push_at == 0) {
     setTreeEmpty(true);
   }
 
   const buildTreeURL = (tree: string) => {
-    return Router.User.Repository.Tree.render({
+    return Router.User.Repository.Reference.render({
+      refType: "tree",
       "*": tree,
       ref: reference,
       repo: repo,
     });
   };
   const buildBlobURL = (filePath: string) => {
-    return Router.User.Repository.Blob.render({
-      filepath: filePath,
+    return Router.User.Repository.Reference.render({
+      refType: "blob",
+      "*": filePath,
       ref: reference,
       repo: repo,
     });
@@ -59,8 +61,8 @@ export function Files(props: Props) {
     folderClosed: <EuiIcon type={"folderClosed"} />,
   };
 
-  // api
-  const fetcher = () => {
+  // tree api
+  const treeFetcher = () => {
     const params = {
       namespace,
       repo,
@@ -72,14 +74,14 @@ export function Files(props: Props) {
     });
   };
   const { data } = useSWR<FileEntity[]>(
-    isEmptyTree
+    isEmptyRepository
       ? null
       : `/swr/key/repo/${namespace}/${repo}/${window.location.pathname}`,
-    fetcher,
+    treeFetcher,
     { suspense: true }
   );
 
-  if (isEmptyTree) {
+  if (isEmptyRepository) {
     if (repository === undefined) {
       return <></>;
     }
@@ -106,8 +108,9 @@ export function Files(props: Props) {
           <>
             {icon}{" "}
             <EuiLink
+              href={link}
               onClick={() => {
-                navigate(link, { state: link });
+                // navigate(link, { state: link });
                 currentRepoFolder.append(name);
               }}
             >

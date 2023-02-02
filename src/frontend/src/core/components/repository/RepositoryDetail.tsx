@@ -9,19 +9,26 @@ import {
 } from "@elastic/eui";
 import useSWR from "swr";
 
-import { RepositoryPathGroup, RepositoryEntity } from "../../common/types";
+import {
+  RepositoryPathGroup,
+  RepositoryEntity,
+  DetailType,
+} from "../../common/types";
 import { Header } from "./Header";
 import { useGlobal } from "../../global/global";
 import { useRepositoryAPI } from "../../api/repository";
 import Loading from "../ui/common/Loading";
-import { Files } from "./detail/Files";
+import { Files } from "./files/Files";
 import i18n from "../../i18n/i18n";
 
-export function RepositoryDetail(props: RepositoryPathGroup) {
+export type Props = RepositoryPathGroup;
+
+export function RepositoryDetail(props: Props) {
   const { namespace, repo } = props;
   const global = useGlobal();
   const [currentTab, setCurrentTab] = useState("files");
-  const folder = useParams()["*"];
+  const path = useParams()["*"];
+  const refType = useParams()["refType"] as DetailType;
 
   const repositoryAPI = useRepositoryAPI(namespace);
 
@@ -41,8 +48,10 @@ export function RepositoryDetail(props: RepositoryPathGroup) {
       name: i18n.t<string>("repository.files"),
       content: (
         <Files
+          type={refType}
+          blobPath={path}
           reference="main"
-          initialFolder={folder || ""}
+          initialFolder={path || ""}
           namespace={namespace}
           repo={repo}
           repository={data}

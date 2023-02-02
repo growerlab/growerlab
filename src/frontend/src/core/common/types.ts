@@ -42,10 +42,12 @@ export interface RepositoryPath {
   repo: string; // repo path
 }
 
-export interface RepositoryFile extends RepositoryPath {
+export type DetailType = "tree" | "blob";
+
+export interface RepositoryReference extends RepositoryPath {
+  refType: DetailType;
   ref: string; // repo ref
-  "*"?: string; // repo folder path
-  filepath?: string; // repo file path（only file, not folder)
+  "*"?: string; // repo folder/file path
 }
 
 export interface RepositoryCommit extends RepositoryPath {
