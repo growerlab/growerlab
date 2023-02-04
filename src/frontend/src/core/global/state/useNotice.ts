@@ -44,41 +44,6 @@ export const useNotice = create<NoticeState>((set, getState) => ({
   warning: (text: string) => getState().emit("warning", text),
 }));
 
-// export class Notice {
-//   set: SetterOrUpdater<Notice>;
-//
-//   constructor(s: SetterOrUpdater<Notice>) {
-//     this.set = s;
-//     return;
-//   }
-//
-//   public primary(text: string) {
-//     this.emit("primary", text);
-//   }
-//
-//   public success(text: string) {
-//     this.emit("success", text);
-//   }
-//
-//   public error(text: string) {
-//     this.emit("danger", text);
-//   }
-//
-//   public warning(text: string) {
-//     this.emit("warning", text);
-//   }
-//
-//   public emit(color: colorNotice, text: string) {
-//     this.set({
-//       id: parser.getID(),
-//       type: "model",
-//       color: color,
-//       title: i18n.t("notice.title"),
-//       text: parser.execute(text),
-//     });
-//   }
-// }
-
 interface Error {
   Error: string;
   Model: string;

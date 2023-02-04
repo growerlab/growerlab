@@ -8,8 +8,10 @@ export type GlobalObject = {
 
 export function useGlobal(): GlobalObject {
   const session = useSession();
+  const notice = useNotice();
+
   const global: GlobalObject = {
-    notice: useNotice(),
+    notice: notice,
     currentUser: session.getCurrentUser(),
   };
   return global;
