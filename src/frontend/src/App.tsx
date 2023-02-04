@@ -2,7 +2,6 @@ import "./pages/styles/globals.css";
 import "@elastic/eui/dist/eui_theme_light.css";
 
 import React from "react";
-import { RecoilRoot } from "recoil";
 import { EuiProvider } from "@elastic/eui";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { SWRConfig } from "swr";
@@ -86,12 +85,10 @@ export default function App() {
       <SWRConfig
         value={{ revalidateOnFocus: false, shouldRetryOnError: false }}
       >
-        <RecoilRoot>
-          <Notice />
-          <EuiProvider colorMode="light">
-            <RouterProvider router={router} />
-          </EuiProvider>
-        </RecoilRoot>
+        <Notice />
+        <EuiProvider colorMode="light">
+          <RouterProvider router={router} />
+        </EuiProvider>
       </SWRConfig>
     </>
   );

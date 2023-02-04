@@ -1,8 +1,8 @@
 import { UserInfo, useSession } from "../api/session";
-import { Notice, useNotice } from "./recoil/useNotice";
+import { NoticeState, useNotice } from "./state/useNotice";
 
 export type GlobalObject = {
-  notice: Notice;
+  notice: NoticeState;
   currentUser?: UserInfo;
 };
 

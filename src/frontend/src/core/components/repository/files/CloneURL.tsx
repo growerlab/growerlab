@@ -7,7 +7,7 @@ import {
   EuiFlexGroup,
 } from "@elastic/eui";
 
-import { useNotice } from "../../../global/recoil/useNotice";
+import { useNotice } from "../../../global/state/useNotice";
 import i18n from "../../../i18n/i18n";
 
 interface Props {

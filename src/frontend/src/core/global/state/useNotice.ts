@@ -1,71 +1,83 @@
-import {
-  atom,
-  SetterOrUpdater,
-  useRecoilValue,
-  useSetRecoilState,
-} from "recoil";
+import { create } from "zustand";
+
 import i18n from "../../i18n/i18n";
 
 type typeNotice = "model";
 type colorNotice = "primary" | "success" | "warning" | "danger";
 
-type noticeValue = {
+interface notice {
   id: string;
   type: typeNotice;
   color: colorNotice;
   title: string;
   text: string;
-};
-
-const noticeState = atom<noticeValue>({
-  key: "notice",
-  default: undefined,
-});
-
-export const useNotice = () => {
-  const set = useSetRecoilState(noticeState);
-  return new Notice(set);
-};
-
-export const useNoticeValues = () => {
-  const value = useRecoilValue(noticeState);
-  return value;
-};
-
-export class Notice {
-  set: SetterOrUpdater<noticeValue>;
-
-  constructor(s: SetterOrUpdater<noticeValue>) {
-    this.set = s;
-    return;
-  }
-
-  public primary(text: string) {
-    this.emit("primary", text);
-  }
-
-  public success(text: string) {
-    this.emit("success", text);
-  }
-
-  public error(text: string) {
-    this.emit("danger", text);
-  }
-
-  public warning(text: string) {
-    this.emit("warning", text);
-  }
-
-  public emit(color: colorNotice, text: string) {
-    this.set({
-      id: parser.getID(),
-      type: "model",
-      color: color,
-      title: i18n.t("notice.title"),
-      text: parser.execute(text),
-    });
-  }
 }
+
+export interface NoticeState {
+  notice: notice | null;
+  emit: (color: colorNotice, text: string) => void;
+  primary: (text: string) => void;
+  success: (text: string) => void;
+  error: (text: string) => void;
+  warning: (text: string) => void;
+}
+
+export const useNotice = create<NoticeState>((set, getState) => ({
+  notice: null,
+  emit: (color: colorNotice, text: string) =>
+    set((state) => ({
+      notice: {
+        id: parser.getID(),
+        type: "model",
+        color: color,
+        title: i18n.t("notice.title"),
+        text: parser.execute(text),
+      },
+    })),
+
+  primary: (text: string) => getState().emit("primary", text),
+
+  success: (text: string) => getState().emit("success", text),
+
+  error: (text: string) => getState().emit("danger", text),
+
+  warning: (text: string) => getState().emit("warning", text),
+}));
+
+// export class Notice {
+//   set: SetterOrUpdater<Notice>;
+//
+//   constructor(s: SetterOrUpdater<Notice>) {
+//     this.set = s;
+//     return;
+//   }
+//
+//   public primary(text: string) {
+//     this.emit("primary", text);
+//   }
+//
+//   public success(text: string) {
+//     this.emit("success", text);
+//   }
+//
+//   public error(text: string) {
+//     this.emit("danger", text);
+//   }
+//
+//   public warning(text: string) {
+//     this.emit("warning", text);
+//   }
+//
+//   public emit(color: colorNotice, text: string) {
+//     this.set({
+//       id: parser.getID(),
+//       type: "model",
+//       color: color,
+//       title: i18n.t("notice.title"),
+//       text: parser.execute(text),
+//     });
+//   }
+// }
 
 interface Error {
   Error: string;

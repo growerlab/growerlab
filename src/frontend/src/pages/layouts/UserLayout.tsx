@@ -15,8 +15,8 @@ import { Router } from "../../config/router";
 import { useSession } from "../../core/api/session";
 import i18n from "../../core/i18n/i18n";
 import { useTitle } from "react-use";
-import { useUserMenu } from "../../core/global/recoil/useMenu";
-import { useNotice } from "../../core/global/recoil/useNotice";
+import { useUserMenu } from "../../core/global/state/useMenu";
+import { useNotice } from "../../core/global/state/useNotice";
 
 interface Props extends React.PropsWithChildren {
   title: string;
@@ -29,7 +29,7 @@ export default function UserLayout(props: Props) {
   const notice = useNotice();
   const session = useSession();
   const navigate = useNavigate();
-  const { setUserMenu, userMenuSelected } = useUserMenu();
+  const userMenu = useUserMenu();
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
   const contextMenuPopoverId = useGeneratedHtmlId({
     prefix: "contextMenuPopover",
@@ -90,7 +90,7 @@ export default function UserLayout(props: Props) {
     },
   ];
 
-  const userMenu = (
+  const userHeaderMenu = (
     <>
       <EuiPopover
         id={contextMenuPopoverId}
@@ -112,13 +112,13 @@ export default function UserLayout(props: Props) {
     href: string;
   }) => {
     const selectedClassName =
-      props.selected == userMenuSelected ? "opacity-100 bg-blue-900" : "";
+      props.selected == userMenu.current ? "opacity-100 bg-blue-900" : "";
 
     return (
       <div>
         <Link
           to={props.href}
-          onClick={() => setUserMenu(props.selected)}
+          onClick={() => userMenu.setMenuSelect(props.selected)}
           className={`text-white block px-4 py-3 rounded-md text-sm opacity-70 hover:opacity-100 hover:bg-blue-900 text-center ${selectedClassName}`}
         >
           <div className=" mb-2">{props.icon}</div>
@@ -221,7 +221,7 @@ export default function UserLayout(props: Props) {
                   {/* user */}
                   <div className="flex">
                     <div className={"mr-5"}>{plusMenu}</div>
-                    <div>{userMenu}</div>
+                    <div>{userHeaderMenu}</div>
                   </div>
                 </div>
               </div>
