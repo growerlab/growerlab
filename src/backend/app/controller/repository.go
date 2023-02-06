@@ -29,12 +29,14 @@ func RepositoryTree(c *gin.Context) {
 }
 
 func CreateRepository(c *gin.Context) {
+	namespace := c.Param("namespace")
+	repo := c.Param("repo")
 	var req repository.CreateParams
 	if err := c.BindJSON(&req); err != nil {
 		Render(c, nil, err)
 		return
 	}
 
-	err := repository.NewCreator(c, &req).Do()
+	err := repository.New(c, namespace, &repo).Creator(&req).Do()
 	Render(c, nil, err)
 }

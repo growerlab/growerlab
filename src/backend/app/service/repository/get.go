@@ -1,30 +1,12 @@
 package repository
 
 import (
-	"github.com/gin-gonic/gin"
 	namespaceModel "github.com/growerlab/growerlab/src/backend/app/model/namespace"
 	repositoryModel "github.com/growerlab/growerlab/src/backend/app/model/repository"
-	"github.com/growerlab/growerlab/src/backend/app/service/common/session"
 	"github.com/growerlab/growerlab/src/common/db"
 	"github.com/growerlab/growerlab/src/common/errors"
 	"github.com/growerlab/growerlab/src/common/permission"
 )
-
-type Repository struct {
-	currentUserID *int64
-	namespace     string
-	// 当取list时，repo可以为空
-	repo *string
-}
-
-func New(c *gin.Context, namespace string, path *string) *Repository {
-	currentUserID := session.New(c).UserID()
-	return &Repository{
-		currentUserID: currentUserID,
-		namespace:     namespace,
-		repo:          path,
-	}
-}
 
 func (g *Repository) Get() (*Entity, error) {
 	if g.namespace == "" {

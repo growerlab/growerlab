@@ -6,12 +6,10 @@ import (
 	"time"
 
 	"github.com/asaskevich/govalidator"
-	"github.com/gin-gonic/gin"
 	"github.com/growerlab/growerlab/src/backend/app/common/git"
 	"github.com/growerlab/growerlab/src/backend/app/model/namespace"
 	"github.com/growerlab/growerlab/src/backend/app/model/repository"
 	"github.com/growerlab/growerlab/src/backend/app/model/user"
-	"github.com/growerlab/growerlab/src/backend/app/service/common/session"
 	"github.com/growerlab/growerlab/src/common/db"
 	"github.com/growerlab/growerlab/src/common/errors"
 	"github.com/growerlab/growerlab/src/common/regex"
@@ -25,24 +23,23 @@ type CreateParams struct {
 	Description string `json:"description"`
 }
 
-func NewCreator(ctx *gin.Context, req *CreateParams) *CreateRepository {
-	currentUser := session.New(ctx).User()
-	return &CreateRepository{req, currentUser}
+func (g *Repository) Creator(req *CreateParams) *Create {
+	return &Create{req, g.currentUser}
 }
 
-type CreateRepository struct {
+type Create struct {
 	req         *CreateParams
 	currentUser *user.User
 }
 
-func (c *CreateRepository) Do() error {
+func (c *Create) Do() error {
 	if c.currentUser == nil {
 		return errors.UnauthorizedError()
 	}
-	return c.Create()
+	return c.create()
 }
 
-func (c *CreateRepository) Create() error {
+func (c *Create) create() error {
 	var ctx, cancel = context.WithTimeout(context.TODO(), 10*time.Second)
 	defer cancel()
 
@@ -76,7 +73,7 @@ func (c *CreateRepository) Create() error {
 //
 //	req.NamespacePath  TODO 这里暂时只验证namespace的owner_id 是否为用户，未来应该验证组织权限（比如是否可以选择这个组织创建仓库）
 //	req.Name 名称是否合法、是否重名
-func (c *CreateRepository) validateAndPrepare(src sqlx.Ext, userID int64, req *CreateParams) (ns *namespace.Namespace, err error) {
+func (c *Create) validateAndPrepare(src sqlx.Ext, userID int64, req *CreateParams) (ns *namespace.Namespace, err error) {
 	req.Namespace = strings.TrimSpace(req.Namespace)
 	req.Name = strings.TrimSpace(req.Name)
 
