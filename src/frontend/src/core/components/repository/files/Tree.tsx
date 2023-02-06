@@ -2,42 +2,34 @@ import React, { useState, Suspense } from "react";
 import useSWR from "swr";
 import { useTitle } from "react-use";
 import TimeAgo from "timeago-react";
-import { useNavigate } from "react-router-dom";
 import { EuiBasicTable, EuiIcon, EuiLink, EuiPanel } from "@elastic/eui";
-import { EuiBreadcrumbProps } from "@elastic/eui/src/components/breadcrumbs/breadcrumb";
 
 import {
+  DetailType,
   FileEntity,
   RepositoryEntity,
   RepositoryPathGroup,
 } from "../../../common/types";
 import { useRepositoryAPI } from "../../../api/repository";
-import EmptyTree from "./EmptyTree";
 import { getTitle } from "../../../common/document";
 import i18n from "../../../i18n/i18n";
 import { Router } from "../../../../config/router";
-import Loading from "../../ui/common/Loading";
-import Breadcrumbs from "../../ui/Breadcrumbs";
 import { Path } from "../../../common/path";
 
 interface Props extends RepositoryPathGroup {
   reference: string;
   initialFolder: string;
   repository?: RepositoryEntity;
+  onChange: (name: string, type: DetailType) => void;
 }
 
-export function Tree(props: Props) {
+export default function Tree(props: Props) {
   const { namespace, repo, reference, initialFolder, repository } = props;
 
   useTitle(getTitle(repo));
 
-  const navigate = useNavigate();
   const repositoryAPI = useRepositoryAPI(namespace);
-  const [isEmptyRepository, setTreeEmpty] = useState<boolean>(false);
-  const [currentRepoFolder] = useState(new Path(initialFolder)); // 正在访问的repo路径
-  if (!isEmptyRepository && repository?.last_push_at == 0) {
-    setTreeEmpty(true);
-  }
+  const currentRepoFolder = new Path(initialFolder); // 正在访问的repo路径
 
   const buildTreeURL = (tree: string) => {
     return Router.User.Repository.Reference.render({
@@ -62,6 +54,7 @@ export function Tree(props: Props) {
   };
 
   // tree api
+  const fetcherKey = `/swr/key/repo/${namespace}/${repo}/${window.location.pathname}`;
   const treeFetcher = () => {
     const params = {
       namespace,
@@ -73,26 +66,9 @@ export function Tree(props: Props) {
       return res.data;
     });
   };
-  const { data } = useSWR<FileEntity[]>(
-    isEmptyRepository
-      ? null
-      : `/swr/key/repo/${namespace}/${repo}/${window.location.pathname}`,
-    treeFetcher,
-    { suspense: true }
-  );
-
-  if (isEmptyRepository) {
-    if (repository === undefined) {
-      return <></>;
-    }
-    return (
-      <EmptyTree
-        cloneURLSSH={repository.git_ssh_url}
-        cloneURLHttp={repository.git_http_url}
-        defaultBranch={repository.default_branch}
-      />
-    );
-  }
+  const { data } = useSWR<FileEntity[]>(fetcherKey, treeFetcher, {
+    suspense: true,
+  });
 
   const columns: any = [
     {
@@ -100,6 +76,7 @@ export function Tree(props: Props) {
       name: i18n.t("repository.commit.file_name"),
       render: (name: string, record: FileEntity) => {
         const icon = record.is_file ? icons.document : icons.folderClosed;
+        const type: DetailType = record.is_file ? "blob" : "tree";
         const folderPath = currentRepoFolder.toString() + "/" + name;
         const link = record.is_file
           ? buildBlobURL(name)
@@ -111,7 +88,8 @@ export function Tree(props: Props) {
               href={link}
               onClick={() => {
                 // navigate(link, { state: link });
-                currentRepoFolder.append(name);
+                // currentRepoFolder.append(name);
+                props.onChange(name, type);
               }}
             >
               {name}
@@ -156,50 +134,16 @@ export function Tree(props: Props) {
     };
   };
 
-  // folder paths
-  const folderBreadcrumbs: EuiBreadcrumbProps[] = [
-    {
-      text: "/",
-      onClick: () => {
-        const rootURL = buildTreeURL("");
-        navigate(rootURL, { state: rootURL });
-        currentRepoFolder.reset("");
-      },
-    },
-  ];
-  currentRepoFolder.forEach((value, index, array) => {
-    if (value === "") {
-      return;
-    }
-    const link = buildTreeURL(value);
-    const onClick = () => {
-      navigate(link, { state: link });
-      currentRepoFolder.reset(array.slice(0, index + 1));
-    };
-    folderBreadcrumbs.push({
-      text: value,
-      onClick: index == array.length - 1 ? undefined : onClick,
-    });
-  });
-
   return (
-    <Suspense fallback={<Loading lines={5} />}>
-      <EuiPanel hasBorder={true} paddingSize={"s"}>
-        <Breadcrumbs
-          truncate={true}
-          max={4}
-          breadcrumbs={folderBreadcrumbs}
-          icon={"submodule"}
-        />
-        <EuiBasicTable
-          tableCaption="Git files"
-          items={data!}
-          rowHeader="name"
-          columns={columns}
-          rowProps={getRowProps}
-          cellProps={getCellProps}
-        />
-      </EuiPanel>
-    </Suspense>
+    <>
+      <EuiBasicTable
+        tableCaption="Git files"
+        items={data!}
+        rowHeader="name"
+        columns={columns}
+        rowProps={getRowProps}
+        cellProps={getCellProps}
+      />
+    </>
   );
 }
