@@ -11,7 +11,7 @@ import (
 	"github.com/samber/lo"
 )
 
-func (g *Take) List() (*ListResponse, error) {
+func (g *Repository) List() (*ListResponse, error) {
 	ns, err := namespaceModel.GetNamespaceByPath(db.DB, g.namespace)
 	if err != nil {
 		return nil, err

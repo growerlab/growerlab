@@ -16,7 +16,7 @@ import (
 // TreeFiles 获取仓库的文件列表
 // ref: 分支、commit、tag等
 // dir: 目录
-func (g *Take) TreeFiles(ref string, folder *string) ([]*git.FileEntity, error) {
+func (g *Repository) TreeFiles(ref string, folder *string) ([]*git.FileEntity, error) {
 	if g.repo == nil || govalidator.IsNull(*g.repo) {
 		return nil, errors.MissingParameterError(errors.Repository, errors.Repo)
 	}
@@ -43,6 +43,6 @@ func (g *Take) TreeFiles(ref string, folder *string) ([]*git.FileEntity, error) 
 	return files, nil
 }
 
-func (g *Take) pathGroup() string {
+func (g *Repository) pathGroup() string {
 	return path.GetPathGroup(g.namespace, *g.repo)
 }

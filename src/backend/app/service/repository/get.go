@@ -10,23 +10,23 @@ import (
 	"github.com/growerlab/growerlab/src/common/permission"
 )
 
-type Take struct {
+type Repository struct {
 	currentUserID *int64
 	namespace     string
 	// 当取list时，repo可以为空
 	repo *string
 }
 
-func NewTaker(c *gin.Context, namespace string, path *string) *Take {
+func New(c *gin.Context, namespace string, path *string) *Repository {
 	currentUserID := session.New(c).UserID()
-	return &Take{
+	return &Repository{
 		currentUserID: currentUserID,
 		namespace:     namespace,
 		repo:          path,
 	}
 }
 
-func (g *Take) Get() (*Entity, error) {
+func (g *Repository) Get() (*Entity, error) {
 	if g.namespace == "" {
 		return nil, errors.InvalidParameterError(errors.Repository, errors.Namespace, errors.Empty)
 	}

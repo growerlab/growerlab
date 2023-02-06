@@ -7,7 +7,7 @@ import (
 
 func Repositories(c *gin.Context) {
 	namespace := c.Param("namespace")
-	repos, err := repository.NewTaker(c, namespace, nil).List()
+	repos, err := repository.New(c, namespace, nil).List()
 	Render(c, repos, err)
 }
 
@@ -15,7 +15,7 @@ func Repository(c *gin.Context) {
 	namespace := c.Param("namespace")
 	repo := c.Param("repo")
 
-	r, err := repository.NewTaker(c, namespace, &repo).Get()
+	r, err := repository.New(c, namespace, &repo).Get()
 	Render(c, r, err)
 }
 
@@ -24,7 +24,7 @@ func RepositoryTree(c *gin.Context) {
 	repo := c.Param("repo")
 	ref := c.Param("ref")
 	folder := c.Param("folder")
-	r, err := repository.NewTaker(c, namespace, &repo).TreeFiles(ref, &folder)
+	r, err := repository.New(c, namespace, &repo).TreeFiles(ref, &folder)
 	Render(c, r, err)
 }
 
