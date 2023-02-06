@@ -25,7 +25,7 @@ func AddUser(tx sqlx.Queryer, user *User) error {
 			nil,
 			nil,
 			nil,
-			nil,
+			0,
 			user.RegisterIP,
 			user.IsAdmin,
 			user.NamespaceID,

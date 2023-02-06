@@ -35,7 +35,7 @@ type User struct {
 	CreatedAt         int64   `db:"created_at"`
 	DeletedAt         *int64  `db:"deleted_at"`
 	VerifiedAt        *int64  `db:"verified_at"`
-	LastLoginAt       *int64  `db:"last_login_at"`
+	LastLoginAt       int64   `db:"last_login_at"`
 	LastLoginIP       *string `db:"last_login_ip"`
 	RegisterIP        string  `db:"register_ip"`
 	IsAdmin           bool    `db:"is_admin"`
