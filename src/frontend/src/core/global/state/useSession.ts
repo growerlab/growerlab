@@ -1,4 +1,4 @@
-import { Router } from "../../config/router";
+import { Router } from "../../../config/router";
 
 const AuthUserToken = "growerlab-token";
 
@@ -10,11 +10,11 @@ export interface UserInfo {
   public_email: string;
 }
 
-export function useSession(): Session {
-  return new Session();
+export function useSession(): UseSession {
+  return new UseSession();
 }
 
-class Session {
+class UseSession {
   constructor() {
     return;
   }

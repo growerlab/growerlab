@@ -1,6 +1,5 @@
 import React from "react";
 import useSWR from "swr";
-import { useTitle } from "react-use";
 import TimeAgo from "timeago-react";
 import { EuiBasicTable, EuiIcon, EuiLink } from "@elastic/eui";
 
@@ -11,7 +10,6 @@ import {
   RepositoryPathGroup,
 } from "../../../common/types";
 import { useRepositoryAPI } from "../../../api/repository";
-import { getTitle } from "../../../common/document";
 import i18n from "../../../i18n/i18n";
 import { Router } from "../../../../config/router";
 import { Path } from "../../../common/path";
@@ -25,8 +23,6 @@ interface Props extends RepositoryPathGroup {
 
 export default function Tree(props: Props) {
   const { namespace, repo, reference, initialFolder, repository } = props;
-
-  useTitle(getTitle(repo));
 
   const repositoryAPI = useRepositoryAPI(namespace);
   const currentRepoFolder = new Path(initialFolder); // 正在访问的repo路径

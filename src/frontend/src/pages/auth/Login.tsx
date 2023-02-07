@@ -1,14 +1,13 @@
 import React from "react";
-import { useTitle } from "react-use";
 import { useNavigate } from "react-router-dom";
 
-import { getTitle } from "../../core/common/document";
 import LoginForm from "../../core/components/user/LoginForm";
 import i18n from "../../core/i18n/i18n";
 import { Router } from "../../config/router";
+import { useTitle } from "../../core/global/state";
 
 export default function Login(props: any) {
-  useTitle(getTitle(i18n.t("website.login")));
+  useTitle(i18n.t("website.login"));
   const navigate = useNavigate();
 
   const onSuccess = () => {

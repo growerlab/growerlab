@@ -1,14 +1,13 @@
 import React from "react";
-import { useTitle } from "react-use";
 
 import i18n from "../../../core/i18n/i18n";
-import { getTitle } from "../../../core/common/document";
 import { NewRepositoryForm } from "../../../core/components/repository/NewRepositoryForm";
 import Header from "../../../core/components/ui/common/Header";
 import { useGlobal } from "../../../core/global/global";
+import { useTitle } from "../../../core/global/state";
 
 export default function RepositoryNew() {
-  useTitle(getTitle(i18n.t("repository.create_repository")));
+  useTitle(i18n.t("repository.create_repository"));
   const { currentUser } = useGlobal();
   if (currentUser === undefined) return <></>;
 

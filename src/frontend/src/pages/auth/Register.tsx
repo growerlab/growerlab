@@ -1,12 +1,11 @@
 import React from "react";
-import { useTitle } from "react-use";
 
-import { getTitle } from "../../core/common/document";
 import RegisterForm from "../../core/components/user/RegisterForm";
 import i18n from "../../core/i18n/i18n";
+import { useTitle } from "../../core/global/state";
 
 export default function Register(props: any) {
-  useTitle(getTitle(i18n.t("website.register")));
+  useTitle(i18n.t("website.register"));
 
   return (
     <div>

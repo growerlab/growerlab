@@ -12,11 +12,13 @@ import {
 } from "@elastic/eui";
 
 import { Router } from "../../config/router";
-import { useSession } from "../../core/api/session";
 import i18n from "../../core/i18n/i18n";
-import { useTitle } from "react-use";
-import { useUserMenu } from "../../core/global/state/useMenu";
-import { useNotice } from "../../core/global/state/useNotice";
+import {
+  useNotice,
+  useUserMenu,
+  useTitle,
+  useSession,
+} from "../../core/global/state";
 
 interface Props extends React.PropsWithChildren {
   title: string;

@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useOutlet } from "react-router-dom";
-import { useUserMenu } from "../../../core/global/state/useMenu";
+import { useUserMenu } from "../../../core/global/state";
 
 interface Props extends React.PropsWithChildren {
   defaultChild?: React.ReactElement;

@@ -1,5 +1,4 @@
-import { UserInfo, useSession } from "../api/session";
-import { NoticeState, useNotice } from "./state/useNotice";
+import { UserInfo, useSession, NoticeState, useNotice } from "./state";
 
 export type GlobalObject = {
   notice: NoticeState;

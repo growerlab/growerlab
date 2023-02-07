@@ -1,14 +1,13 @@
 import React from "react";
-import { useTitle } from "react-use";
 
 import Activate from "../../core/components/user/Activate";
-import { getTitle } from "../../core/common/document";
 import i18n from "../../core/i18n/i18n";
 import Notfound404 from "../../core/components/ui/common/404";
 import { useParams } from "react-router-dom";
+import { useTitle } from "../../core/global/state";
 
 export default function ActivateUser(props: any) {
-  useTitle(getTitle(i18n.t("website.activate_user")));
+  useTitle(i18n.t("website.activate_user"));
   const { code } = useParams();
   if (code === undefined) {
     return <Notfound404 />;

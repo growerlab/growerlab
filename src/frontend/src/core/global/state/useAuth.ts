@@ -1,8 +1,8 @@
 import { AxiosResponse } from "axios";
 
-import { UserInfo } from "./session";
-import { API, request, Result } from "./api";
-import { GlobalObject, useGlobal } from "../global/global";
+import { UserInfo } from "./index";
+import { API, request, Result } from "../../api/api";
+import { GlobalObject, useGlobal } from "../global";
 
 interface RegisterArgs {
   username: string;
@@ -12,17 +12,17 @@ interface RegisterArgs {
 
 export function useAuth() {
   const global = useGlobal();
-  return new Auth(global);
+  return new UseAuth(global);
 }
 
-class Auth {
+class UseAuth {
   constructor(private global: GlobalObject) {}
 
   public login(
     email: string,
     password: string
   ): Promise<AxiosResponse<UserInfo>> {
-    return request(this.global).post<Auth, AxiosResponse<UserInfo>>(
+    return request(this.global).post<UseAuth, AxiosResponse<UserInfo>>(
       API.Auth.Login,
       {
         email: email,

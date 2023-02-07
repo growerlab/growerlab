@@ -1,5 +1,4 @@
 import React, { useState, Suspense } from "react";
-import { useTitle } from "react-use";
 import { useNavigate } from "react-router-dom";
 import { EuiPanel } from "@elastic/eui";
 import { EuiBreadcrumbProps } from "@elastic/eui/src/components/breadcrumbs/breadcrumb";
@@ -9,13 +8,13 @@ import {
   RepositoryEntity,
   RepositoryPathGroup,
 } from "../../../common/types";
-import { getTitle } from "../../../common/document";
 import { Router } from "../../../../config/router";
 import Loading from "../../ui/common/Loading";
 import Breadcrumbs from "../../ui/Breadcrumbs";
 import { Path } from "../../../common/path";
 import Tree from "./Tree";
 import Blob from "./Blob";
+import { useTitle } from "../../../global/state";
 
 interface Props extends RepositoryPathGroup {
   type: DetailType;
@@ -28,7 +27,7 @@ interface Props extends RepositoryPathGroup {
 export function Files(props: Props) {
   const { namespace, repo, reference, initialFolder, repository } = props;
   const { blobPath } = props;
-  useTitle(getTitle(repo));
+  useTitle(repo);
 
   const navigate = useNavigate();
   const [detailType, setDetailType] = useState(props.type);

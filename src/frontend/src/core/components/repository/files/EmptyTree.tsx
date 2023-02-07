@@ -1,10 +1,9 @@
 import React, { useState } from "react";
-import { useTitle } from "react-use";
 import i18n from "i18next";
 import { EuiCodeBlock, EuiCard, EuiCallOut, EuiIcon } from "@elastic/eui";
 
-import { getTitle } from "../../../common/document";
 import CloneURL from "./CloneURL";
+import { useTitle } from "../../../global/state";
 
 interface Props {
   defaultBranch: string;
@@ -13,7 +12,7 @@ interface Props {
 }
 
 export default function EmptyTree(props: Props) {
-  useTitle(getTitle(i18n.t("repository.empty_tree")));
+  useTitle(i18n.t("repository.empty_tree"));
 
   const [cloneURL, setCloneURL] = useState<string>(props.cloneURLHttp);
 

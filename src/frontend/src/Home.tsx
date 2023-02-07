@@ -1,14 +1,13 @@
 import React from "react";
-import { useTitle } from "react-use";
 import { EuiButton } from "@elastic/eui";
 import { useNavigate } from "react-router-dom";
 
 import { Router } from "./config/router";
 import HomeLayout from "./pages/layouts/HomeLayout";
-import { getTitle } from "./core/common/document";
+import { useTitle } from "./core/global/state";
 
 export default function Home() {
-  useTitle(getTitle());
+  useTitle();
   const navigate = useNavigate();
 
   const onLogin = () => {
