@@ -31,6 +31,7 @@ export function Files(props: Props) {
   useTitle(getTitle(repo));
 
   const navigate = useNavigate();
+  const [detailType, setDetailType] = useState(props.type);
   const [isEmptyRepository, setTreeEmpty] = useState<boolean>(false);
   const [currentRepoFolder] = useState(new Path(initialFolder)); // 正在访问的repo路径
   if (!isEmptyRepository && repository?.last_push_at == 0) {
@@ -41,14 +42,6 @@ export function Files(props: Props) {
     return Router.User.Repository.Reference.render({
       refType: "tree",
       "*": tree,
-      ref: reference,
-      repo: repo,
-    });
-  };
-  const buildBlobURL = (filePath: string) => {
-    return Router.User.Repository.Reference.render({
-      refType: "blob",
-      "*": filePath,
       ref: reference,
       repo: repo,
     });
@@ -72,6 +65,7 @@ export function Files(props: Props) {
     const link = buildTreeURL(value);
     const onClick = () => {
       navigate(link, { state: link });
+      setDetailType("tree");
       currentRepoFolder.reset(array.slice(0, index + 1));
     };
     folderBreadcrumbs.push({
@@ -81,7 +75,7 @@ export function Files(props: Props) {
   });
 
   const detail =
-    props.type === "blob" ? (
+    detailType === "blob" ? (
       <Blob {...props} Path={blobPath!} />
     ) : (
       <Tree

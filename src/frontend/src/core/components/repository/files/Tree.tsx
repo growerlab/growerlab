@@ -1,8 +1,8 @@
-import React, { useState, Suspense } from "react";
+import React from "react";
 import useSWR from "swr";
 import { useTitle } from "react-use";
 import TimeAgo from "timeago-react";
-import { EuiBasicTable, EuiIcon, EuiLink, EuiPanel } from "@elastic/eui";
+import { EuiBasicTable, EuiIcon, EuiLink } from "@elastic/eui";
 
 import {
   DetailType,
@@ -79,7 +79,7 @@ export default function Tree(props: Props) {
         const type: DetailType = record.is_file ? "blob" : "tree";
         const folderPath = currentRepoFolder.toString() + "/" + name;
         const link = record.is_file
-          ? buildBlobURL(name)
+          ? buildBlobURL(folderPath)
           : buildTreeURL(folderPath);
         return (
           <>
